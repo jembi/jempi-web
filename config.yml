@@ -1,0 +1,9 @@
+---
+image: jembi/platform
+defaultTargetLauncher: swarm
+disableKubernetes: true
+disableIG: true
+disableCustomTargetSelection: true
+packages:
+  
+
