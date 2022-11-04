@@ -41,7 +41,7 @@ Version will default to `latest` if none is supplied
 
 ### Run regular stack deploy
 
-Run `./stack-deploy.sh`
+Run `./deploy-stack.sh`
 
 OR
 
@@ -49,6 +49,6 @@ OR
 
 Run `./get-cli.sh {linux|macos|windows}` to download the relevant `platform` binary
 
-Run `./platform-deploy.sh init` to start up the stack
+Run `./deploy-platform.sh init` to start up the stack
 
 The script can also be run with `up down destroy` to perform the respective action
