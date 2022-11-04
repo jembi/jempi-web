@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   jempi-web:
-    image: jembi/jempi-web:latest
+    image: jembi/jempi-web:${JEMPI_WEB_VERSION}
     deploy:
       replicas: ${JEMPI_WEB_INSTANCES}
       placement:

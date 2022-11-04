@@ -6,6 +6,7 @@
   "version": "0.0.1",
   "dependencies": [],
   "environmentVariables": {
+    "JEMPI_WEB_VERSION": "latest",
     "JEMPI_WEB_INSTANCES": 1,
     "JEMPI_WEB_CPU_LIMIT": 2,
     "JEMPI_WEB_CPU_RESERVE": 0.05,
