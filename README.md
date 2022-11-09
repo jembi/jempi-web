@@ -27,20 +27,28 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployment
 
-### `yarn eject`
+App is deployed using docker and port 3000 is exposed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Build the image
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Run `./build-image.sh {version}`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+e.g. `./build-image.sh 1.0.0`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Version will default to `latest` if none is supplied
 
-## Learn More
+### Run regular stack deploy
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Run `./deploy-stack.sh`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+OR
+
+### Run with [Jembi Platform](https://github.com/jembi/platform)
+
+Run `./get-cli.sh {linux|macos|windows}` to download the relevant `platform` binary
+
+Run `./deploy-platform.sh init` to start up the stack
+
+The script can also be run with `up down destroy` to perform the respective action

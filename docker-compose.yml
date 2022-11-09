@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  jempi-web:
+    image: jembi/jempi-web:${JEMPI_WEB_VERSION}
+    deploy:
+      replicas: ${JEMPI_WEB_INSTANCES}
+      placement:
+        max_replicas_per_node: 1
+      resources:
+        limits:
+          cpus: ${JEMPI_WEB_CPU_LIMIT}
+          memory: ${JEMPI_WEB_MEMORY_LIMIT}
+        reservations:
+          cpus: ${JEMPI_WEB_CPU_RESERVE}
+          memory: ${JEMPI_WEB_MEMORY_RESERVE}
