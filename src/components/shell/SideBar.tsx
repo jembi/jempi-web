@@ -21,13 +21,15 @@ import {
 
 interface SideBarProps {
   open: boolean
+  drawerWidth: number
 }
 
-const SideBar: FC<SideBarProps> = ({ open }) => {
+const SideBar: FC<SideBarProps> = ({ open, drawerWidth }) => {
   return (
     <Drawer
       variant="persistent"
-      PaperProps={{ sx: { width: 256 } }}
+      sx={{ width: drawerWidth, flexShrink: 0 }}
+      PaperProps={{ sx: { width: drawerWidth } }}
       open={open}
     >
       <Toolbar />
@@ -47,19 +49,19 @@ const SideBar: FC<SideBarProps> = ({ open }) => {
         }}
       >
         <List component="nav">
-          <ListItemButton>
+          <ListItemButton component="a" href="/">
             <ListItemIcon>
               <DashboardIcon sx={{ mr: 2 }} />
               <ListItemText>Dashboard</ListItemText>
             </ListItemIcon>
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton component="a" href="/search">
             <ListItemIcon>
               <SearchIcon sx={{ mr: 2 }} />
               <ListItemText>Search</ListItemText>
             </ListItemIcon>
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton component="a" href="/review-matches">
             <ListItemIcon>
               <PeopleIcon sx={{ mr: 2 }} />
               <ListItemText>Review Matches</ListItemText>
