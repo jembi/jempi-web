@@ -1,4 +1,15 @@
-import { Box, Breadcrumbs, Chip, Typography, Link } from '@mui/material'
+import { AxiosError } from 'axios'
+
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Breadcrumbs,
+  Chip,
+  Link,
+  Skeleton,
+  Typography
+} from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -6,14 +17,10 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams
 } from '@mui/x-data-grid'
-import { MakeGenerics, useMatch } from '@tanstack/react-location'
-import Match from '../../types/Match'
+import { useQuery } from '@tanstack/react-query'
 
-type LocationGenerics = MakeGenerics<{
-  LoaderData: {
-    matches: Match[]
-  }
-}>
+import ApiClient from '../../services/ApiClient'
+import Match from '../../types/Match'
 
 const columns: GridColDef[] = [
   {
@@ -80,10 +87,7 @@ const columns: GridColDef[] = [
     }),
     renderCell: (params: GridRenderCellParams<any>) => {
       return (
-        <Link
-          href={`/match/${params.value.id}?patient=${params.value.patient}`}
-          underline="none"
-        >
+        <Link href={`/match/${params.value.id}`} underline="none">
           VIEW
         </Link>
       )
@@ -92,11 +96,24 @@ const columns: GridColDef[] = [
 ]
 
 const ReviewMatches = () => {
-  const {
-    data: { matches }
-  } = useMatch<LocationGenerics>()
+  //TODO Refactor to custom hook
+  const { data, error, isFetching } = useQuery<Match[], AxiosError>(
+    ['matches'],
+    ApiClient.getMatches
+  )
 
-  return (
+  return isFetching ? (
+    <>
+      <Skeleton variant="text" height={100}></Skeleton>
+      <Skeleton variant="rectangular" height={600}></Skeleton>
+    </>
+  ) : error ? (
+    // TODO Create a generic error handler
+    <Alert severity="error">
+      <AlertTitle>Error</AlertTitle>
+      {error.message}
+    </Alert>
+  ) : (
     <Box>
       <Typography variant="h5">Review Matches Review</Typography>
       <Breadcrumbs>
@@ -107,7 +124,7 @@ const ReviewMatches = () => {
       </Breadcrumbs>
       <DataGrid
         columns={columns}
-        rows={matches as Match[]}
+        rows={data as Match[]}
         pageSize={10}
         rowsPerPageOptions={[10]}
         sx={{ maxWidth: 1400, mt: 4 }}
