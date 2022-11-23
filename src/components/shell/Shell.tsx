@@ -1,60 +1,91 @@
-import { useState } from 'react'
-
 import {
   AccountCircle as AccountCircleIcon,
-  Menu as MenuIcon,
-  MenuOpen as MenuOpenIcon
+  Dashboard as DashboardIcon,
+  People as PeopleIcon,
+  Search as SearchIcon
 } from '@mui/icons-material'
-import { AppBar, Box, IconButton, Toolbar } from '@mui/material'
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  Typography,
+  Button
+} from '@mui/material'
 
-import SideBar from './SideBar'
 import { Outlet } from '@tanstack/react-location'
 import { ReactLocationDevtools } from '@tanstack/react-location-devtools'
 
+const barColour =
+  'linear-gradient(90.05deg, #8BF280 -4.51%, #3B826B -4.5%, #58AB73 99.95%)'
+
 const Shell = () => {
-  const [menuOpen, setMenuOpen] = useState(true)
-
-  const toggleMenu = () => setMenuOpen(!menuOpen)
-  //TODO nice transition
-
-  const drawerWidth = 256
-
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          zIndex: theme => theme.zIndex.drawer + 1
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            onClick={toggleMenu}
+      <AppBar position="fixed">
+        <Toolbar sx={{ order: 0 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              mr: 4
+            }}
           >
-            {(menuOpen && <MenuOpenIcon />) || <MenuIcon />}
-          </IconButton>
-          <Box sx={{ flexGrow: 1 }}></Box>
+            <Typography variant="h6" sx={{ color: '#FFC400' }}>
+              1
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: theme => theme.palette.text.primary }}
+            >
+              Record
+            </Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Button
+              href="/"
+              startIcon={<DashboardIcon />}
+              sx={{ color: theme => theme.palette.text.primary }}
+            >
+              Dashboard
+            </Button>
+            <Button
+              href="/search"
+              startIcon={<SearchIcon />}
+              sx={{ color: theme => theme.palette.text.primary }}
+            >
+              Search
+            </Button>
+            <Button
+              href="/review-matches"
+              startIcon={<PeopleIcon />}
+              sx={{ color: theme => theme.palette.text.primary }}
+            >
+              Matches
+            </Button>
+          </Box>
           <IconButton size="large" edge="end" color="inherit">
             <AccountCircleIcon />
           </IconButton>
         </Toolbar>
+        <Box
+          sx={{
+            background: barColour,
+            height: 12
+          }}
+        ></Box>
       </AppBar>
-      <SideBar open={menuOpen} drawerWidth={drawerWidth} />
+
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
           p: 3,
-          ml: menuOpen ? 0 : `-${drawerWidth}px`
+          width: '100%'
         }}
       >
         <Toolbar />
         <Outlet />
-        <ReactLocationDevtools position="bottom-right" />
       </Box>
+      <ReactLocationDevtools position="bottom-right" />
     </Box>
   )
 }

@@ -22,7 +22,7 @@ const routes: Route[] = [
     element: <ReviewMatches />
   },
   {
-    path: '/match/:matchId',
+    path: '/match-details/:matchId',
     element: <MatchDetails />
   },
   { path: '/search', element: <Search /> },
