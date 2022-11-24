@@ -3,9 +3,9 @@ import { AxiosError } from 'axios'
 import {
   Alert,
   AlertTitle,
-  Box,
   Breadcrumbs,
   Chip,
+  Container,
   Link,
   Skeleton,
   Typography
@@ -87,7 +87,7 @@ const columns: GridColDef[] = [
     }),
     renderCell: (params: GridRenderCellParams<any>) => {
       return (
-        <Link href={`/match/${params.value.id}`} underline="none">
+        <Link href={`/match-details/${params.value.id}`} underline="none">
           VIEW
         </Link>
       )
@@ -103,19 +103,21 @@ const ReviewMatches = () => {
   )
 
   return isFetching ? (
-    <>
+    <Container>
       <Skeleton variant="text" height={100}></Skeleton>
       <Skeleton variant="rectangular" height={600}></Skeleton>
-    </>
+    </Container>
   ) : error ? (
     // TODO Create a generic error handler
-    <Alert severity="error">
-      <AlertTitle>Error</AlertTitle>
-      {error.message}
-    </Alert>
+    <Container>
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {error.message}
+      </Alert>
+    </Container>
   ) : (
-    <Box>
-      <Typography variant="h5">Review Matches Review</Typography>
+    <Container>
+      <Typography variant="h5">Review Matches</Typography>
       <Breadcrumbs>
         <Link underline="hover" color="inherit" href="/">
           Home
@@ -130,7 +132,7 @@ const ReviewMatches = () => {
         sx={{ maxWidth: 1400, mt: 4 }}
         autoHeight={true}
       />
-    </Box>
+    </Container>
   )
 }
 
