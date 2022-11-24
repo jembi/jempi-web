@@ -117,7 +117,7 @@ const ReviewMatches = () => {
     </Container>
   ) : (
     <Container>
-      <Typography variant="h5">Review Matches Review</Typography>
+      <Typography variant="h5">Review Matches</Typography>
       <Breadcrumbs>
         <Link underline="hover" color="inherit" href="/">
           Home
