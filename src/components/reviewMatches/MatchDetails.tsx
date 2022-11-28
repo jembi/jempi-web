@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import {
   DataGrid,
+  GridCellParams,
   GridColDef,
   GridRenderCellParams,
   GridValueFormatterParams,
@@ -33,7 +34,16 @@ const columns: GridColDef[] = [
     field: 'type',
     headerName: 'Record Type',
     minWidth: 110,
-    flex: 2
+    flex: 2,
+    cellClassName: (params: GridCellParams<string>) => {
+      if (params.value === 'Current') {
+        return 'current-patient-cell'
+      } else if (params.value === 'Golden') {
+        return 'golden-patient-cell'
+      }
+
+      return ''
+    }
   },
   {
     field: 'match',
@@ -203,7 +213,15 @@ const MatchDetails = () => {
         rows={data as PatientRecord[]}
         pageSize={10}
         rowsPerPageOptions={[10]}
-        sx={{ mt: 4 }}
+        sx={{
+          mt: 4,
+          '& .current-patient-cell': {
+            color: '#7B61FF'
+          },
+          '& .golden-patient-cell': {
+            color: '#FFC400'
+          }
+        }}
         autoHeight={true}
       />
     </Container>
