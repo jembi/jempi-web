@@ -11,6 +11,7 @@ import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
 import Shell from './components/shell/Shell'
 import theme from './theme'
+import { SnackbarProvider } from 'notistack'
 
 const location = new ReactLocation()
 const queryClient = new QueryClient()
@@ -35,7 +36,11 @@ const App = () => {
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <Router location={location} routes={routes}>
-          <Shell />
+          <SnackbarProvider
+            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          >
+            <Shell />
+          </SnackbarProvider>
         </Router>
         <ReactQueryDevtools />
       </QueryClientProvider>
