@@ -40,6 +40,18 @@ type MatchDetailsParams = MakeGenerics<{
   }
 }>
 
+enum Action {
+  Accept,
+  Link,
+  CreateRecord
+}
+
+interface DialogParams {
+  title?: string
+  text?: string
+  open: boolean
+}
+
 const MatchDetails = () => {
   const columns: GridColDef[] = [
     {
@@ -147,7 +159,7 @@ const MatchDetails = () => {
         return params.row.type === 'Current' ? (
           <Link
             component="button"
-            onClick={() => {} /*TODO New golden record logic here*/}
+            onClick={createGoldenRecord}
             underline="none"
           >
             New Record
@@ -171,9 +183,12 @@ const MatchDetails = () => {
     }
   ]
 
-  const [openDialog, setOpenDialog] = useState(false)
-  const [dialogTitle, setDialogTitle] = useState('')
-  const [dialogText, setDialogText] = useState('')
+  const [action, setAction] = useState<Action>()
+  const [dialog, setDialog] = useState<DialogParams>({
+    title: '',
+    text: '',
+    open: false
+  })
 
   const searchParams = useSearch<MatchDetailsParams>()
 
@@ -193,6 +208,16 @@ const MatchDetails = () => {
 
   const updateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error updating notification: ${error.message}`, {
+        variant: 'error'
+      })
+      setDialog({ open: false })
+    }
+  })
+
+  const accept = useMutation({
+    mutationFn: ApiClient.updateNotification,
     onSuccess: () => {
       enqueueSnackbar('Patient linked', {
         variant: 'success'
@@ -200,10 +225,30 @@ const MatchDetails = () => {
       navigate({ to: '/review-matches' })
     },
     onError: (error: AxiosError) => {
-      enqueueSnackbar(`Error: ${error.message}`, {
+      enqueueSnackbar(`Error updating notification: ${error.message}`, {
         variant: 'error'
       })
-      setOpenDialog(false)
+      setDialog({ open: false })
+    }
+  })
+
+  const newGoldenRecord = useMutation({
+    mutationFn: ApiClient.newGoldenRecord,
+    onSuccess: () => {
+      enqueueSnackbar('New golden record created', {
+        variant: 'success'
+      })
+      navigate({ to: '/review-matches' })
+      updateNotification.mutate({
+        notificationId: searchParams.notificationId!,
+        state: NotificationState.Actioned
+      })
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setDialog({ open: false })
     }
   })
 
@@ -211,21 +256,42 @@ const MatchDetails = () => {
     return data && `${data[0].firstName} ${data[0].lastName}`
   }
 
+  const createGoldenRecord = () => {
+    setAction(Action.CreateRecord)
+    setDialog({
+      title: 'Confirm create golden record',
+      text: 'This will unlink from the current golden record and create a new golden record',
+      open: true
+    })
+  }
+
   const acceptLink = () => {
-    setDialogTitle('Confirm record link')
-    setDialogText('This will link these two records')
-    setOpenDialog(true)
+    setAction(Action.Accept)
+    setDialog({
+      title: 'Confirm record link',
+      text: 'This will link these two records',
+      open: true
+    })
   }
 
   const handleCancel = () => {
-    setOpenDialog(false)
+    setDialog({ open: false })
   }
 
   const handleConfirm = () => {
-    updateNotification.mutate({
-      notificationId: searchParams.notificationId!,
-      state: NotificationState.Actioned
-    })
+    switch (action) {
+      case Action.CreateRecord:
+        newGoldenRecord.mutate({ docID: data![0].id, goldenID: data![1].id })
+        break
+      case Action.Accept:
+        accept.mutate({
+          notificationId: searchParams.notificationId!,
+          state: NotificationState.Actioned
+        })
+        break
+      default:
+        break
+    }
   }
 
   return isFetching ? (
@@ -270,15 +336,19 @@ const MatchDetails = () => {
         autoHeight={true}
       />
 
-      <Dialog open={openDialog} onClose={handleCancel}>
-        <DialogTitle>{dialogTitle}</DialogTitle>
+      <Dialog open={dialog.open} onClose={handleCancel}>
+        <DialogTitle>{dialog.title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{dialogText}</DialogContentText>
+          <DialogContentText>{dialog.text}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
           <Button onClick={handleConfirm} autoFocus>
-            {updateNotification.isLoading ? <CircularProgress /> : 'Confirm'}
+            {accept.isLoading || newGoldenRecord.isLoading ? (
+              <CircularProgress />
+            ) : (
+              'Confirm'
+            )}
           </Button>
         </DialogActions>
       </Dialog>
