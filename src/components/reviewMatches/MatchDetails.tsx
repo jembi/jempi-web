@@ -159,19 +159,19 @@ const MatchDetails = () => {
         return params.row.type === 'Current' ? (
           <Link
             component="button"
-            onClick={createGoldenRecord}
+            onClick={handleCreateGoldenRecord}
             underline="none"
           >
             New Record
           </Link>
         ) : params.row.type === 'Golden' ? (
-          <Link component="button" onClick={acceptLink} underline="none">
+          <Link component="button" onClick={handleAcceptLink} underline="none">
             Accept
           </Link>
         ) : params.row.type === 'Candidate' ? (
           <Link
             component="button"
-            onClick={() => {} /*TODO Link logic here*/}
+            onClick={() => handleLinkRecord(params.row.id)}
             underline="none"
           >
             Link
@@ -184,6 +184,7 @@ const MatchDetails = () => {
   ]
 
   const [action, setAction] = useState<Action>()
+  const [recordId, setRecordId] = useState('')
   const [dialog, setDialog] = useState<DialogParams>({
     title: '',
     text: '',
@@ -252,11 +253,31 @@ const MatchDetails = () => {
     }
   })
 
+  const linkRecord = useMutation({
+    mutationFn: ApiClient.linkRecord,
+    onSuccess: () => {
+      enqueueSnackbar('Linked to candidate golden record', {
+        variant: 'success'
+      })
+      navigate({ to: '/review-matches' })
+      updateNotification.mutate({
+        notificationId: searchParams.notificationId!,
+        state: NotificationState.Actioned
+      })
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error linking to golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setDialog({ open: false })
+    }
+  })
+
   const getName = (data: PatientRecord[] | undefined) => {
     return data && `${data[0].firstName} ${data[0].lastName}`
   }
 
-  const createGoldenRecord = () => {
+  const handleCreateGoldenRecord = () => {
     setAction(Action.CreateRecord)
     setDialog({
       title: 'Confirm create golden record',
@@ -265,11 +286,21 @@ const MatchDetails = () => {
     })
   }
 
-  const acceptLink = () => {
+  const handleAcceptLink = () => {
     setAction(Action.Accept)
     setDialog({
       title: 'Confirm record link',
       text: 'This will link these two records',
+      open: true
+    })
+  }
+
+  const handleLinkRecord = (id: string) => {
+    setAction(Action.Link)
+    setRecordId(id)
+    setDialog({
+      title: 'Confirm record link',
+      text: 'This will unlink from the current golden record and link this new record as the golden record',
       open: true
     })
   }
@@ -282,6 +313,13 @@ const MatchDetails = () => {
     switch (action) {
       case Action.CreateRecord:
         newGoldenRecord.mutate({ docID: data![0].id, goldenID: data![1].id })
+        break
+      case Action.Link:
+        linkRecord.mutate({
+          docID: data![0].id,
+          goldenID: data![1].id,
+          newGoldenID: recordId
+        })
         break
       case Action.Accept:
         accept.mutate({
