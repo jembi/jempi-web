@@ -4,7 +4,7 @@ export default interface Notification {
   patient: string
   patientId: string
   date: Date
-  state: string
+  state: NotificationState
   linkedTo: GoldenRecord
   candidates: GoldenRecord[]
 }
@@ -12,4 +12,10 @@ export default interface Notification {
 interface GoldenRecord {
   gID: string
   score: number
+}
+
+export enum NotificationState {
+  New = 'New',
+  Seen = 'Seen',
+  Actioned = 'Actioned'
 }
