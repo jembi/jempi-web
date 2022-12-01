@@ -196,16 +196,16 @@ const MatchDetails = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data, error, isFetching } = useQuery<PatientRecord[], AxiosError>(
-    ['matches'],
-    () =>
+  const { data, error, isFetching } = useQuery<PatientRecord[], AxiosError>({
+    queryKey: ['matchDetails'],
+    queryFn: () =>
       ApiClient.getMatchDetails(
         searchParams.patientId!,
         searchParams.goldenId!,
         searchParams.candidates!
       ),
-    { refetchOnWindowFocus: false }
-  )
+    refetchOnWindowFocus: false
+  })
 
   const updateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
