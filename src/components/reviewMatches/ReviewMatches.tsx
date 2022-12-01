@@ -20,7 +20,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 
 import ApiClient from '../../services/ApiClient'
-import Match from '../../types/Match'
+import Notification from '../../types/Notification'
+import { Link as LocationLink } from '@tanstack/react-location'
 
 const columns: GridColDef[] = [
   {
@@ -43,8 +44,9 @@ const columns: GridColDef[] = [
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
+    valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${params.value}%`
+      `${Math.round(params.value * 100)}%`
   },
   {
     field: 'date',
@@ -85,11 +87,21 @@ const columns: GridColDef[] = [
       id: params.row.id,
       patient: params.row.patient
     }),
-    renderCell: (params: GridRenderCellParams<any>) => {
+    renderCell: (params: GridRenderCellParams<any, Notification>) => {
+      const { patientId, linkedTo, candidates, id } = params.row
       return (
-        <Link href={`/match-details/${params.value.id}`} underline="none">
+        <LocationLink
+          to={`/match-details`}
+          search={{
+            notificationId: id,
+            patientId,
+            goldenId: linkedTo.gID,
+            candidates: candidates.map(c => c.gID)
+          }}
+          style={{ textDecoration: 'none' }}
+        >
           VIEW
-        </Link>
+        </LocationLink>
       )
     }
   }
@@ -98,10 +110,10 @@ const columns: GridColDef[] = [
 const ReviewMatches = () => {
   const tryIt = 'bob'
   //TODO Refactor to custom hook
-  const { data, error, isFetching } = useQuery<Match[], AxiosError>({
+  const { data, error, isFetching } = useQuery<Notification[], AxiosError>({
     queryKey: ['matches'],
     queryFn: ApiClient.getMatches,
-    enabled: !!tryIt, 
+    refetchOnWindowFocus: false
   })
 
   return isFetching ? (
@@ -119,7 +131,7 @@ const ReviewMatches = () => {
     </Container>
   ) : (
     <Container>
-      <Typography variant="h5">Review Matches Review</Typography>
+      <Typography variant="h5">Review Matches</Typography>
       <Breadcrumbs>
         <Link underline="hover" color="inherit" href="/">
           Home
@@ -128,7 +140,7 @@ const ReviewMatches = () => {
       </Breadcrumbs>
       <DataGrid
         columns={columns}
-        rows={data as Match[]}
+        rows={data as Notification[]}
         pageSize={10}
         rowsPerPageOptions={[10]}
         sx={{ maxWidth: 1400, mt: 4 }}

@@ -63,8 +63,8 @@ const Shell = () => {
               Matches
             </Button>
           </Box>
-          <IconButton size="large" edge="end" color="inherit">
-            <AccountCircleIcon sx={{color: "grey"}} />
+          <IconButton size="large" edge="end">
+            <AccountCircleIcon />
           </IconButton>
         </Toolbar>
         <Box
@@ -78,7 +78,7 @@ const Shell = () => {
       <Box
         component="main"
         sx={{
-          p: 3,
+          p: 6,
           width: '100%'
         }}
       >

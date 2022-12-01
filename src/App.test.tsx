@@ -5,6 +5,6 @@ test('renders JeMPI logo', async () => {
   await act(() => {
     render(<App />)
   })
-  const linkElement = screen.getByText(/JeMPI/i)
+  const linkElement = screen.getByText(/Record/i)
   expect(linkElement).toBeInTheDocument()
 })
