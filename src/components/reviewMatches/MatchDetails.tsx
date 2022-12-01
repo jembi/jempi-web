@@ -168,16 +168,16 @@ const columns: GridColDef[] = [
 const MatchDetails = () => {
   const searchParams = useSearch<MatchDetailsGenerics>()
 
-  const { data, error, isFetching } = useQuery<PatientRecord[], AxiosError>(
-    ['matches'],
-    () =>
+  const { data, error, isFetching } = useQuery<PatientRecord[], AxiosError>({
+    queryKey: ['matchDetails'],
+    queryFn: () =>
       ApiClient.getMatchDetails(
         searchParams.patientId!,
         searchParams.goldenId!,
         searchParams.candidates!
       ),
-    { refetchOnWindowFocus: false }
-  )
+    refetchOnWindowFocus: false
+  })
 
   const getName = (data: PatientRecord[] | undefined) => {
     return data && `${data[0].firstName} ${data[0].lastName}`
