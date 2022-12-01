@@ -20,7 +20,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 
 import ApiClient from '../../services/ApiClient'
-import Match from '../../types/Match'
+import Notification from '../../types/Notification'
+import { Link as LocationLink } from '@tanstack/react-location'
 
 const columns: GridColDef[] = [
   {
@@ -43,8 +44,9 @@ const columns: GridColDef[] = [
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
+    valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${params.value}%`
+      `${params.value * 100}%`
   },
   {
     field: 'date',
@@ -85,11 +87,20 @@ const columns: GridColDef[] = [
       id: params.row.id,
       patient: params.row.patient
     }),
-    renderCell: (params: GridRenderCellParams<any>) => {
+    renderCell: (params: GridRenderCellParams<any, Notification>) => {
+      const { patientId, linkedTo, candidates } = params.row
       return (
-        <Link href={`/match-details/${params.value.id}`} underline="none">
+        <LocationLink
+          to={`/match-details`}
+          search={{
+            patientId,
+            goldenId: linkedTo.gID,
+            candidates: candidates.map(c => c.gID)
+          }}
+          style={{ textDecoration: 'none' }}
+        >
           VIEW
-        </Link>
+        </LocationLink>
       )
     }
   }
@@ -97,10 +108,11 @@ const columns: GridColDef[] = [
 
 const ReviewMatches = () => {
   //TODO Refactor to custom hook
-  const { data, error, isFetching } = useQuery<Match[], AxiosError>(
-    ['matches'],
-    ApiClient.getMatches
-  )
+  const { data, error, isFetching } = useQuery<Notification[], AxiosError>({
+    queryKey: ['matches'],
+    queryFn: ApiClient.getMatches,
+    refetchOnWindowFocus: false
+  })
 
   return isFetching ? (
     <Container>
@@ -126,7 +138,7 @@ const ReviewMatches = () => {
       </Breadcrumbs>
       <DataGrid
         columns={columns}
-        rows={data as Match[]}
+        rows={data as Notification[]}
         pageSize={10}
         rowsPerPageOptions={[10]}
         sx={{ maxWidth: 1400, mt: 4 }}
