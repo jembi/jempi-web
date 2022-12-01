@@ -13,7 +13,13 @@ import Shell from './components/shell/Shell'
 import theme from './theme'
 
 const location = new ReactLocation()
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+    
+    }
+  }
+})
 
 const routes: Route[] = [
   { path: '/', element: <Dashboard /> },

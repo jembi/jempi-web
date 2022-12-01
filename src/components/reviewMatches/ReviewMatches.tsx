@@ -96,11 +96,13 @@ const columns: GridColDef[] = [
 ]
 
 const ReviewMatches = () => {
+  const tryIt = 'bob'
   //TODO Refactor to custom hook
-  const { data, error, isFetching } = useQuery<Match[], AxiosError>(
-    ['matches'],
-    ApiClient.getMatches
-  )
+  const { data, error, isFetching } = useQuery<Match[], AxiosError>({
+    queryKey: ['matches'],
+    queryFn: ApiClient.getMatches,
+    enabled: !!tryIt, 
+  })
 
   return isFetching ? (
     <Container>

@@ -64,7 +64,7 @@ const Shell = () => {
             </Button>
           </Box>
           <IconButton size="large" edge="end" color="inherit">
-            <AccountCircleIcon />
+            <AccountCircleIcon sx={{color: "grey"}} />
           </IconButton>
         </Toolbar>
         <Box
