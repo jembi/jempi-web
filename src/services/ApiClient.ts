@@ -51,6 +51,13 @@ class ApiClient {
     const goldenRecord = this.getGoldenRecords([goldenId])
     const candidateRecords = this.getGoldenRecords(candidates)
 
+    return (await axios
+      .all<any>([patientRecord, goldenRecord, candidateRecords])
+      .then(response =>
+        [response[0]].concat(response[1]).concat(response[2])
+      )) as PatientRecord[]
+  }
+
   async updateNotification(request: NotificationRequest) {
     return await axios
       .post(ROUTES.UPDATE_NOTIFICATION, request)
