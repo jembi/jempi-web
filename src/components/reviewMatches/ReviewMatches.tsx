@@ -46,7 +46,7 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
     valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${params.value * 100}%`
+      `${Math.round(params.value * 100)}%`
   },
   {
     field: 'date',
@@ -88,11 +88,12 @@ const columns: GridColDef[] = [
       patient: params.row.patient
     }),
     renderCell: (params: GridRenderCellParams<any, Notification>) => {
-      const { patientId, linkedTo, candidates } = params.row
+      const { patientId, linkedTo, candidates, id } = params.row
       return (
         <LocationLink
           to={`/match-details`}
           search={{
+            notificationId: id,
             patientId,
             goldenId: linkedTo.gID,
             candidates: candidates.map(c => c.gID)

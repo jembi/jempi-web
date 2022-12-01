@@ -1,5 +1,5 @@
 export default interface PatientRecord {
-  id: number
+  id: string
   type: string
   match: number
   uid: string
