@@ -76,7 +76,7 @@ const MatchDetails = () => {
       align: 'center',
       headerAlign: 'center',
       valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? `${params.value}%` : null
+        params.value ? `${Math.round(params.value)}%` : null
     },
     {
       field: 'uid',

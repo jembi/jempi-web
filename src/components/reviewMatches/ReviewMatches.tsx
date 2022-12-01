@@ -46,7 +46,7 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
     valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${params.value * 100}%`
+      `${Math.round(params.value * 100)}%`
   },
   {
     field: 'date',
