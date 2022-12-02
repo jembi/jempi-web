@@ -2,18 +2,19 @@ import axios from 'axios'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
 
-const client = axios.create({})
-
-const BASE_URL = 'http://192.168.10.82:50000/JeMPI'
+const client = axios.create({
+  baseURL:
+    process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
+})
 
 //TODO Change to real URL when available
 const ROUTES = {
-  GET_NOTIFICATIONS: `${BASE_URL}/MatchesForReview`,
-  GET_PATIENT_DOCUMENT: `${BASE_URL}/Document`,
-  GET_GOLDEN_ID_DOCUMENTS: `${BASE_URL}/GoldenRecordDocuments`,
-  UPDATE_NOTIFICATION: `${BASE_URL}/NotificationRequest`,
-  CREATE_GOLDEN_RECORD: `${BASE_URL}/Unlink`,
-  LINK_RECORD: `${BASE_URL}/Link`
+  GET_NOTIFICATIONS: '/MatchesForReview',
+  GET_PATIENT_DOCUMENT: '/Document',
+  GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecordDocuments',
+  UPDATE_NOTIFICATION: '/NotificationRequest',
+  CREATE_GOLDEN_RECORD: '/Unlink',
+  LINK_RECORD: '/Link'
 }
 
 interface NotificationRequest {
