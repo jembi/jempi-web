@@ -34,8 +34,8 @@ import PatientRecord from '../../types/PatientRecord'
 type MatchDetailsParams = MakeGenerics<{
   Search: {
     notificationId: string
-    patientId: string
-    goldenId: string
+    patient_id: string
+    golden_id: string
     candidates: string[]
   }
 }>
@@ -85,19 +85,19 @@ const MatchDetails = () => {
       flex: 2
     },
     {
-      field: 'identifiers',
+      field: 'nationalId',
       headerName: 'Identifiers',
       minWidth: 150,
       flex: 2
     },
     {
-      field: 'firstName',
+      field: 'givenName',
       headerName: 'First Name',
       minWidth: 150,
       flex: 2
     },
     {
-      field: 'lastName',
+      field: 'familyName',
       headerName: 'Last Name',
       minWidth: 150,
       flex: 2
@@ -120,7 +120,7 @@ const MatchDetails = () => {
       headerAlign: 'center'
     },
     {
-      field: 'phoneNo',
+      field: 'phoneNumber',
       headerName: 'Phone No',
       minWidth: 110,
       align: 'center',
@@ -200,8 +200,8 @@ const MatchDetails = () => {
     queryKey: ['matchDetails'],
     queryFn: () =>
       ApiClient.getMatchDetails(
-        searchParams.patientId!,
-        searchParams.goldenId!,
+        searchParams.patient_id!,
+        searchParams.golden_id!,
         searchParams.candidates!
       ),
     refetchOnWindowFocus: false
@@ -274,7 +274,7 @@ const MatchDetails = () => {
   })
 
   const getName = (data: PatientRecord[] | undefined) => {
-    return data && `${data[0].firstName} ${data[0].lastName}`
+    return data && `${data[0].givenName} ${data[0].familyName}`
   }
 
   const handleCreateGoldenRecord = () => {
@@ -312,12 +312,15 @@ const MatchDetails = () => {
   const handleConfirm = () => {
     switch (action) {
       case Action.CreateRecord:
-        newGoldenRecord.mutate({ docID: data![0].id, goldenID: data![1].id })
+        newGoldenRecord.mutate({
+          docID: data![0].uid,
+          goldenID: data![1].uid
+        })
         break
       case Action.Link:
         linkRecord.mutate({
-          docID: data![0].id,
-          goldenID: data![1].id,
+          docID: data![0].uid,
+          goldenID: data![1].uid,
           newGoldenID: recordId
         })
         break
@@ -362,6 +365,7 @@ const MatchDetails = () => {
         rows={data as PatientRecord[]}
         pageSize={10}
         rowsPerPageOptions={[10]}
+        getRowId={row => row.uid}
         sx={{
           mt: 4,
           '& .current-patient-cell': {

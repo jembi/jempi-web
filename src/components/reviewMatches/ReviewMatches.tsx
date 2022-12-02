@@ -25,13 +25,13 @@ import { Link as LocationLink } from '@tanstack/react-location'
 
 const columns: GridColDef[] = [
   {
-    field: 'reason',
+    field: 'type',
     headerName: 'Reason for Match',
     minWidth: 150,
     flex: 2
   },
   {
-    field: 'patient',
+    field: 'names',
     headerName: 'Patient',
     minWidth: 150,
     flex: 2
@@ -44,18 +44,21 @@ const columns: GridColDef[] = [
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
-    valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
+    //valueGetter: (params: GridValueGetterParams) => params.row.linkedTo.score,
+    valueGetter: (params: GridValueGetterParams) => params.row.score,
     valueFormatter: (params: GridValueFormatterParams<number>) =>
       `${Math.round(params.value * 100)}%`
   },
   {
-    field: 'date',
+    field: 'created',
     headerName: 'Date',
     type: 'date',
     minWidth: 110,
     flex: 1,
     align: 'center',
-    headerAlign: 'center'
+    headerAlign: 'center',
+    valueFormatter: (params: GridValueFormatterParams<number>) =>
+      new Date(params.value)
   },
   {
     field: 'state',
@@ -88,15 +91,22 @@ const columns: GridColDef[] = [
       patient: params.row.patient
     }),
     renderCell: (params: GridRenderCellParams<any, Notification>) => {
-      const { patientId, linkedTo, candidates, id } = params.row
+      const {
+        patient_id,
+        //linkedTo,
+        //candidates,
+        id,
+        golden_id
+      } = params.row
       return (
         <LocationLink
           to={`/match-details`}
           search={{
             notificationId: id,
-            patientId,
-            goldenId: linkedTo.gID,
-            candidates: candidates.map(c => c.gID)
+            patient_id,
+            golden_id
+            //goldenId: linkedTo.golden_id,
+            //candidates: candidates.map(c => c.golden_id)
           }}
           style={{ textDecoration: 'none' }}
         >

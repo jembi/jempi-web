@@ -1,14 +1,14 @@
 export default interface PatientRecord {
-  id: string
+  auxId: string
   type: string
   match: number
   uid: string
-  identifiers: string
-  firstName: string
-  lastName: string
+  nationalId: string
+  givenName: string
+  familyName: string
   gender: string
   dob: Date
-  phoneNo: string
+  phoneNumber: string
   city: string
-  updatedBy: string
+  updatedBy: string | undefined
 }

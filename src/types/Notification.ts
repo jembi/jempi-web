@@ -1,16 +1,19 @@
 export default interface Notification {
-  id: number
-  reason: string
-  patient: string
-  patientId: string
-  date: Date
+  id: string
+  type: string
+  reason?: string | null
+  created: number
+  names: string
+  patient_id: string | null
   state: NotificationState
-  linkedTo: GoldenRecord
-  candidates: GoldenRecord[]
+  golden_id: string
+  score: number
+  linkedTo?: GoldenRecord
+  candidates?: GoldenRecord[]
 }
 
 interface GoldenRecord {
-  gID: string
+  golden_id: string
   score: number
 }
 
