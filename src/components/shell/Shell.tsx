@@ -31,13 +31,13 @@ const Shell = () => {
             }}
           >
             <Typography variant="h6" sx={{ color: '#FFC400' }}>
-              1
+              Je
             </Typography>
             <Typography
               variant="h6"
               sx={{ color: theme => theme.palette.text.primary }}
             >
-              Record
+              MPI
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1 }}>

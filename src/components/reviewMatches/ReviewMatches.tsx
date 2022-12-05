@@ -98,7 +98,8 @@ const columns: GridColDef[] = [
         candidates,
         score,
         id,
-        golden_id
+        golden_id,
+        state
       } = params.row
       return (
         <LocationLink
@@ -113,7 +114,7 @@ const columns: GridColDef[] = [
           }}
           style={{ textDecoration: 'none' }}
         >
-          VIEW
+          {state !== 'Actioned' ? 'VIEW' : null}
         </LocationLink>
       )
     }

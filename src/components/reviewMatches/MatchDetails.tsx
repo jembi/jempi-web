@@ -72,6 +72,12 @@ const mapDataToScores = (
 }
 
 const MatchDetails = () => {
+  const checkForExactMatch = (params: GridCellParams<string>) => {
+    return params.value ===
+      (data && data[0][params.field as keyof PatientRecord])
+      ? 'matching-cell'
+      : ''
+  }
   const columns: GridColDef[] = [
     {
       field: 'type',
@@ -107,19 +113,22 @@ const MatchDetails = () => {
       field: 'nationalId',
       headerName: 'Identifiers',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
       field: 'givenName',
       headerName: 'First Name',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
       field: 'familyName',
       headerName: 'Last Name',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
       field: 'gender',
@@ -127,7 +136,8 @@ const MatchDetails = () => {
       minWidth: 110,
       flex: 1,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
     {
       field: 'dob',
@@ -138,21 +148,24 @@ const MatchDetails = () => {
       align: 'center',
       headerAlign: 'center',
       valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? moment(params.value).format('YYYY-MM-DD') : null
+        params.value ? moment(params.value).format('YYYY-MM-DD') : null,
+      cellClassName: checkForExactMatch
     },
     {
       field: 'phoneNumber',
       headerName: 'Phone No',
       minWidth: 110,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
     {
       field: 'city',
       headerName: 'City',
       minWidth: 110,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
     //TODO Add back when we have user information
     // {
@@ -392,13 +405,22 @@ const MatchDetails = () => {
         pageSize={10}
         rowsPerPageOptions={[10]}
         getRowId={row => row.uid}
+        getRowClassName={params =>
+          params.row.type === 'Golden' ? 'golden-row' : ''
+        }
         sx={{
           mt: 4,
           '& .current-patient-cell': {
             color: '#7B61FF'
           },
           '& .golden-patient-cell': {
-            color: '#FFC400'
+            color: '#D79B01'
+          },
+          '& .golden-row': {
+            backgroundColor: 'rgba(255, 202, 40, 0.2)'
+          },
+          '& .matching-cell': {
+            fontWeight: 'bold'
           }
         }}
         autoHeight={true}
