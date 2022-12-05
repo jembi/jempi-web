@@ -1,7 +1,7 @@
 export default interface PatientRecord {
   auxId: string
   type: string
-  match: number
+  score: number
   uid: string
   nationalId: string
   givenName: string

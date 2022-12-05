@@ -25,6 +25,7 @@ import {
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import moment from 'moment'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import ApiClient from '../../services/ApiClient'
@@ -36,7 +37,8 @@ type MatchDetailsParams = MakeGenerics<{
     notificationId: string
     patient_id: string
     golden_id: string
-    candidates: string[]
+    score: number
+    candidates: { golden_id: string; score: number }[]
   }
 }>
 
@@ -50,6 +52,23 @@ interface DialogParams {
   title?: string
   text?: string
   open: boolean
+}
+
+//TODO Move horrible function to the backend
+const mapDataToScores = (
+  data?: PatientRecord[],
+  score?: number,
+  candidates?: { golden_id: string; score: number }[]
+): PatientRecord[] => {
+  if (!data?.length) {
+    return []
+  }
+  data[1].score = score || 0
+  for (let i = 2; i < data.length; i++) {
+    data[i].score =
+      candidates?.find(c => c.golden_id === data[i].uid)?.score || 0
+  }
+  return data
 }
 
 const MatchDetails = () => {
@@ -68,7 +87,7 @@ const MatchDetails = () => {
       }
     },
     {
-      field: 'match',
+      field: 'score',
       headerName: 'Match',
       type: 'number',
       width: 100,
@@ -76,7 +95,7 @@ const MatchDetails = () => {
       align: 'center',
       headerAlign: 'center',
       valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? `${Math.round(params.value)}%` : null
+        params.value ? `${Math.round(params.value * 100)}%` : null
     },
     {
       field: 'uid',
@@ -117,7 +136,9 @@ const MatchDetails = () => {
       minWidth: 110,
       flex: 1,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      valueFormatter: (params: GridValueFormatterParams<number>) =>
+        params.value ? moment(params.value).format('YYYY-MM-DD') : null
     },
     {
       field: 'phoneNumber',
@@ -133,13 +154,14 @@ const MatchDetails = () => {
       align: 'center',
       headerAlign: 'center'
     },
-    {
-      field: 'updatedBy',
-      headerName: 'Updated By',
-      minWidth: 110,
-      align: 'center',
-      headerAlign: 'center'
-    },
+    //TODO Add back when we have user information
+    // {
+    //   field: 'updatedBy',
+    //   headerName: 'Updated By',
+    //   minWidth: 110,
+    //   align: 'center',
+    //   headerAlign: 'center'
+    // },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -171,7 +193,7 @@ const MatchDetails = () => {
         ) : params.row.type === 'Candidate' ? (
           <Link
             component="button"
-            onClick={() => handleLinkRecord(params.row.id)}
+            onClick={() => handleLinkRecord(params.row.uid)}
             underline="none"
           >
             Link
@@ -202,7 +224,7 @@ const MatchDetails = () => {
       ApiClient.getMatchDetails(
         searchParams.patient_id!,
         searchParams.golden_id!,
-        searchParams.candidates!
+        searchParams.candidates!.map(c => c.golden_id)
       ),
     refetchOnWindowFocus: false
   })
@@ -362,7 +384,11 @@ const MatchDetails = () => {
       </Breadcrumbs>
       <DataGrid
         columns={columns}
-        rows={data as PatientRecord[]}
+        rows={mapDataToScores(
+          data,
+          searchParams.score,
+          searchParams.candidates
+        )}
         pageSize={10}
         rowsPerPageOptions={[10]}
         getRowId={row => row.uid}

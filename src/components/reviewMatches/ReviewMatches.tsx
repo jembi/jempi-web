@@ -22,6 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import { Link as LocationLink } from '@tanstack/react-location'
+import moment from 'moment'
 
 const columns: GridColDef[] = [
   {
@@ -58,7 +59,7 @@ const columns: GridColDef[] = [
     align: 'center',
     headerAlign: 'center',
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      new Date(params.value)
+      params.value ? moment(params.value).format('YYYY-MM-DD') : null
   },
   {
     field: 'state',
@@ -94,7 +95,8 @@ const columns: GridColDef[] = [
       const {
         patient_id,
         //linkedTo,
-        //candidates,
+        candidates,
+        score,
         id,
         golden_id
       } = params.row
@@ -104,9 +106,10 @@ const columns: GridColDef[] = [
           search={{
             notificationId: id,
             patient_id,
-            golden_id
+            golden_id,
+            score,
             //goldenId: linkedTo.golden_id,
-            //candidates: candidates.map(c => c.golden_id)
+            candidates
           }}
           style={{ textDecoration: 'none' }}
         >
