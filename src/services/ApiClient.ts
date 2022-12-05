@@ -7,7 +7,6 @@ const client = axios.create({
     process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
 })
 
-//TODO Change to real URL when available
 const ROUTES = {
   GET_NOTIFICATIONS: '/MatchesForReview',
   GET_PATIENT_DOCUMENT: '/Document',
@@ -52,7 +51,6 @@ class ApiClient {
   }
 
   async getPatient(uid: string) {
-    uid = '0x642'
     return await client
       .get<PatientRecordResponse>(ROUTES.GET_PATIENT_DOCUMENT, {
         params: { uid }
@@ -116,7 +114,7 @@ class ApiClient {
   async linkRecord(request: LinkRequest) {
     return await client
       .patch(
-        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}`
+        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
       )
       .then(res => res.data)
   }
