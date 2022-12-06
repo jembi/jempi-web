@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 
 import { Outlet } from '@tanstack/react-location'
+import ErrorBoundary from '../error/ErrorBoundary'
 
 const barColour =
   'linear-gradient(90.05deg, #8BF280 -4.51%, #3B826B -4.5%, #58AB73 99.95%)'
@@ -81,7 +82,9 @@ const Shell = () => {
         }}
       >
         <Toolbar />
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </Box>
     </Box>
   )

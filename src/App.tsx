@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
+import ErrorBoundary from './components/error/ErrorBoundary'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
@@ -49,7 +50,9 @@ const App = () => {
           <SnackbarProvider
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            <Shell />
+            <ErrorBoundary>
+              <Shell />
+            </ErrorBoundary>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
         </Router>
