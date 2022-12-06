@@ -6,13 +6,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { SnackbarProvider } from 'notistack'
+import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
 import Shell from './components/shell/Shell'
 import theme from './theme'
-import { lazy } from 'react'
 
 const location = new ReactLocation()
 const queryClient = new QueryClient()

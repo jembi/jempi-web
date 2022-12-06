@@ -19,10 +19,10 @@ import {
 } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 
-import ApiClient from '../../services/ApiClient'
-import Notification from '../../types/Notification'
 import { Link as LocationLink } from '@tanstack/react-location'
 import moment from 'moment'
+import ApiClient from '../../services/ApiClient'
+import Notification from '../../types/Notification'
 
 const columns: GridColDef[] = [
   {
