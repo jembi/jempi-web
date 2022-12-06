@@ -7,14 +7,13 @@ import {
 import {
   AppBar,
   Box,
+  Button,
   IconButton,
   Toolbar,
-  Typography,
-  Button
+  Typography
 } from '@mui/material'
 
 import { Outlet } from '@tanstack/react-location'
-import { ReactLocationDevtools } from '@tanstack/react-location-devtools'
 
 const barColour =
   'linear-gradient(90.05deg, #8BF280 -4.51%, #3B826B -4.5%, #58AB73 99.95%)'
@@ -74,7 +73,6 @@ const Shell = () => {
           }}
         ></Box>
       </AppBar>
-
       <Box
         component="main"
         sx={{
@@ -85,7 +83,6 @@ const Shell = () => {
         <Toolbar />
         <Outlet />
       </Box>
-      <ReactLocationDevtools position="bottom-right" />
     </Box>
   )
 }
