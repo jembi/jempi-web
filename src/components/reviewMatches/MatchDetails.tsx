@@ -335,7 +335,7 @@ const MatchDetails = () => {
     setRecordId(id)
     setDialog({
       title: 'Confirm record link',
-      text: 'This will unlink from the current golden record and link this new record as the golden record',
+      text: 'This will unlink from the current golden record and link this record as the golden record',
       open: true
     })
   }
