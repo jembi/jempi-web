@@ -5,16 +5,26 @@ import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+import { SnackbarProvider } from 'notistack'
+import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
 import Shell from './components/shell/Shell'
 import theme from './theme'
-import { SnackbarProvider } from 'notistack'
 
 const location = new ReactLocation()
 const queryClient = new QueryClient()
+
+const ReactLocationDevtools =
+  process.env.NODE_ENV === 'production'
+    ? () => null
+    : lazy(() =>
+        import('@tanstack/react-location-devtools').then(res => ({
+          default: res.ReactLocationDevtools
+        }))
+      )
 
 const routes: Route[] = [
   { path: '/', element: <Dashboard /> },
@@ -41,6 +51,7 @@ const App = () => {
           >
             <Shell />
           </SnackbarProvider>
+          <ReactLocationDevtools position="bottom-right" />
         </Router>
         <ReactQueryDevtools />
       </QueryClientProvider>

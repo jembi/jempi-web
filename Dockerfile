@@ -6,4 +6,8 @@ COPY . .
 
 RUN yarn install
 
-CMD ["yarn", "start"]
+RUN yarn build
+
+RUN yarn global add serve
+
+CMD serve -s build
