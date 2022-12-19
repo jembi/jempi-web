@@ -1,6 +1,6 @@
 import './App.css'
 
-import { CssBaseline, ThemeProvider, Typography } from '@mui/material'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
+import ErrorBoundary from './components/error/ErrorBoundary'
+import NotFound from './components/error/NotFound'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
@@ -37,7 +39,7 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <Search /> },
-  { element: <Typography variant="h1">NOPE</Typography> }
+  { element: <NotFound /> }
 ]
 
 const App = () => {
@@ -49,7 +51,9 @@ const App = () => {
           <SnackbarProvider
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            <Shell />
+            <ErrorBoundary>
+              <Shell />
+            </ErrorBoundary>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
         </Router>
