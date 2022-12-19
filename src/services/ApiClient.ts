@@ -1,11 +1,14 @@
 import axios from 'axios'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import moxios from './mockBackend'
 
-const client = axios.create({
-  baseURL:
-    process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
-})
+const client = process.env.REACT_APP_MOCK_BACKEND
+  ? moxios
+  : axios.create({
+      baseURL:
+        process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
+    })
 
 const ROUTES = {
   GET_NOTIFICATIONS: '/MatchesForReview',
