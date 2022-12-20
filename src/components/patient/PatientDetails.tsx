@@ -60,10 +60,10 @@ const PatientDetails = () => {
         <Grid item xs={4}>
           <IdentifiersPanel data={data} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <RegisteringFacilityPanel data={data} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <AddressPanel data={data} />
         </Grid>
         <Grid item xs={8}>

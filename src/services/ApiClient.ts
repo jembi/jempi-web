@@ -1,5 +1,5 @@
 import axios from 'axios'
-import FIELDS_CONFIG from '../config/fields.config'
+import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
 import ROUTES from './apiRoutes'
@@ -41,8 +41,9 @@ interface GoldenRecordResponse {
 
 class ApiClient {
   async getFields() {
-    // @TODO : Update this to use API endpoint once ready.
-    return await Promise.resolve(FIELDS_CONFIG)
+    return await client
+      .get<Fields>(ROUTES.GET_FIELDS_CONFIG)
+      .then(res => res.data)
   }
 
   async getMatches() {

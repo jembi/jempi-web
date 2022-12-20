@@ -27,6 +27,7 @@ const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
     .filter(({ fieldName }) => fieldName in data)
     .map(({ fieldName, fieldType }) => {
       return {
+        fieldName,
         label: data[fieldName]?.toString(),
         Icon: getIconByFieldType(fieldType)
       }
@@ -36,14 +37,17 @@ const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
 
   return (
     <Stack direction="row" spacing={1} sx={{ my: 3 }}>
-      <Chip
-        icon={isGoldenRecord ? <StarIcon /> : <CircleOutlinedIcon />}
-        label={data.uid}
-        color={isGoldenRecord ? 'primary' : 'default'}
-      />
-      {chips.map(({ label, Icon }) => (
-        <Chip icon={<Icon />} label={label} />
-      ))}
+      {chips.map(({ label, Icon, fieldName }) =>
+        fieldName === 'uid' ? (
+          <Chip
+            icon={isGoldenRecord ? <StarIcon /> : <CircleOutlinedIcon />}
+            label={data.uid}
+            color={isGoldenRecord ? 'primary' : 'default'}
+          />
+        ) : (
+          <Chip icon={<Icon />} label={label} />
+        )
+      )}
     </Stack>
   )
 }

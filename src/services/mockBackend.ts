@@ -3,6 +3,7 @@ import AxiosMockAdapter from 'axios-mock-adapter'
 import ROUTES from './apiRoutes'
 
 import mockData from './mockData'
+import mockFields from './mockFields'
 
 const moxios = axios.create()
 
@@ -26,5 +27,7 @@ axiosMockAdapterInstance
     })
     return [200, { goldenRecords: records }]
   })
+  .onGet('/Fields')
+  .reply(200, mockFields)
 
 export default moxios
