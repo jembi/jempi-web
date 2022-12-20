@@ -20,7 +20,7 @@ interface Parameters {
 }
 
 interface Search {
-  search: Parameters[]
+  parameters: Parameters[]
 }
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -121,13 +121,13 @@ const Search = () => {
                   <FieldArray name="search">
                     {() => (
                       <div>
-                        {values.search.map((data, index) => {
+                        {values.parameters.map((data, index) => {
                           const inputFieldLabel = data.field
                             .split(/(?=[A-Z])/)
                             .join(' ')
-                          const fieldAttribute: string = `search[${index}].value`
-                          const exactAttribute: string = `search[${index}].exact`
-                          const distanceAttribute: string = `search[${index}].distance`
+                          const fieldAttribute: string = `parameters[${index}].value`
+                          const exactAttribute: string = `parameters[${index}].exact`
+                          const distanceAttribute: string = `parameters[${index}].distance`
 
                           return (
                             <div key={data.field}>

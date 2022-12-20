@@ -1,5 +1,5 @@
 const SimpleSearchDataModel = {
-  search: [
+  parameters: [
     {
       field: 'NationalId',
       value: '',
