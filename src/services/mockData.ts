@@ -31,7 +31,7 @@ const patientRecord: PatientRecord = {
 
 const goldenRecord: PatientRecord = {
   auxId: '0x77',
-  type: 'Current',
+  type: '',
   score: 0,
   uid: '0x9833',
   nationalId: '123456',
