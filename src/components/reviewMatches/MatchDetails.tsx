@@ -237,7 +237,7 @@ const MatchDetails = () => {
       ApiClient.getMatchDetails(
         searchParams.patient_id!,
         searchParams.golden_id!,
-        searchParams.candidates!.map(c => c.golden_id)
+        searchParams.candidates?.map(c => c.golden_id) || []
       ),
     refetchOnWindowFocus: false
   })
