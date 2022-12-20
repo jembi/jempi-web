@@ -25,6 +25,7 @@ import {
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import moment from 'moment'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import ApiClient from '../../services/ApiClient'
@@ -34,9 +35,10 @@ import PatientRecord from '../../types/PatientRecord'
 type MatchDetailsParams = MakeGenerics<{
   Search: {
     notificationId: string
-    patientId: string
-    goldenId: string
-    candidates: string[]
+    patient_id: string
+    golden_id: string
+    score: number
+    candidates: { golden_id: string; score: number }[]
   }
 }>
 
@@ -52,7 +54,30 @@ interface DialogParams {
   open: boolean
 }
 
+//TODO Move horrible function to the backend
+const mapDataToScores = (
+  data?: PatientRecord[],
+  score?: number,
+  candidates?: { golden_id: string; score: number }[]
+): PatientRecord[] => {
+  if (!data?.length) {
+    return []
+  }
+  data[1].score = score || 0
+  for (let i = 2; i < data.length; i++) {
+    data[i].score =
+      candidates?.find(c => c.golden_id === data[i].uid)?.score || 0
+  }
+  return data
+}
+
 const MatchDetails = () => {
+  const checkForExactMatch = (params: GridCellParams<string>) => {
+    return params.value ===
+      (data && data[0][params.field as keyof PatientRecord])
+      ? 'matching-cell'
+      : ''
+  }
   const columns: GridColDef[] = [
     {
       field: 'type',
@@ -68,7 +93,7 @@ const MatchDetails = () => {
       }
     },
     {
-      field: 'match',
+      field: 'score',
       headerName: 'Match',
       type: 'number',
       width: 100,
@@ -76,7 +101,7 @@ const MatchDetails = () => {
       align: 'center',
       headerAlign: 'center',
       valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? `${Math.round(params.value)}%` : null
+        params.value ? `${Math.round(params.value * 100)}%` : null
     },
     {
       field: 'uid',
@@ -85,22 +110,25 @@ const MatchDetails = () => {
       flex: 2
     },
     {
-      field: 'identifiers',
+      field: 'nationalId',
       headerName: 'Identifiers',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
-      field: 'firstName',
+      field: 'givenName',
       headerName: 'First Name',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
-      field: 'lastName',
+      field: 'familyName',
       headerName: 'Last Name',
       minWidth: 150,
-      flex: 2
+      flex: 2,
+      cellClassName: checkForExactMatch
     },
     {
       field: 'gender',
@@ -108,7 +136,8 @@ const MatchDetails = () => {
       minWidth: 110,
       flex: 1,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
     {
       field: 'dob',
@@ -117,29 +146,35 @@ const MatchDetails = () => {
       minWidth: 110,
       flex: 1,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      valueFormatter: (params: GridValueFormatterParams<number>) =>
+        params.value ? moment(params.value).format('YYYY-MM-DD') : null,
+      cellClassName: checkForExactMatch
     },
     {
-      field: 'phoneNo',
+      field: 'phoneNumber',
       headerName: 'Phone No',
       minWidth: 110,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
     {
       field: 'city',
       headerName: 'City',
       minWidth: 110,
       align: 'center',
-      headerAlign: 'center'
+      headerAlign: 'center',
+      cellClassName: checkForExactMatch
     },
-    {
-      field: 'updatedBy',
-      headerName: 'Updated By',
-      minWidth: 110,
-      align: 'center',
-      headerAlign: 'center'
-    },
+    //TODO Add back when we have user information
+    // {
+    //   field: 'updatedBy',
+    //   headerName: 'Updated By',
+    //   minWidth: 110,
+    //   align: 'center',
+    //   headerAlign: 'center'
+    // },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -171,7 +206,7 @@ const MatchDetails = () => {
         ) : params.row.type === 'Candidate' ? (
           <Link
             component="button"
-            onClick={() => handleLinkRecord(params.row.id)}
+            onClick={() => handleLinkRecord(params.row.uid)}
             underline="none"
           >
             Link
@@ -200,9 +235,9 @@ const MatchDetails = () => {
     queryKey: ['matchDetails'],
     queryFn: () =>
       ApiClient.getMatchDetails(
-        searchParams.patientId!,
-        searchParams.goldenId!,
-        searchParams.candidates!
+        searchParams.patient_id!,
+        searchParams.golden_id!,
+        searchParams.candidates?.map(c => c.golden_id) || []
       ),
     refetchOnWindowFocus: false
   })
@@ -276,7 +311,7 @@ const MatchDetails = () => {
   })
 
   const getName = (data: PatientRecord[] | undefined) => {
-    return data && `${data[0].firstName} ${data[0].lastName}`
+    return data && `${data[0].givenName} ${data[0].familyName}`
   }
 
   const handleCreateGoldenRecord = () => {
@@ -302,7 +337,7 @@ const MatchDetails = () => {
     setRecordId(id)
     setDialog({
       title: 'Confirm record link',
-      text: 'This will unlink from the current golden record and link this new record as the golden record',
+      text: 'This will unlink from the current golden record and link this record as the golden record',
       open: true
     })
   }
@@ -314,12 +349,15 @@ const MatchDetails = () => {
   const handleConfirm = () => {
     switch (action) {
       case Action.CreateRecord:
-        newGoldenRecord.mutate({ docID: data![0].id, goldenID: data![1].id })
+        newGoldenRecord.mutate({
+          docID: data![0].uid,
+          goldenID: data![1].uid
+        })
         break
       case Action.Link:
         linkRecord.mutate({
-          docID: data![0].id,
-          goldenID: data![1].id,
+          docID: data![0].uid,
+          goldenID: data![1].uid,
           newGoldenID: recordId
         })
         break
@@ -361,16 +399,30 @@ const MatchDetails = () => {
       </Breadcrumbs>
       <DataGrid
         columns={columns}
-        rows={data as PatientRecord[]}
+        rows={mapDataToScores(
+          data,
+          searchParams.score,
+          searchParams.candidates
+        )}
         pageSize={10}
         rowsPerPageOptions={[10]}
+        getRowId={row => row.uid}
+        getRowClassName={params =>
+          params.row.type === 'Golden' ? 'golden-row' : ''
+        }
         sx={{
           mt: 4,
           '& .current-patient-cell': {
             color: '#7B61FF'
           },
           '& .golden-patient-cell': {
-            color: '#FFC400'
+            color: '#D79B01'
+          },
+          '& .golden-row': {
+            backgroundColor: 'rgba(255, 202, 40, 0.2)'
+          },
+          '& .matching-cell': {
+            fontWeight: 'bold'
           }
         }}
         autoHeight={true}

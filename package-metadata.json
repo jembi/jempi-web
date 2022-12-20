@@ -7,6 +7,7 @@
   "dependencies": [],
   "environmentVariables": {
     "JEMPI_WEB_VERSION": "latest",
+    "REACT_APP_JEMPI_BASE_URL": "http://localhost:50000/JeMPI",
     "JEMPI_WEB_INSTANCES": 1,
     "JEMPI_WEB_CPU_LIMIT": 2,
     "JEMPI_WEB_CPU_RESERVE": 0.05,

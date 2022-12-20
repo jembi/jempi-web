@@ -1,19 +1,15 @@
 import axios from 'axios'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import ROUTES from './apiRoutes'
+import moxios from './mockBackend'
 
-//TODO Change to real URL when available
-const ROUTES = {
-  GET_NOTIFICATIONS:
-    'https://api.mockaroo.com/api/ea593b70?count=23&key=98d3ce00',
-  GET_PATIENT_DOCUMENT:
-    'https://api.mockaroo.com/api/0e76bdc0?count=1&key=98d3ce00',
-  GET_GOLDEN_ID_DOCUMENTS:
-    'https://api.mockaroo.com/api/70ec1680?count=1&key=98d3ce00',
-  UPDATE_NOTIFICATION: 'https://jsonplaceholder.typicode.com/posts',
-  CREATE_GOLDEN_RECORD: 'https://jsonplaceholder.typicode.com/posts',
-  LINK_RECORD: 'https://jsonplaceholder.typicode.com/posts'
-}
+const client = process.env.REACT_APP_MOCK_BACKEND
+  ? moxios
+  : axios.create({
+      baseURL:
+        process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
+    })
 
 interface NotificationRequest {
   notificationId: string
@@ -26,23 +22,49 @@ interface LinkRequest {
   newGoldenID?: string
 }
 
+interface NotificationResponse {
+  records: Notification[]
+}
+
+interface PatientRecordResponse {
+  document: PatientRecord
+}
+
+interface CustomGoldenRecord {
+  customGoldenRecord: PatientRecord
+}
+
+interface GoldenRecordResponse {
+  goldenRecords: CustomGoldenRecord[]
+}
+
 class ApiClient {
   async getMatches() {
-    return await axios
-      .get<Notification[]>(ROUTES.GET_NOTIFICATIONS)
-      .then(res => res.data)
+    return await client
+      .get<NotificationResponse>(ROUTES.GET_NOTIFICATIONS)
+      .then(res => res.data.records)
   }
 
   async getPatient(uid: string) {
-    return await axios
-      .get<PatientRecord>(ROUTES.GET_PATIENT_DOCUMENT, { params: { uid } })
-      .then(res => res.data)
+    return await client
+      .get<PatientRecordResponse>(ROUTES.GET_PATIENT_DOCUMENT, {
+        params: { uid }
+      })
+      .then(res => res.data.document)
   }
 
   async getGoldenRecords(uid: string[]) {
-    return await axios
-      .get<PatientRecord[]>(ROUTES.GET_GOLDEN_ID_DOCUMENTS, { params: { uid } })
-      .then(res => res.data)
+    const uids = uid?.map(u => '0x' + parseInt(u).toString(16))
+    return await client
+      .get<GoldenRecordResponse>(ROUTES.GET_GOLDEN_ID_DOCUMENTS, {
+        params: {
+          uid: uids
+        },
+        paramsSerializer: {
+          indexes: null
+        }
+      })
+      .then(res => res.data.goldenRecords.map(gr => gr.customGoldenRecord))
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
@@ -53,25 +75,43 @@ class ApiClient {
 
     return (await axios
       .all<any>([patientRecord, goldenRecord, candidateRecords])
-      .then(response =>
-        [response[0]].concat(response[1]).concat(response[2])
-      )) as PatientRecord[]
+      .then(response => {
+        return [{ type: 'Current', ...response[0] }]
+          .concat(
+            response[1].map((r: PatientRecord) => {
+              r.type = 'Golden'
+              return r
+            })
+          )
+          .concat(
+            response[2].map((r: PatientRecord) => {
+              r.type = 'Candidate'
+              return r
+            })
+          )
+      })) as PatientRecord[]
   }
 
   async updateNotification(request: NotificationRequest) {
-    return await axios
+    return await client
       .post(ROUTES.UPDATE_NOTIFICATION, request)
       .then(res => res.data)
   }
 
   async newGoldenRecord(request: LinkRequest) {
-    return await axios
-      .post(ROUTES.CREATE_GOLDEN_RECORD, request)
+    return await client
+      .patch(
+        `${ROUTES.CREATE_GOLDEN_RECORD}?goldenID=${request.goldenID}&docID=${request.docID}`
+      )
       .then(res => res.data)
   }
 
   async linkRecord(request: LinkRequest) {
-    return await axios.post(ROUTES.LINK_RECORD, request).then(res => res.data)
+    return await client
+      .patch(
+        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
+      )
+      .then(res => res.data)
   }
 }
 
