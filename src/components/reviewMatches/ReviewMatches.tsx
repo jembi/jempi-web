@@ -108,7 +108,6 @@ const columns: GridColDef[] = [
 ]
 
 const ReviewMatches = () => {
-  const tryIt = 'bob'
   //TODO Refactor to custom hook
   const { data, error, isFetching } = useQuery<Notification[], AxiosError>({
     queryKey: ['matches'],

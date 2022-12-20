@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Dashboard from './components/dashboard/Dashboard'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
-import Search from './components/search/Search'
+import Search from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import theme from './theme'
 import { SnackbarProvider } from 'notistack'
@@ -16,9 +16,7 @@ import { SnackbarProvider } from 'notistack'
 const location = new ReactLocation()
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-    
-    }
+    queries: {}
   }
 })
 
