@@ -5,7 +5,7 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'uid',
     fieldType: 'String',
     fieldLabel: 'UID',
-    groups: ['identifiers'],
+    groups: ['identifiers', 'sub_heading'],
     scope: ['/patient/:uid'],
     accessLevel: []
   },
@@ -45,7 +45,7 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'gender',
     fieldType: 'String',
     fieldLabel: 'Gender',
-    groups: ['demographics'],
+    groups: ['demographics', 'sub_heading'],
     scope: ['/patient/:uid'],
     accessLevel: []
   },
@@ -53,7 +53,7 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'dob',
     fieldType: 'Date',
     fieldLabel: 'Date of Birth',
-    groups: ['demographics'],
+    groups: ['demographics', 'sub_heading'],
     scope: ['/patient/:uid'],
     accessLevel: []
   },

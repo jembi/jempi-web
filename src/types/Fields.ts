@@ -6,11 +6,14 @@ export type FieldGroup =
   | 'address'
   | 'demographics'
   | 'relationships'
+  | 'sub_heading'
   | 'system'
+
+export type FieldType = 'String' | 'Number' | 'Date' | 'Boolean'
 
 export type Field = {
   fieldName: string
-  fieldType: 'String' | 'Number' | 'Date' | 'Boolean'
+  fieldType: FieldType
   fieldLabel: string
   groups: FieldGroup[]
   scope: string[]

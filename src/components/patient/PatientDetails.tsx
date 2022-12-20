@@ -13,6 +13,7 @@ import DemographicsPanel from './DemographicsPanel'
 import IdentifiersPanel from './IdentifiersPanel'
 import RegisteringFacilityPanel from './RegisteringFacilityPanel'
 import RelationshipPanel from './RelationshipPanel'
+import SubHeading from './SubHeading'
 
 const PatientDetails = () => {
   const {
@@ -54,11 +55,7 @@ const PatientDetails = () => {
         <Typography color="text.primary">{patientName}</Typography>
       </Breadcrumbs>
       <Typography variant="h4">{patientName}</Typography>
-      {/* <Stack direction="row" spacing={1} sx={{ my: 3 }}>
-        <Chip icon={<StarIcon />} label={data.uid} color={'primary'} />
-        <Chip icon={<PersonIcon />} label={data.gender} />
-        <Chip icon={<CalendarIcon />} label={data.dob.toISOString()} />
-      </Stack> */}
+      <SubHeading data={data} />
       <Grid container spacing={4}>
         <Grid item xs={4}>
           <IdentifiersPanel data={data} />
