@@ -44,7 +44,7 @@ const PatientDetails = () => {
   const patientName = getPatientName(data)
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Breadcrumbs>
         <Link underline="hover" color="inherit" href="/">
           Home

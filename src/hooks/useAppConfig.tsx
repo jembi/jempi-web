@@ -1,16 +1,17 @@
-import { useMatch, useMatchRoute } from '@tanstack/react-location'
+import { useMatchRoute } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React, { useCallback, useMemo } from 'react'
 import Loading from '../components/common/Loading'
 import ApiErrorMessage from '../components/error/ApiErrorMessage'
 import ApiClient from '../services/ApiClient'
-import { FieldGroup, Fields } from '../types/Fields'
+import { DisplayField, FieldGroup, Fields } from '../types/Fields'
 import PatientRecord from '../types/PatientRecord'
+import { getFieldValueFormatter } from '../utils/formatters'
 
 export interface AppConfigContextValue {
-  availableFields: Fields
-  getFieldsByGroup: (group: FieldGroup) => Fields
+  availableFields: DisplayField[]
+  getFieldsByGroup: (group: FieldGroup) => DisplayField[]
   getPatientName: (patient: PatientRecord) => string
 }
 
@@ -24,6 +25,7 @@ export interface AppConfigProviderProps {
 export const AppConfigProvider = ({
   children
 }: AppConfigProviderProps): JSX.Element => {
+  const matchRoute = useMatchRoute()
   const {
     data: fields,
     error,
@@ -34,14 +36,17 @@ export const AppConfigProvider = ({
     queryFn: () => ApiClient.getFields(),
     refetchOnWindowFocus: false
   })
-  const matchRoute = useMatchRoute()
-  const { pathname } = useMatch()
 
-  const availableFields = useMemo(() => {
-    return (fields || []).filter(({ scope }) =>
-      scope.some(path => matchRoute({ to: path }))
-    )
-  }, [fields, pathname])
+  const availableFields: DisplayField[] = useMemo(() => {
+    return (fields || [])
+      .filter(({ scope }) => scope.some(path => matchRoute({ to: path })))
+      .map(field => {
+        return {
+          ...field,
+          formatValue: getFieldValueFormatter(field.fieldType)
+        }
+      })
+  }, [fields, matchRoute])
 
   const getFieldsByGroup = useCallback(
     (groupName: FieldGroup) => {

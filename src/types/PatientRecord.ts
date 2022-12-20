@@ -6,3 +6,5 @@ export default interface PatientRecord
   uid: string
   updatedBy: string | undefined
 }
+
+export type ValueOf<T> = T[keyof T]

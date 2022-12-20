@@ -7,10 +7,12 @@ import PatientRecord from '../../types/PatientRecord'
 const RelationshipPanel: FC<{ data: PatientRecord }> = ({ data }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('relationships').map(
-    ({ fieldName, fieldLabel }) => {
+    ({ fieldName, fieldLabel, formatValue }) => {
       return {
         field: fieldName,
-        headerName: fieldLabel
+        headerName: fieldLabel,
+        flex: 1,
+        valueFormatter: ({ value }) => formatValue(value)
       }
     }
   )

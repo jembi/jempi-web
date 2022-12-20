@@ -25,10 +25,10 @@ const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
   const { getFieldsByGroup } = useAppConfig()
   const chips = getFieldsByGroup('sub_heading')
     .filter(({ fieldName }) => fieldName in data)
-    .map(({ fieldName, fieldType }) => {
+    .map(({ fieldName, fieldType, formatValue }) => {
       return {
         fieldName,
-        label: data[fieldName]?.toString(),
+        label: formatValue(data[fieldName]),
         Icon: getIconByFieldType(fieldType)
       }
     })
