@@ -1,5 +1,6 @@
 import axios from 'axios'
 import AxiosMockAdapter from 'axios-mock-adapter'
+import ROUTES from './apiRoutes'
 
 import mockData from './mockData'
 
@@ -12,11 +13,11 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
 const { notifications, patientRecord, goldenRecords } = mockData
 
 axiosMockAdapterInstance
-  .onGet('/MatchesForReview')
+  .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
-  .onGet('/Document')
+  .onGet(ROUTES.GET_PATIENT_DOCUMENT)
   .reply(200, { document: patientRecord })
-  .onGet('/GoldenRecordDocuments')
+  .onGet(ROUTES.GET_GOLDEN_ID_DOCUMENTS)
   .reply(() => {
     // Unique row ids for data grid
     const records = goldenRecords.map(g => {

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
 const client = process.env.REACT_APP_MOCK_BACKEND
@@ -9,15 +10,6 @@ const client = process.env.REACT_APP_MOCK_BACKEND
       baseURL:
         process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
     })
-
-const ROUTES = {
-  GET_NOTIFICATIONS: '/MatchesForReview',
-  GET_PATIENT_DOCUMENT: '/Document',
-  GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecordDocuments',
-  UPDATE_NOTIFICATION: '/NotificationRequest',
-  CREATE_GOLDEN_RECORD: '/Unlink',
-  LINK_RECORD: '/Link'
-}
 
 interface NotificationRequest {
   notificationId: string
