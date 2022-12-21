@@ -12,7 +12,9 @@ const AddressPanel: FC<{ data: PatientRecord }> = ({ data }) => {
         field: fieldName,
         headerName: fieldLabel,
         flex: 1,
-        valueFormatter: ({ value }) => formatValue(value)
+        valueFormatter: ({ value }) => formatValue(value),
+        sortable: false,
+        disableColumnMenu: true
       }
     }
   )

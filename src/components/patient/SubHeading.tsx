@@ -40,12 +40,13 @@ const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
       {chips.map(({ label, Icon, fieldName }) =>
         fieldName === 'uid' ? (
           <Chip
+            key={fieldName}
             icon={isGoldenRecord ? <StarIcon /> : <CircleOutlinedIcon />}
             label={data.uid}
             color={isGoldenRecord ? 'primary' : 'default'}
           />
         ) : (
-          <Chip icon={<Icon />} label={label} />
+          <Chip key={fieldName} icon={<Icon />} label={label} />
         )
       )}
     </Stack>
