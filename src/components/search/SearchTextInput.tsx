@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material'
 import { Fragment } from 'react'
-import SimpleSearchTextInput from '../../types/SimpleSearchTextInput'
+import {SimpleSearchTextInput} from '../../types/SimpleSearch'
 
 const SearchTextInput = (prop: SimpleSearchTextInput) => {
   return (

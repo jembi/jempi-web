@@ -1,12 +1,17 @@
 import { Grid } from '@mui/material'
 import { Fragment } from 'react'
-import SearchParameters from '../../types/SearchParameters'
-
+import SearchParameters from '../../types/SimpleSearch'
+import SearchDateInput from './SearchDateInput'
 import ExactSwitch from './ExactSwitch'
 import FuzzyMatch from './FuzzyMatch'
 import SearchTextInput from './SearchTextInput'
 
 const SimpleSearchParametersComponent = (prop: SearchParameters) => {
+  let isDateField = false
+  if (prop.label.toLowerCase().includes('date')) {
+    isDateField = true
+  }
+
   return (
     <Fragment>
       <Grid item sx={{ mb: 1 }}>
@@ -17,12 +22,21 @@ const SimpleSearchParametersComponent = (prop: SearchParameters) => {
           alignItems={'center'}
         >
           <Grid item>
-            <SearchTextInput
-              label={prop.label}
-              textFieldValue={prop.textFieldValue}
-              onChange={prop.handleChange}
-              name={prop.fieldAttribute}
-            />
+            {isDateField ? (
+              <SearchDateInput
+                label={prop.label}
+                textFieldValue={prop.textFieldValue}
+                name={prop.fieldAttribute}
+                setFieldValue={prop.setFieldValue}
+              />
+            ) : (
+              <SearchTextInput
+                label={prop.label}
+                textFieldValue={prop.textFieldValue}
+                onChange={prop.handleChange}
+                name={prop.fieldAttribute}
+              />
+            )}
           </Grid>
           <Grid item sx={{ ml: 0.5 }}>
             <Grid item sx={{ mr: 2 }}>

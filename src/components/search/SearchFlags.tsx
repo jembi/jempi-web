@@ -1,18 +1,15 @@
 import { Grid } from '@mui/material'
 import { Fragment, useState } from 'react'
-import ToggleThreeButton from './ToggleThreeButton'
 import SearchTypes from './SearchTypes'
+import ToggleThreeButton from './ToggleCustomBbutton'
 
 interface searchFlagsType {
-  button1Label: string
-  button2Label: string
-  button3Label: string
+  range: string[]
   to: string
   label: string
 }
 const SearchFlags = (prop: searchFlagsType) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
-
   const ToggleButtonStyle = () => ({
     width: '129px',
     height: '42px',
@@ -37,9 +34,7 @@ const SearchFlags = (prop: searchFlagsType) => {
             handleChange={handleChange}
             exactValue={true}
             ToggleButtonStyle={ToggleButtonStyle}
-            button1Label={prop.button1Label}
-            button2Label={prop.button2Label}
-            button3Label={prop.button3Label}
+            range={prop.range}
           />
         </Grid>
         <SearchTypes to={prop.to} label={prop.label} />

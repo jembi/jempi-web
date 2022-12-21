@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Notification, { NotificationState } from '../types/Notification'
+import {Search} from '../types/SimpleSearch'
 import PatientRecord from '../types/PatientRecord'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
@@ -113,6 +114,13 @@ class ApiClient {
       )
       .then(res => res.data)
   }
+
+  async postSimpleSearchQuery(request: Search) {
+    return await client
+      .post(ROUTES.POST_SIMPLE_SEARCH, request)
+      .then(res => res.data)
+  }
 }
+
 
 export default new ApiClient()

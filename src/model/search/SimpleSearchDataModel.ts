@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const SimpleSearchDataModel = {
   parameters: [
     {
@@ -20,7 +22,7 @@ const SimpleSearchDataModel = {
     },
     {
       field: 'DateOfBirth',
-      value: '',
+      value: moment().format('DD/MM/YYYY'),
       exact: true,
       distance: 1
     }

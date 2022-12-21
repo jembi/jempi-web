@@ -1,63 +1,85 @@
+import HomeIcon from '@mui/icons-material/Home'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import SearchIcon from '@mui/icons-material/Search'
 import {
-  Breadcrumbs,
-  Container,
-  Link,
-  Typography,
-  Grid,
-  Button,
-  Box
+  Box, Breadcrumbs, Button, Container, Grid, Stack, Typography
 } from '@mui/material'
-import { Formik, Form, FieldArray } from 'formik'
-import SimpleSearchParametersComponent from './SimpleSearchParametersComponent'
-import SearchFlags from './SearchFlags'
+import IconButton from '@mui/material/IconButton'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { FieldArray, Form, Formik } from 'formik'
 import SimpleSearchDataModel from '../../model/search/SimpleSearchDataModel'
+import ApiClient from '../../services/ApiClient'
+import { Parameters, Search } from '../../types/SimpleSearch'
+import SearchFlags from './SearchFlags'
+import SimpleSearchParametersComponent from './SimpleSearchParametersComponent'
 
-interface Parameters {
-  field: string
-  value: string
-  exact: boolean
-  distance: number
-}
-
-interface Search {
-  parameters: Parameters[]
-}
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
   GOLDEN_ONLY = 'GOLDEN ONLY',
   PATIENT_ONLY = 'PATIENT ONLY'
 }
-const Search = () => {
-  const initialValues: Search = SimpleSearchDataModel
+const SimpleSearch = () => {
+  //TODO: find a better way of handling error while posting the search request
+  const postSearchQuery = useMutation({
+    mutationFn: ApiClient.postSimpleSearchQuery,
+    onError: (error: AxiosError) => {
+      console.log(`Oops! Error getting search result: ${error.message}`)
+    }
+  })
 
-  //TODO: set the correct value object type
   function handleOnFormSubmit(value: Search) {
+    postSearchQuery.mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
+
+  const initialValues: Search = SimpleSearchDataModel
+
+  let range = new Array(
+    FlagLabel.ALL_RECORDS,
+    FlagLabel.GOLDEN_ONLY,
+    FlagLabel.PATIENT_ONLY
+  )
+
   return (
-    <Container
-      sx={{
-        ml: 0,
-        mr: 0
-      }}
-      maxWidth={false}
-    >
+    <Container maxWidth={false}>
       <Grid container direction={'column'}>
         <Grid item container direction={'row'}>
           <Grid item lg={6}>
-            <Typography variant="h5">Simple Search</Typography>
             <Breadcrumbs>
-              <Link underline="hover" color="inherit" href="/search">
-                Search
-              </Link>
-              <Typography color="text.primary">Simple</Typography>
+              <IconButton href="/">
+                <HomeIcon />
+              </IconButton>
+              <MoreHorizIcon/>
+              <Stack direction={'row'} spacing={1}>
+                <SearchIcon/>
+                <Typography color="text.primary">Search</Typography>
+              </Stack>
+              
             </Breadcrumbs>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: '34px',
+                fontWeight: 400,
+                color: 'rgba(0, 0, 0, 0.87)'
+              }}
+            >
+              Simple Search
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: '16px',
+                fontWeight: 400,
+                color: 'rgba(0, 0, 0, 0.6)'
+              }}
+            >
+              Our quick and simple search.
+            </Typography>
           </Grid>
           <Grid item lg={6}>
             <SearchFlags
-              button1Label={FlagLabel.ALL_RECORDS}
-              button2Label={FlagLabel.GOLDEN_ONLY}
-              button3Label={FlagLabel.PATIENT_ONLY}
+              range={range}
               to="/custom-search"
               label="CUSTOM SEARCH"
             />
@@ -66,7 +88,6 @@ const Search = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={values => {
-            //TODO: use useMutation to send data to the backend
             handleOnFormSubmit(values)
           }}
         >
@@ -106,7 +127,6 @@ const Search = () => {
                       <Grid item>
                         <Typography
                           sx={{
-                            fontFamily: 'Roboto',
                             fontStyle: 'normal',
                             fontSize: '14px',
                             color: '#1976D2'
@@ -121,31 +141,33 @@ const Search = () => {
                   <FieldArray name="search">
                     {() => (
                       <div>
-                        {values.parameters.map((data, index) => {
-                          const inputFieldLabel = data.field
-                            .split(/(?=[A-Z])/)
-                            .join(' ')
-                          const fieldAttribute: string = `parameters[${index}].value`
-                          const exactAttribute: string = `parameters[${index}].exact`
-                          const distanceAttribute: string = `parameters[${index}].distance`
+                        {values.parameters.map(
+                          (data: Parameters, index: number) => {
+                            const inputFieldLabel = data.field
+                              .split(/(?=[A-Z])/)
+                              .join(' ')
+                            const fieldAttribute: string = `parameters[${index}].value`
+                            const exactAttribute: string = `parameters[${index}].exact`
+                            const distanceAttribute: string = `parameters[${index}].distance`
 
-                          return (
-                            <div key={data.field}>
-                              <SimpleSearchParametersComponent
-                                fieldAttribute={fieldAttribute}
-                                exactAttribute={exactAttribute}
-                                distanceAttribute={distanceAttribute}
-                                label={inputFieldLabel}
-                                handleChange={handleChange}
-                                textFieldValue={data.value}
-                                exactValue={data.exact}
-                                distanceValue={data.distance}
-                                fieldName={data.field}
-                                setFieldValue={setFieldValue}
-                              />
-                            </div>
-                          )
-                        })}
+                            return (
+                              <div key={data.field}>
+                                <SimpleSearchParametersComponent
+                                  fieldAttribute={fieldAttribute}
+                                  exactAttribute={exactAttribute}
+                                  distanceAttribute={distanceAttribute}
+                                  label={inputFieldLabel}
+                                  handleChange={handleChange}
+                                  textFieldValue={data.value}
+                                  exactValue={data.exact}
+                                  distanceValue={data.distance}
+                                  fieldName={data.field}
+                                  setFieldValue={setFieldValue}
+                                />
+                              </div>
+                            )
+                          }
+                        )}
                       </div>
                     )}
                   </FieldArray>
@@ -175,4 +197,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SimpleSearch

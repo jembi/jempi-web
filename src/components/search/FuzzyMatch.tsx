@@ -1,10 +1,12 @@
 import { Stack, Typography } from '@mui/material'
 import { useState } from 'react'
-import ToggleThreeButton from './ToggleThreeButton'
-import SimpleSearchFuzzyMatch from '../../types/FuzzyMatch'
+import { SimpleSearchFuzzyMatch } from '../../types/SimpleSearch'
+import ToggleThreeButton from './ToggleCustomBbutton'
 
 const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
+
+  let range = new Array("1", "2", "3")
 
   const ToggleButtonStyle = () => ({
     width: '50px',
@@ -23,7 +25,6 @@ const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
     <Stack direction={'column'} alignItems="start">
       <Typography
         sx={{
-          fontFamily: 'Roboto',
           fontSize: '14px',
           color: prop.exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}
@@ -37,14 +38,11 @@ const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
         distanceValue={prop.distanceValue}
         exactValue={prop.exactValue}
         ToggleButtonStyle={ToggleButtonStyle}
-        button1Label={"1"}
-        button2Label={"2"}
-        button3Label={"3"}
+        range={range}
         name={prop.name}
       />
       <Typography
         sx={{
-          fontFamily: 'Roboto',
           fontSize: '13px',
           color: prop.exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}

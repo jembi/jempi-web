@@ -1,6 +1,6 @@
 import { Stack, Switch, Typography } from '@mui/material'
 import { Fragment, useState } from 'react'
-import SimpleSearchExactSwitch from '../../types/ExactSwitch'
+import {SimpleSearchExactSwitch} from '../../types/SimpleSearch'
 
 const ExactSwitch = (prop: SimpleSearchExactSwitch) => {
   const [checked, setChecked] = useState(true)
@@ -21,7 +21,6 @@ const ExactSwitch = (prop: SimpleSearchExactSwitch) => {
         />
         <Typography
           sx={{
-            fontFamily: 'Roboto',
             fontSize: '14px',
             color: prop.exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)',
             fontWeight: 800
