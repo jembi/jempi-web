@@ -10,10 +10,12 @@ import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import Search from './components/search/Search'
 import Shell from './components/shell/Shell'
+import { AppConfigProvider } from './hooks/useAppConfig'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -39,6 +41,13 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <Search /> },
+  {
+    path: '/patient/:uid',
+    element: <PatientDetails />,
+    loader: async ({ params }) => ({
+      uid: params.uid
+    })
+  },
   { element: <NotFound /> }
 ]
 
@@ -52,7 +61,9 @@ const App = () => {
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
             <ErrorBoundary>
-              <Shell />
+              <AppConfigProvider>
+                <Shell />
+              </AppConfigProvider>
             </ErrorBoundary>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
