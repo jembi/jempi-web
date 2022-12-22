@@ -1,8 +1,18 @@
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { Fragment } from 'react'
-import { ToggleCustomBbuttonType } from '../../types/SimpleSearch'
+import { SxProps, Theme } from "@mui/material"
+interface ToggleCustomButtonType {
+  selectedButton: number
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  name?: string
+  handleChange(value: any, event: React.MouseEvent<HTMLElement>): void
+  range: string[]
+  distanceValue?: number
+  ToggleButtonStyle: SxProps<Theme>
+  exactValue?: boolean
 
-const ToggleCustomBbutton = (prop: ToggleCustomBbuttonType) => {
+}
+const ToggleCustomButton = (prop: ToggleCustomButtonType) => {
   return (
     <Fragment>
       <ToggleButtonGroup
@@ -32,4 +42,4 @@ const ToggleCustomBbutton = (prop: ToggleCustomBbuttonType) => {
   )
 }
 
-export default ToggleCustomBbutton
+export default ToggleCustomButton

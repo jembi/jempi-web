@@ -1,7 +1,10 @@
 import { Stack, Switch, Typography } from '@mui/material'
 import { Fragment, useState } from 'react'
-import {SimpleSearchExactSwitch} from '../../types/SimpleSearch'
-
+interface SimpleSearchExactSwitch {
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  name: string
+  exactValue: boolean
+}
 const ExactSwitch = (prop: SimpleSearchExactSwitch) => {
   const [checked, setChecked] = useState(true)
 

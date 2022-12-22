@@ -1,7 +1,11 @@
 import { TextField } from '@mui/material'
 import { Fragment } from 'react'
-import {SimpleSearchTextInput} from '../../types/SimpleSearch'
-
+interface SimpleSearchTextInput {
+  textFieldValue: string | Date
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  name: string
+  label: string
+}
 const SearchTextInput = (prop: SimpleSearchTextInput) => {
   return (
     <Fragment>

@@ -4,17 +4,18 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import moment, { Moment } from 'moment'
 import { Fragment, useState } from 'react'
-import {SimpleSearchDateInput} from '../../types/SimpleSearch'
-
+export interface SimpleSearchDateInput {
+  name: string
+  label: string
+  textFieldValue: string | Date
+  setFieldValue: Function
+}
 const SearchDateInput = (prop: SimpleSearchDateInput) => {
-  
-  const [value, setValue] = useState<Moment | null>(
-    moment(),
-  );
+  const [value, setValue] = useState<Moment | null>(moment())
   const handleChange = (newValue: Moment | null) => {
-    setValue(newValue);
+    setValue(newValue)
     prop.setFieldValue(prop.name, moment(newValue).format('DD/MM/YYYY'))
-  };
+  }
 
   return (
     <Fragment>
@@ -25,7 +26,12 @@ const SearchDateInput = (prop: SimpleSearchDateInput) => {
           value={value}
           onChange={handleChange}
           renderInput={params => (
-            <TextField {...params} variant="outlined" size="small" sx={{width: '210px'}}/>
+            <TextField
+              {...params}
+              variant="outlined"
+              size="small"
+              sx={{ width: '210px' }}
+            />
           )}
         />
       </LocalizationProvider>

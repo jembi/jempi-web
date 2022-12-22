@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material'
 import { Fragment, useState } from 'react'
 import SearchTypes from './SearchTypes'
-import ToggleThreeButton from './ToggleCustomBbutton'
+import ToggleThreeButton from './ToggleCustomButton'
 
 interface searchFlagsType {
   range: string[]

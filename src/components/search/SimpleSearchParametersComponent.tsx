@@ -1,10 +1,22 @@
 import { Grid } from '@mui/material'
 import { Fragment } from 'react'
-import SearchParameters from '../../types/SimpleSearch'
 import SearchDateInput from './SearchDateInput'
 import ExactSwitch from './ExactSwitch'
 import FuzzyMatch from './FuzzyMatch'
 import SearchTextInput from './SearchTextInput'
+
+interface SearchParameters {
+  label: string
+  fieldAttribute: string
+  exactAttribute: string
+  distanceAttribute: string
+  handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  textFieldValue: string | Date
+  exactValue: boolean
+  distanceValue: number
+  fieldName: string
+  setFieldValue: Function
+}
 
 const SimpleSearchParametersComponent = (prop: SearchParameters) => {
   let isDateField = false

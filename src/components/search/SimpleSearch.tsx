@@ -1,31 +1,48 @@
-import HomeIcon from '@mui/icons-material/Home'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import SearchIcon from '@mui/icons-material/Search'
 import {
   Box,
-  Breadcrumbs,
   Button,
   Container,
   Grid,
+  IconButton,
   Stack,
   Typography
 } from '@mui/material'
-import IconButton from '@mui/material/IconButton'
+import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import SimpleSearchDataModel from '../../model/search/SimpleSearchDataModel'
 import ApiClient from '../../services/ApiClient'
 import { Parameters, Search } from '../../types/SimpleSearch'
+import PageHeader from './PageHeader'
 import SearchFlags from './SearchFlags'
 import SimpleSearchParametersComponent from './SimpleSearchParametersComponent'
-import Divider from '@mui/material/Divider';
-
+import HomeIcon from '@mui/icons-material/Home'
+import { MoreHorizOutlined } from '@mui/icons-material'
+import SearchIcon from '@mui/icons-material/Search'
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
   GOLDEN_ONLY = 'GOLDEN ONLY',
   PATIENT_ONLY = 'PATIENT ONLY'
 }
+
+const breadcrumbs = [
+  <IconButton href="/">
+    <HomeIcon />
+  </IconButton>,
+  <Stack direction={'row'} spacing={1}>
+    <MoreHorizOutlined />
+  </Stack>,
+  <Stack direction={'row'} spacing={1}>
+    <SearchIcon />
+    <Typography color="text.primary">Search</Typography>
+  </Stack>,
+  <Stack direction={'row'} spacing={1}>
+    <SearchIcon />
+    <Typography color="text.primary">Search</Typography>
+  </Stack>
+]
+
 const SimpleSearch = () => {
   //TODO: find a better way of handling error while posting the search request
   const postSearchQuery = useMutation({
@@ -42,46 +59,22 @@ const SimpleSearch = () => {
 
   const initialValues: Search = SimpleSearchDataModel
 
-  let range = new Array(
+  let range = [
     FlagLabel.ALL_RECORDS,
     FlagLabel.GOLDEN_ONLY,
     FlagLabel.PATIENT_ONLY
-  )
+  ]
 
   return (
     <Container maxWidth={false}>
       <Grid container direction={'column'}>
         <Grid item container direction={'row'}>
           <Grid item lg={6}>
-            <Breadcrumbs>
-              <IconButton href="/">
-                <HomeIcon />
-              </IconButton>
-              <MoreHorizIcon />
-              <Stack direction={'row'} spacing={1}>
-                <SearchIcon />
-                <Typography color="text.primary">Search</Typography>
-              </Stack>
-            </Breadcrumbs>
-            <Typography
-              variant="h5"
-              sx={{
-                fontSize: '34px',
-                fontWeight: 400,
-                color: 'rgba(0, 0, 0, 0.87)'
-              }}
-            >
-              Simple Search
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 400,
-                color: 'rgba(0, 0, 0, 0.6)'
-              }}
-            >
-              Our quick and simple search.
-            </Typography>
+            <PageHeader
+              description="Our quick and simple search."
+              title="Simple Patient Search"
+              breadcrumbs={breadcrumbs}
+            />
           </Grid>
           <Grid item lg={6}>
             <SearchFlags
@@ -91,7 +84,7 @@ const SimpleSearch = () => {
             />
           </Grid>
         </Grid>
-        <Divider/>
+        <Divider />
         <Formik
           initialValues={initialValues}
           onSubmit={values => {

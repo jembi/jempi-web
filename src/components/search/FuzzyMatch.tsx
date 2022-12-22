@@ -1,7 +1,14 @@
 import { Stack, Typography } from '@mui/material'
 import { useState } from 'react'
-import { SimpleSearchFuzzyMatch } from '../../types/SimpleSearch'
-import ToggleThreeButton from './ToggleCustomBbutton'
+import ToggleThreeButton from './ToggleCustomButton'
+
+interface SimpleSearchFuzzyMatch {
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  name: string
+  exactValue: boolean
+  distanceValue: number
+  setFieldValue: Function
+}
 
 const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
