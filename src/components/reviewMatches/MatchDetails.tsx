@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertTitle,
   Breadcrumbs,
   Button,
   CircularProgress,
@@ -11,7 +9,6 @@ import {
   DialogContentText,
   DialogTitle,
   Link,
-  Skeleton,
   Typography
 } from '@mui/material'
 import {
@@ -31,6 +28,8 @@ import { useState } from 'react'
 import ApiClient from '../../services/ApiClient'
 import { NotificationState } from '../../types/Notification'
 import PatientRecord from '../../types/PatientRecord'
+import Loading from '../common/Loading'
+import ApiErrorMessage from '../error/ApiErrorMessage'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
@@ -231,7 +230,10 @@ const MatchDetails = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data, error, isFetching } = useQuery<PatientRecord[], AxiosError>({
+  const { data, error, isLoading, isError } = useQuery<
+    PatientRecord[],
+    AxiosError
+  >({
     queryKey: ['matchDetails'],
     queryFn: () =>
       ApiClient.getMatchDetails(
@@ -372,20 +374,15 @@ const MatchDetails = () => {
     }
   }
 
-  return isFetching ? (
-    <Container>
-      <Skeleton animation="wave" variant="text" height={100}></Skeleton>
-      <Skeleton variant="rectangular" height={600}></Skeleton>
-    </Container>
-  ) : error ? (
-    // TODO Create a generic error handler
-    <Container>
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        {error.message}
-      </Alert>
-    </Container>
-  ) : (
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (isError) {
+    return <ApiErrorMessage error={error} />
+  }
+
+  return (
     <Container maxWidth="xl">
       <Typography variant="h5">Patient Matches Detail</Typography>
       <Breadcrumbs>

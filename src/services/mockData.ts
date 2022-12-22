@@ -31,7 +31,7 @@ const patientRecord: PatientRecord = {
 
 const goldenRecord: PatientRecord = {
   auxId: '0x77',
-  type: '',
+  type: 'Golden',
   score: 0,
   uid: '0x9833',
   nationalId: '123456',
@@ -44,8 +44,10 @@ const goldenRecord: PatientRecord = {
   updatedBy: undefined
 }
 
+const patientRecords = [patientRecord, goldenRecord]
+
 const goldenRecords = [{ customGoldenRecord: goldenRecord }]
 
-const mockData = { notifications, patientRecord, goldenRecords }
+const mockData = { notifications, patientRecord, goldenRecords, patientRecords }
 
 export default mockData

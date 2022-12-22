@@ -1,14 +1,10 @@
-export default interface PatientRecord {
+export default interface PatientRecord
+  extends Record<string, string | number | boolean | Date | undefined | null> {
   auxId: string
-  type: string
+  type: 'Golden' | 'Candidate' | 'Current'
   score: number
   uid: string
-  nationalId: string
-  givenName: string
-  familyName: string
-  gender: string
-  dob: Date
-  phoneNumber: string
-  city: string
   updatedBy: string | undefined
 }
+
+export type ValueOf<T> = T[keyof T]

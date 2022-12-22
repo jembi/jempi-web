@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import {Search} from '../types/SimpleSearch'
 import PatientRecord from '../types/PatientRecord'
@@ -40,6 +41,12 @@ interface GoldenRecordResponse {
 }
 
 class ApiClient {
+  async getFields() {
+    return await client
+      .get<Fields>(ROUTES.GET_FIELDS_CONFIG)
+      .then(res => res.data)
+  }
+
   async getMatches() {
     return await client
       .get<NotificationResponse>(ROUTES.GET_NOTIFICATIONS)
