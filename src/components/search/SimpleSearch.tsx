@@ -36,10 +36,6 @@ const breadcrumbs = [
   <Stack direction={'row'} spacing={1}>
     <SearchIcon />
     <Typography color="text.primary">Search</Typography>
-  </Stack>,
-  <Stack direction={'row'} spacing={1}>
-    <SearchIcon />
-    <Typography color="text.primary">Search</Typography>
   </Stack>
 ]
 
