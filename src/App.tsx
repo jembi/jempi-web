@@ -44,7 +44,7 @@ const routes: Route[] = [
     path: '/match-details',
     element: <MatchDetails />
   },
-  { path: '/search', element: <Search /> },
+  { path: '/search', element: <SimpleSearch /> },
   {
     path: '/patient/:uid',
     element: <PatientDetails />,
