@@ -3,12 +3,13 @@ import { Fragment, useState } from 'react'
 import SearchTypes from './SearchTypes'
 import ToggleThreeButton from './ToggleCustomButton'
 
-interface searchFlagsType {
+interface searchFlagsProps {
   range: string[]
   to: string
   label: string
 }
-const SearchFlags = (prop: searchFlagsType) => {
+
+const SearchFlags: React.FC<searchFlagsProps> = ({ range, to, label }) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
   const ToggleButtonStyle = () => ({
     width: '129px',
@@ -34,10 +35,10 @@ const SearchFlags = (prop: searchFlagsType) => {
             handleChange={handleChange}
             exactValue={true}
             ToggleButtonStyle={ToggleButtonStyle}
-            range={prop.range}
+            range={range}
           />
         </Grid>
-        <SearchTypes to={prop.to} label={prop.label} />
+        <SearchTypes to={to} label={label} />
       </Grid>
     </Fragment>
   )

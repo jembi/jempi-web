@@ -2,29 +2,37 @@ import { Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import ToggleThreeButton from './ToggleCustomButton'
 
-interface SimpleSearchFuzzyMatch {
-  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+interface FuzzyMatchProps {
+  onChange:
+    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined
   name: string
   exactValue: boolean
   distanceValue: number
   setFieldValue: Function
 }
 
-const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
+const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
+  onChange,
+  name,
+  exactValue,
+  distanceValue,
+  setFieldValue
+}) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
 
-  let range = new Array("1", "2", "3")
+  let range = new Array('1', '2', '3')
 
   const ToggleButtonStyle = () => ({
     width: '50px',
     '&.Mui-selected, &.Mui-selected:hover': {
       color: 'white',
-      backgroundColor: prop.exactValue ? '#1976D2' : ''
+      backgroundColor: exactValue ? '#1976D2' : ''
     }
   })
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, value: any) => {
-    prop.setFieldValue(prop.name, value)
+    setFieldValue(name, value)
     setSelectedButton(value)
   }
 
@@ -33,7 +41,7 @@ const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
       <Typography
         sx={{
           fontSize: '14px',
-          color: prop.exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
+          color: exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}
       >
         Fuzzy match
@@ -41,17 +49,17 @@ const FuzzyMatch = (prop: SimpleSearchFuzzyMatch) => {
       <ToggleThreeButton
         selectedButton={selectedButton}
         handleChange={handleChange}
-        onChange={prop.onChange}
-        distanceValue={prop.distanceValue}
-        exactValue={prop.exactValue}
+        onChange={onChange}
+        distanceValue={distanceValue}
+        exactValue={exactValue}
         ToggleButtonStyle={ToggleButtonStyle}
         range={range}
-        name={prop.name}
+        name={name}
       />
       <Typography
         sx={{
           fontSize: '13px',
-          color: prop.exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
+          color: exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}
       >
         Distance parameter

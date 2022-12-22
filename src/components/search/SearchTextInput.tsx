@@ -1,22 +1,30 @@
 import { TextField } from '@mui/material'
 import { Fragment } from 'react'
-interface SimpleSearchTextInput {
+interface SearchTextInputProps {
   textFieldValue: string | Date
-  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  onChange:
+    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined
   name: string
   label: string
 }
-const SearchTextInput = (prop: SimpleSearchTextInput) => {
+
+const SearchTextInput: React.FC<SearchTextInputProps> = ({
+  textFieldValue,
+  onChange,
+  name,
+  label
+}) => {
   return (
     <Fragment>
       <TextField
         id="outlined-basic"
-        label={prop.label}
+        label={label}
         variant="outlined"
         size="small"
-        value={prop.textFieldValue}
-        onChange={prop.onChange}
-        name={prop.name}
+        value={textFieldValue}
+        onChange={onChange}
+        name={name}
       />
     </Fragment>
   )

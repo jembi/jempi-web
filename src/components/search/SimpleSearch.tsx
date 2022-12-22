@@ -16,7 +16,7 @@ import ApiClient from '../../services/ApiClient'
 import { Parameters, Search } from '../../types/SimpleSearch'
 import PageHeader from './PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchParametersComponent from './SimpleSearchParametersComponent'
+import SimpleSearchParameters from './SimpleSearchParameters'
 import HomeIcon from '@mui/icons-material/Home'
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
@@ -39,7 +39,7 @@ const breadcrumbs = [
   </Stack>
 ]
 
-const SimpleSearch = () => {
+const SimpleSearch: React.FC = () => {
   //TODO: find a better way of handling error while posting the search request
   const postSearchQuery = useMutation({
     mutationFn: ApiClient.postSimpleSearchQuery,
@@ -148,7 +148,7 @@ const SimpleSearch = () => {
 
                             return (
                               <div key={data.field}>
-                                <SimpleSearchParametersComponent
+                                <SimpleSearchParameters
                                   fieldAttribute={fieldAttribute}
                                   exactAttribute={exactAttribute}
                                   distanceAttribute={distanceAttribute}

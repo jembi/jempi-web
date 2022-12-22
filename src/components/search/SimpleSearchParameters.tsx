@@ -5,12 +5,14 @@ import ExactSwitch from './ExactSwitch'
 import FuzzyMatch from './FuzzyMatch'
 import SearchTextInput from './SearchTextInput'
 
-interface SearchParameters {
+interface SearchParametersProps {
   label: string
   fieldAttribute: string
   exactAttribute: string
   distanceAttribute: string
-  handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  handleChange:
+    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined
   textFieldValue: string | Date
   exactValue: boolean
   distanceValue: number
@@ -18,9 +20,20 @@ interface SearchParameters {
   setFieldValue: Function
 }
 
-const SimpleSearchParametersComponent = (prop: SearchParameters) => {
+const SimpleSearchParameters: React.FC<SearchParametersProps> = ({
+  label,
+  fieldAttribute,
+  exactAttribute,
+  distanceAttribute,
+  handleChange,
+  textFieldValue,
+  exactValue,
+  distanceValue,
+  fieldName,
+  setFieldValue
+}) => {
   let isDateField = false
-  if (prop.label.toLowerCase().includes('date')) {
+  if (label.toLowerCase().includes('date')) {
     isDateField = true
   }
 
@@ -36,36 +49,36 @@ const SimpleSearchParametersComponent = (prop: SearchParameters) => {
           <Grid item>
             {isDateField ? (
               <SearchDateInput
-                label={prop.label}
-                textFieldValue={prop.textFieldValue}
-                name={prop.fieldAttribute}
-                setFieldValue={prop.setFieldValue}
+                label={label}
+                textFieldValue={textFieldValue}
+                name={fieldAttribute}
+                setFieldValue={setFieldValue}
               />
             ) : (
               <SearchTextInput
-                label={prop.label}
-                textFieldValue={prop.textFieldValue}
-                onChange={prop.handleChange}
-                name={prop.fieldAttribute}
+                label={label}
+                textFieldValue={textFieldValue}
+                onChange={handleChange}
+                name={fieldAttribute}
               />
             )}
           </Grid>
           <Grid item sx={{ ml: 0.5 }}>
             <Grid item sx={{ mr: 2 }}>
               <ExactSwitch
-                onChange={prop.handleChange}
-                exactValue={prop.exactValue}
-                name={prop.exactAttribute}
+                onChange={handleChange}
+                exactValue={exactValue}
+                name={exactAttribute}
               />
             </Grid>
           </Grid>
           <Grid item>
             <FuzzyMatch
-              exactValue={prop.exactValue}
-              distanceValue={prop.distanceValue}
-              onChange={prop.handleChange}
-              name={prop.distanceAttribute}
-              setFieldValue={prop.setFieldValue}
+              exactValue={exactValue}
+              distanceValue={distanceValue}
+              onChange={handleChange}
+              name={distanceAttribute}
+              setFieldValue={setFieldValue}
             />
           </Grid>
         </Grid>
@@ -74,4 +87,4 @@ const SimpleSearchParametersComponent = (prop: SearchParameters) => {
   )
 }
 
-export default SimpleSearchParametersComponent
+export default SimpleSearchParameters

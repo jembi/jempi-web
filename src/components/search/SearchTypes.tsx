@@ -1,20 +1,21 @@
 import { Button, Grid } from '@mui/material'
 import { Fragment } from 'react'
 
-interface searchTypesButton {
+interface SearchTypesProps {
   to: string
   label: string
 }
-const SearchTypes = (prop: searchTypesButton) => {
+
+const SearchTypes: React.FC<SearchTypesProps> = ({ to, label }) => {
   return (
     <Fragment>
       <Grid item marginLeft={2}>
         <Button
           variant="outlined"
           sx={{ height: '42px', width: '172px' }}
-          href={prop.to}
+          href={to}
         >
-          {prop.label}
+          {label}
         </Button>
       </Grid>
     </Fragment>

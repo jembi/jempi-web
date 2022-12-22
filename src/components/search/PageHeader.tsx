@@ -1,18 +1,18 @@
 import { Breadcrumbs, Typography } from '@mui/material'
-
-import { Fragment } from 'react'
-interface PageHeaderType {
-  breadcrumbs: JSX.Element[]  
+interface PageHeaderProps {
+  breadcrumbs: JSX.Element[]
   title: string
   description: string
 }
 
-const PageHeader = (prop: PageHeaderType) => {
+const PageHeader: React.FC<PageHeaderProps> = ({
+  breadcrumbs,
+  title,
+  description
+}) => {
   return (
-    <Fragment>
-      <Breadcrumbs>
-        {prop.breadcrumbs}
-      </Breadcrumbs>
+    <>
+      <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
       <Typography
         variant="h5"
         sx={{
@@ -21,7 +21,7 @@ const PageHeader = (prop: PageHeaderType) => {
           color: 'rgba(0, 0, 0, 0.87)'
         }}
       >
-        {prop.title}
+        {title}
       </Typography>
       <Typography
         sx={{
@@ -30,9 +30,9 @@ const PageHeader = (prop: PageHeaderType) => {
           color: 'rgba(0, 0, 0, 0.6)'
         }}
       >
-        {prop.description}
+        {description}
       </Typography>
-    </Fragment>
+    </>
   )
 }
 
