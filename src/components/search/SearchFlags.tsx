@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material'
-import { Fragment, useState } from 'react'
+import {useState } from 'react'
 import SearchTypes from './SearchTypes'
 import ToggleThreeButton from './ToggleCustomButton'
 
@@ -27,20 +27,18 @@ const SearchFlags: React.FC<searchFlagsProps> = ({ range, to, label }) => {
   }
 
   return (
-    <Fragment>
-      <Grid container direction={'row'} justifyContent={'flex-end'}>
-        <Grid item>
-          <ToggleThreeButton
-            selectedButton={selectedButton}
-            handleChange={handleChange}
-            exactValue={true}
-            ToggleButtonStyle={ToggleButtonStyle}
-            range={range}
-          />
-        </Grid>
-        <SearchTypes to={to} label={label} />
+    <Grid container direction={'row'} justifyContent={'flex-end'}>
+      <Grid item>
+        <ToggleThreeButton
+          selectedButton={selectedButton}
+          handleChange={handleChange}
+          exactValue={true}
+          ToggleButtonStyle={ToggleButtonStyle}
+          range={range}
+        />
       </Grid>
-    </Fragment>
+      <SearchTypes to={to} label={label} />
+    </Grid>
   )
 }
 

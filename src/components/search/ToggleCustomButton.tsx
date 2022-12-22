@@ -1,5 +1,4 @@
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
-import { Fragment } from 'react'
 import { SxProps, Theme } from '@mui/material'
 interface ToggleCustomButtonProps {
   selectedButton: number
@@ -25,31 +24,29 @@ const ToggleCustomButton: React.FC<ToggleCustomButtonProps> = ({
   exactValue
 }) => {
   return (
-    <Fragment>
-      <ToggleButtonGroup
-        value={selectedButton}
-        exclusive
-        onChange={handleChange}
-        size={'small'}
-        disabled={!exactValue}
-        id={name}
-      >
-        {range.map((label: string, index: number) => {
-          let value = index + 1
-          return (
-            <ToggleButton
-              value={value}
-              aria-label="left aligned"
-              sx={ToggleButtonStyle}
-              name={name}
-              key={index}
-            >
-              <Typography id={name}>{label}</Typography>
-            </ToggleButton>
-          )
-        })}
-      </ToggleButtonGroup>
-    </Fragment>
+    <ToggleButtonGroup
+      value={selectedButton}
+      exclusive
+      onChange={handleChange}
+      size={'small'}
+      disabled={!exactValue}
+      id={name}
+    >
+      {range.map((label: string, index: number) => {
+        let value = index + 1
+        return (
+          <ToggleButton
+            value={value}
+            aria-label="left aligned"
+            sx={ToggleButtonStyle}
+            name={name}
+            key={index}
+          >
+            <Typography id={name}>{label}</Typography>
+          </ToggleButton>
+        )
+      })}
+    </ToggleButtonGroup>
   )
 }
 
