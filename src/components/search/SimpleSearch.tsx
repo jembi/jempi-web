@@ -2,7 +2,13 @@ import HomeIcon from '@mui/icons-material/Home'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import SearchIcon from '@mui/icons-material/Search'
 import {
-  Box, Breadcrumbs, Button, Container, Grid, Stack, Typography
+  Box,
+  Breadcrumbs,
+  Button,
+  Container,
+  Grid,
+  Stack,
+  Typography
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { useMutation } from '@tanstack/react-query'
@@ -13,6 +19,7 @@ import ApiClient from '../../services/ApiClient'
 import { Parameters, Search } from '../../types/SimpleSearch'
 import SearchFlags from './SearchFlags'
 import SimpleSearchParametersComponent from './SimpleSearchParametersComponent'
+import Divider from '@mui/material/Divider';
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -50,12 +57,11 @@ const SimpleSearch = () => {
               <IconButton href="/">
                 <HomeIcon />
               </IconButton>
-              <MoreHorizIcon/>
+              <MoreHorizIcon />
               <Stack direction={'row'} spacing={1}>
-                <SearchIcon/>
+                <SearchIcon />
                 <Typography color="text.primary">Search</Typography>
               </Stack>
-              
             </Breadcrumbs>
             <Typography
               variant="h5"
@@ -85,6 +91,7 @@ const SimpleSearch = () => {
             />
           </Grid>
         </Grid>
+        <Divider/>
         <Formik
           initialValues={initialValues}
           onSubmit={values => {
@@ -99,7 +106,7 @@ const SimpleSearch = () => {
                   borderRadius: '4px',
                   boxShadow: '0px 0px 0px 1px #E0E0E0',
                   background: '#FFFFFF',
-                  mt: 3,
+                  mt: 4,
                   padding: 2
                 }}
               >

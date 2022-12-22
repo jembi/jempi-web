@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
-const PageTitle = (prop: any) => {
+const PageHeader = (prop: any) => {
   return <Fragment></Fragment>
 }
 
-export default PageTitle
+export default PageHeader
