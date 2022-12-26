@@ -5,12 +5,13 @@ import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
-import SimpleSearchDataModel from '../../model/search/SimpleSearchDataModel'
+import moment from 'moment'
+import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { Parameters, Search } from '../../types/SimpleSearch'
+import { SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchParameters from './SimpleSearchParameters'
+import SimpleSearchParameter from './SimpleSearchParameters'
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -19,6 +20,7 @@ enum FlagLabel {
 }
 
 const SimpleSearch: React.FC = () => {
+  const { availableFields } = useAppConfig()
   //TODO: find a better way of handling error while posting the search request
   const postSearchQuery = useMutation({
     mutationFn: ApiClient.postSimpleSearchQuery,
@@ -27,12 +29,21 @@ const SimpleSearch: React.FC = () => {
     }
   })
 
-  function handleOnFormSubmit(value: Search) {
+  function handleOnFormSubmit(value: SearchQuery) {
     postSearchQuery.mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
-  const initialValues: Search = SimpleSearchDataModel
+  const initialValues: SearchQuery = {
+    parameters: availableFields.map(({ fieldType, fieldName }) => {
+      return {
+        fieldName,
+        value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
+        exact: false,
+        distance: 1
+      }
+    })
+  }
 
   return (
     <Container maxWidth={false}>
@@ -79,7 +90,7 @@ const SimpleSearch: React.FC = () => {
             handleOnFormSubmit(values)
           }}
         >
-          {({ values, handleChange, setFieldValue }) => (
+          {({ values, handleChange }) => (
             <Form>
               <Box
                 sx={{
@@ -125,36 +136,21 @@ const SimpleSearch: React.FC = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-
                   <FieldArray name="search">
                     {() => (
                       <div>
-                        {values.parameters.map(
-                          (data: Parameters, index: number) => {
-                            const inputFieldLabel = data.field
-                              .split(/(?=[A-Z])/)
-                              .join(' ')
-                            const fieldAttribute: string = `parameters[${index}].value`
-                            const exactAttribute: string = `parameters[${index}].exact`
-                            const distanceAttribute: string = `parameters[${index}].distance`
-
-                            return (
-                              <div key={data.field}>
-                                <SimpleSearchParameters
-                                  fieldAttribute={fieldAttribute}
-                                  exactAttribute={exactAttribute}
-                                  distanceAttribute={distanceAttribute}
-                                  label={inputFieldLabel}
-                                  onChange={handleChange}
-                                  textFieldValue={data.value}
-                                  exactValue={data.exact}
-                                  distanceValue={data.distance}
-                                  setFieldValue={setFieldValue}
-                                />
-                              </div>
-                            )
-                          }
-                        )}
+                        {availableFields.map((field, index) => {
+                          const parameter = values.parameters[index]
+                          return (
+                            <SimpleSearchParameter
+                              field={field}
+                              parameter={parameter}
+                              index={index}
+                              onChange={handleChange}
+                              key={field.fieldName}
+                            />
+                          )
+                        })}
                       </div>
                     )}
                   </FieldArray>

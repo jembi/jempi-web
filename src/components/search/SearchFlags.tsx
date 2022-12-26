@@ -9,8 +9,8 @@ interface SearchFlagsProps {
 const SearchFlags: React.FC<SearchFlagsProps> = ({ options }) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
 
-  const handleChange = (event: React.MouseEvent<HTMLElement>, value: any) => {
-    setSelectedButton(value)
+  const handleChange = (event: React.ChangeEvent<any>) => {
+    setSelectedButton(event?.target.value)
   }
 
   return (

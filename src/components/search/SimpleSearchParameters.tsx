@@ -1,36 +1,24 @@
 import { Grid } from '@mui/material'
+import { DisplayField } from '../../types/Fields'
+import { SearchParameter } from '../../types/SimpleSearch'
 import ExactSwitch from './ExactSwitch'
 import FuzzyMatch from './FuzzyMatch'
 import SearchDateInput from './SearchDateInput'
 import SearchTextInput from './SearchTextInput'
 
-interface SimpleSearchParametersProps {
-  label: string
-  fieldAttribute: string
-  exactAttribute: string
-  distanceAttribute: string
-  onChange?: (event: React.ChangeEvent<any>, value: any) => void
-  textFieldValue: string | Date
-  exactValue: boolean
-  distanceValue: number
-  setFieldValue: Function
+interface SimpleSearchParameterProps {
+  field: DisplayField
+  parameter: SearchParameter
+  index: number
+  onChange?: (e: React.ChangeEvent<any>) => void
 }
 
-const SimpleSearchParameters: React.FC<SimpleSearchParametersProps> = ({
-  label,
-  fieldAttribute,
-  exactAttribute,
-  distanceAttribute,
-  onChange,
-  textFieldValue,
-  exactValue,
-  setFieldValue
+const SimpleSearchParameter: React.FC<SimpleSearchParameterProps> = ({
+  field,
+  parameter,
+  index,
+  onChange
 }) => {
-  let isDateField = false
-  if (label.toLowerCase().includes('date')) {
-    isDateField = true
-  }
-
   return (
     <Grid item sx={{ mb: 1 }}>
       <Grid
@@ -40,18 +28,19 @@ const SimpleSearchParameters: React.FC<SimpleSearchParametersProps> = ({
         alignItems={'center'}
       >
         <Grid item>
-          {isDateField ? (
+          {field.fieldType === 'Date' ? (
             <SearchDateInput
-              label={label}
-              name={fieldAttribute}
-              setFieldValue={setFieldValue}
+              label={field.fieldLabel}
+              value={parameter.value}
+              onChange={onChange}
+              name={`parameters[${index}].value`}
             />
           ) : (
             <SearchTextInput
-              label={label}
-              textFieldValue={textFieldValue}
-              onChange={e => onChange && onChange(e, e.target.value)}
-              name={fieldAttribute}
+              label={field.fieldLabel}
+              value={parameter.value}
+              onChange={onChange}
+              name={`parameters[${index}].value`}
             />
           )}
         </Grid>
@@ -59,17 +48,17 @@ const SimpleSearchParameters: React.FC<SimpleSearchParametersProps> = ({
           <Grid item sx={{ mr: 2 }}>
             <ExactSwitch
               onChange={onChange}
-              exactValue={exactValue}
-              name={exactAttribute}
+              value={parameter.exact}
+              name={`parameters[${index}].exact`}
             />
           </Grid>
         </Grid>
         <Grid item>
           <FuzzyMatch
-            disabled={exactValue}
+            disabled={!!parameter.exact}
             onChange={onChange}
-            name={distanceAttribute}
-            setFieldValue={setFieldValue}
+            name={`parameters[${index}].distance`}
+            value={parameter.distance}
           />
         </Grid>
       </Grid>
@@ -77,4 +66,4 @@ const SimpleSearchParameters: React.FC<SimpleSearchParametersProps> = ({
   )
 }
 
-export default SimpleSearchParameters
+export default SimpleSearchParameter

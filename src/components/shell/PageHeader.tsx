@@ -20,12 +20,15 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         </IconButton>
         {breadcrumbs.map(({ icon, title, link }, idx) => {
           return (
-            <Link underline="hover" color="inherit" href={link || '#'}>
-              <Stack direction={'row'} spacing={1} key={idx}>
+            <Link
+              underline="hover"
+              color="inherit"
+              href={link || '#'}
+              key={idx}
+            >
+              <Stack direction={'row'} spacing={1}>
                 {icon}
-                <Typography key={idx} sx={{ fontSize: '16px' }}>
-                  {title}
-                </Typography>
+                <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
               </Stack>
             </Link>
           )
