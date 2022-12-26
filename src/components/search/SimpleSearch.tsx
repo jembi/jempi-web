@@ -1,12 +1,6 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Stack,
-  Typography
-} from '@mui/material'
+import { MoreHorizOutlined } from '@mui/icons-material'
+import SearchIcon from '@mui/icons-material/Search'
+import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -14,30 +8,15 @@ import { FieldArray, Form, Formik } from 'formik'
 import SimpleSearchDataModel from '../../model/search/SimpleSearchDataModel'
 import ApiClient from '../../services/ApiClient'
 import { Parameters, Search } from '../../types/SimpleSearch'
-import PageHeader from './PageHeader'
+import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SimpleSearchParameters from './SimpleSearchParameters'
-import HomeIcon from '@mui/icons-material/Home'
-import { MoreHorizOutlined } from '@mui/icons-material'
-import SearchIcon from '@mui/icons-material/Search'
+
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
   GOLDEN_ONLY = 'GOLDEN ONLY',
   PATIENT_ONLY = 'PATIENT ONLY'
 }
-
-const breadcrumbs = [
-  <IconButton href="/">
-    <HomeIcon />
-  </IconButton>,
-  <Stack direction={'row'} spacing={1}>
-    <MoreHorizOutlined />
-  </Stack>,
-  <Stack direction={'row'} spacing={1}>
-    <SearchIcon />
-    <Typography color="text.primary">Search</Typography>
-  </Stack>
-]
 
 const SimpleSearch: React.FC = () => {
   //TODO: find a better way of handling error while posting the search request
@@ -55,12 +34,6 @@ const SimpleSearch: React.FC = () => {
 
   const initialValues: Search = SimpleSearchDataModel
 
-  let range = [
-    FlagLabel.ALL_RECORDS,
-    FlagLabel.GOLDEN_ONLY,
-    FlagLabel.PATIENT_ONLY
-  ]
-
   return (
     <Container maxWidth={false}>
       <Grid container direction={'column'}>
@@ -69,15 +42,34 @@ const SimpleSearch: React.FC = () => {
             <PageHeader
               description="Our quick and simple search."
               title="Simple Patient Search"
-              breadcrumbs={breadcrumbs}
+              breadcrumbs={[
+                {
+                  icon: <MoreHorizOutlined />
+                },
+                {
+                  icon: <SearchIcon />,
+                  title: 'Search'
+                }
+              ]}
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid item lg={4}>
             <SearchFlags
-              range={range}
-              to="/custom-search"
-              label="CUSTOM SEARCH"
+              options={[
+                FlagLabel.ALL_RECORDS,
+                FlagLabel.GOLDEN_ONLY,
+                FlagLabel.PATIENT_ONLY
+              ]}
             />
+          </Grid>
+          <Grid item lg={2} textAlign="right">
+            <Button
+              variant="outlined"
+              sx={{ height: '42px', width: '172px' }}
+              href={'/custom-search'}
+            >
+              {'CUSTOM SEARCH'}
+            </Button>
           </Grid>
         </Grid>
         <Divider />
@@ -153,11 +145,10 @@ const SimpleSearch: React.FC = () => {
                                   exactAttribute={exactAttribute}
                                   distanceAttribute={distanceAttribute}
                                   label={inputFieldLabel}
-                                  handleChange={handleChange}
+                                  onChange={handleChange}
                                   textFieldValue={data.value}
                                   exactValue={data.exact}
                                   distanceValue={data.distance}
-                                  fieldName={data.field}
                                   setFieldValue={setFieldValue}
                                 />
                               </div>

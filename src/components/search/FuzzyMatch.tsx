@@ -1,39 +1,27 @@
 import { Stack, Typography } from '@mui/material'
 import { useState } from 'react'
-import ToggleThreeButton from './ToggleCustomButton'
+import { range } from '../../utils/misc'
+import ToggleButtons from './ToggleButtons'
 
 interface FuzzyMatchProps {
-  onChange:
-    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    | undefined
+  onChange?: (event: React.MouseEvent<HTMLElement>, value: any) => void
   name: string
-  exactValue: boolean
-  distanceValue: number
+  disabled: boolean
   setFieldValue: Function
 }
 
 const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
   onChange,
   name,
-  exactValue,
-  distanceValue,
+  disabled,
   setFieldValue
 }) => {
   const [selectedButton, setSelectedButton] = useState<number>(1)
 
-  let range = new Array('1', '2', '3')
-
-  const ToggleButtonStyle = () => ({
-    width: '50px',
-    '&.Mui-selected, &.Mui-selected:hover': {
-      color: 'white',
-      backgroundColor: exactValue ? '#1976D2' : ''
-    }
-  })
-
   const handleChange = (event: React.MouseEvent<HTMLElement>, value: any) => {
     setFieldValue(name, value)
     setSelectedButton(value)
+    onChange && onChange(event, value)
   }
 
   return (
@@ -41,25 +29,29 @@ const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
       <Typography
         sx={{
           fontSize: '14px',
-          color: exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
+          color: !disabled ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}
       >
         Fuzzy match
       </Typography>
-      <ToggleThreeButton
+      <ToggleButtons
         selectedButton={selectedButton}
-        handleChange={handleChange}
-        onChange={onChange}
-        distanceValue={distanceValue}
-        exactValue={exactValue}
-        ToggleButtonStyle={ToggleButtonStyle}
-        range={range}
+        onChange={handleChange}
+        disabled={disabled}
+        sx={{
+          width: '50px',
+          '&.Mui-selected, &.Mui-selected:hover': {
+            color: 'white',
+            backgroundColor: !disabled ? '#1976D2' : ''
+          }
+        }}
+        options={range(1, 3)}
         name={name}
       />
       <Typography
         sx={{
           fontSize: '13px',
-          color: exactValue ? '#000000' : 'rgba(0, 0, 0, 0.3)'
+          color: !disabled ? '#000000' : 'rgba(0, 0, 0, 0.3)'
         }}
       >
         Distance parameter

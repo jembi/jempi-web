@@ -4,17 +4,16 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import moment, { Moment } from 'moment'
 import { useState } from 'react'
+
 export interface SearchDateInputProps {
   name: string
   label: string
-  textFieldValue: string | Date
   setFieldValue: Function
 }
 
 const SearchDateInput: React.FC<SearchDateInputProps> = ({
   name,
   label,
-  textFieldValue,
   setFieldValue
 }) => {
   const [value, setValue] = useState<Moment | null>(moment())

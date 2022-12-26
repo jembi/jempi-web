@@ -1,5 +1,4 @@
 import {
-  Breadcrumbs,
   Button,
   CircularProgress,
   Container,
@@ -8,8 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Link,
-  Typography
+  Link
 } from '@mui/material'
 import {
   DataGrid,
@@ -25,11 +23,13 @@ import { AxiosError } from 'axios'
 import moment from 'moment'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
+import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import { NotificationState } from '../../types/Notification'
 import PatientRecord from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
+import PageHeader from '../shell/PageHeader'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
@@ -71,6 +71,7 @@ const mapDataToScores = (
 }
 
 const MatchDetails = () => {
+  const { getPatientName } = useAppConfig()
   const checkForExactMatch = (params: GridCellParams<string>) => {
     return params.value ===
       (data && data[0][params.field as keyof PatientRecord])
@@ -245,7 +246,7 @@ const MatchDetails = () => {
   })
 
   //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
-  
+
   const updateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
     onError: (error: AxiosError) => {
@@ -311,10 +312,6 @@ const MatchDetails = () => {
       setDialog({ open: false })
     }
   })
-
-  const getName = (data: PatientRecord[] | undefined) => {
-    return data && `${data[0].givenName} ${data[0].familyName}`
-  }
 
   const handleCreateGoldenRecord = () => {
     setAction(Action.CreateRecord)
@@ -384,16 +381,19 @@ const MatchDetails = () => {
 
   return (
     <Container maxWidth="xl">
-      <Typography variant="h5">Patient Matches Detail</Typography>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/">
-          Home
-        </Link>
-        <Link underline="hover" color="inherit" href="/review-matches/">
-          Matches
-        </Link>
-        <Typography color="text.primary">{getName(data)}</Typography>
-      </Breadcrumbs>
+      <PageHeader
+        title={'Patient Matches Detail'}
+        breadcrumbs={[
+          {
+            link: '/review-matches/',
+            title: 'Matches'
+          },
+          {
+            link: '/review-matches/',
+            title: getPatientName(data![0])
+          }
+        ]}
+      />
       <DataGrid
         columns={columns}
         rows={mapDataToScores(

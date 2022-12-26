@@ -1,9 +1,11 @@
 import { Stack, Switch, Typography } from '@mui/material'
 import { useState } from 'react'
+
 interface ExactSwitchProps {
-  onChange:
-    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    | undefined
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => void
   name: string
   exactValue: boolean
 }
@@ -17,7 +19,7 @@ const ExactSwitch: React.FC<ExactSwitchProps> = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
-    onChange && onChange(event)
+    onChange && onChange(event, event.target.checked)
   }
 
   return (
