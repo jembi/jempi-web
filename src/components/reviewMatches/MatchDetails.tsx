@@ -14,7 +14,7 @@ import {
 import {
   DataGrid,
   GridCellParams,
-  GridColDef,
+  GridColumns,
   GridRenderCellParams,
   GridValueFormatterParams,
   GridValueGetterParams
@@ -22,14 +22,16 @@ import {
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import moment from 'moment'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
+import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
+import { DisplayField } from '../../types/Fields'
 import { NotificationState } from '../../types/Notification'
 import PatientRecord from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
+import NotFound from '../error/NotFound'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
@@ -70,153 +72,24 @@ const mapDataToScores = (
   return data
 }
 
-const MatchDetails = () => {
-  const checkForExactMatch = (params: GridCellParams<string>) => {
-    return params.value ===
-      (data && data[0][params.field as keyof PatientRecord])
-      ? 'matching-cell'
+const getCellClassName = (
+  params: GridCellParams<string>,
+  field: DisplayField,
+  data: PatientRecord
+) => {
+  if (field.fieldName === 'type') {
+    return params.value === 'Current'
+      ? 'current-patient-cell'
+      : params.value === 'Golden'
+      ? 'golden-patient-cell'
       : ''
-  }
-  const columns: GridColDef[] = [
-    {
-      field: 'type',
-      headerName: 'Record Type',
-      minWidth: 110,
-      flex: 2,
-      cellClassName: (params: GridCellParams<string>) => {
-        return params.value === 'Current'
-          ? 'current-patient-cell'
-          : params.value === 'Golden'
-          ? 'golden-patient-cell'
-          : ''
-      }
-    },
-    {
-      field: 'score',
-      headerName: 'Match',
-      type: 'number',
-      width: 100,
-      minWidth: 80,
-      align: 'center',
-      headerAlign: 'center',
-      valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? `${Math.round(params.value * 100)}%` : null
-    },
-    {
-      field: 'uid',
-      headerName: 'UID',
-      minWidth: 150,
-      flex: 2
-    },
-    {
-      field: 'nationalId',
-      headerName: 'Identifiers',
-      minWidth: 150,
-      flex: 2,
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'givenName',
-      headerName: 'First Name',
-      minWidth: 150,
-      flex: 2,
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'familyName',
-      headerName: 'Last Name',
-      minWidth: 150,
-      flex: 2,
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'gender',
-      headerName: 'Gender',
-      minWidth: 110,
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'dob',
-      headerName: 'DOB',
-      type: 'date',
-      minWidth: 110,
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      valueFormatter: (params: GridValueFormatterParams<number>) =>
-        params.value ? moment(params.value).format('YYYY-MM-DD') : null,
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'phoneNumber',
-      headerName: 'Phone No',
-      minWidth: 110,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: checkForExactMatch
-    },
-    {
-      field: 'city',
-      headerName: 'City',
-      minWidth: 110,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: checkForExactMatch
-    },
-    //TODO Add back when we have user information
-    // {
-    //   field: 'updatedBy',
-    //   headerName: 'Updated By',
-    //   minWidth: 110,
-    //   align: 'center',
-    //   headerAlign: 'center'
-    // },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      maxWidth: 180,
-      minWidth: 120,
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      filterable: false,
-      valueGetter: (params: GridValueGetterParams) => ({
-        id: params.row.id,
-        patient: params.row.patient,
-        type: params.row.type
-      }),
-      renderCell: (params: GridRenderCellParams<any>) => {
-        return params.row.type === 'Current' ? (
-          <Link
-            component="button"
-            onClick={handleCreateGoldenRecord}
-            underline="none"
-          >
-            New Record
-          </Link>
-        ) : params.row.type === 'Golden' ? (
-          <Link component="button" onClick={handleAcceptLink} underline="none">
-            Accept
-          </Link>
-        ) : params.row.type === 'Candidate' ? (
-          <Link
-            component="button"
-            onClick={() => handleLinkRecord(params.row.uid)}
-            underline="none"
-          >
-            Link
-          </Link>
-        ) : (
-          <></>
-        )
-      }
-    }
-  ]
+  } else if (field.groups.includes('demographics')) {
+    return params.value === data[params.field] ? 'matching-cell' : ''
+  } else return ''
+}
 
+const MatchDetails = () => {
+  const { availableFields } = useAppConfig()
   const [action, setAction] = useState<Action>()
   const [recordId, setRecordId] = useState('')
   const [dialog, setDialog] = useState<DialogParams>({
@@ -234,13 +107,14 @@ const MatchDetails = () => {
     PatientRecord[],
     AxiosError
   >({
-    queryKey: ['matchDetails'],
-    queryFn: () =>
-      ApiClient.getMatchDetails(
+    queryKey: ['matchDetails', searchParams],
+    queryFn: () => {
+      return ApiClient.getMatchDetails(
         searchParams.patient_id!,
         searchParams.golden_id!,
         searchParams.candidates?.map(c => c.golden_id) || []
-      ),
+      )
+    },
     refetchOnWindowFocus: false
   })
 
@@ -379,6 +253,87 @@ const MatchDetails = () => {
   if (isError) {
     return <ApiErrorMessage error={error} />
   }
+
+  if (!data) {
+    return <NotFound />
+  }
+
+  const columns: GridColumns = [
+    {
+      field: 'score',
+      headerName: 'Match',
+      type: 'number',
+      width: 100,
+      minWidth: 80,
+      align: 'center',
+      headerAlign: 'center',
+      valueFormatter: (params: GridValueFormatterParams<number>) =>
+        params.value ? `${Math.round(params.value * 100)}%` : null
+    },
+    ...availableFields.map(field => {
+      const { fieldName, fieldLabel, formatValue } = field
+      return {
+        field: fieldName,
+        headerName: fieldLabel,
+        flex: 1,
+        valueFormatter: ({ value }: any) => formatValue(value),
+        cellClassName: (params: GridCellParams<string>) =>
+          getCellClassName(params, field, data[0])
+      }
+    }),
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      maxWidth: 180,
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      filterable: false,
+      valueGetter: (params: GridValueGetterParams) => ({
+        id: params.row.id,
+        patient: params.row.patient,
+        type: params.row.type
+      }),
+      renderCell: (params: GridRenderCellParams<any>) => {
+        switch (params.row.type) {
+          case 'Current':
+            return (
+              <Link
+                component="button"
+                onClick={handleCreateGoldenRecord}
+                underline="none"
+              >
+                New Record
+              </Link>
+            )
+          case 'Golden':
+            return (
+              <Link
+                component="button"
+                onClick={handleAcceptLink}
+                underline="none"
+              >
+                Accept
+              </Link>
+            )
+          case 'Candidate':
+            return (
+              <Link
+                component="button"
+                onClick={() => handleLinkRecord(params.row.uid)}
+                underline="none"
+              >
+                Link
+              </Link>
+            )
+          default:
+            return <></>
+        }
+      }
+    }
+  ]
 
   return (
     <Container maxWidth="xl">
