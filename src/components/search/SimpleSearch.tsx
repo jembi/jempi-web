@@ -97,48 +97,31 @@ const SimpleSearch: React.FC = () => {
                   width: '100%',
                   borderRadius: '4px',
                   boxShadow: '0px 0px 0px 1px #E0E0E0',
-                  background: '#FFFFFF',
                   mt: 4,
-                  padding: 2
+                  padding: 2,
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}
               >
-                <Grid container direction={'column'} justifyContent={'center'}>
-                  <Grid item sx={{ mr: 3 }}>
-                    <Grid container direction={'row'}>
-                      <Grid item xs={4} />
-                      <Grid item>
-                        <Typography
-                          sx={{
-                            fontFamily: 'Roboto',
-                            fontStyle: 'normal',
-                            fontSize: '24px',
-                            color: 'rgba(0, 0, 0, 0.6)'
-                          }}
-                        >
-                          Search Records
-                        </Typography>
-                      </Grid>
+                <Grid container direction="column" width="fit-content">
+                  <Grid item container direction="column" width="fit-content">
+                    <Grid item>
+                      <Typography variant="h5">Search Records</Typography>
                     </Grid>
-                  </Grid>
-                  <Grid item sx={{ mb: 2, mr: 3 }}>
-                    <Grid container direction={'row'}>
-                      <Grid item xs={4} />
-                      <Grid item>
-                        <Typography
-                          sx={{
-                            fontStyle: 'normal',
-                            fontSize: '14px',
-                            color: '#1976D2'
-                          }}
-                        >
-                          Use custom search
-                        </Typography>
-                      </Grid>
+                    <Grid item sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: theme => theme.palette.primary.main
+                        }}
+                      >
+                        Use custom search
+                      </Typography>
                     </Grid>
                   </Grid>
                   <FieldArray name="search">
                     {() => (
-                      <div>
+                      <>
                         {availableFields.map((field, index) => {
                           const parameter = values.parameters[index]
                           return (
@@ -151,13 +134,11 @@ const SimpleSearch: React.FC = () => {
                             />
                           )
                         })}
-                      </div>
+                      </>
                     )}
                   </FieldArray>
-                </Grid>
-                <Grid item sx={{ mr: 3 }}>
-                  <Grid container direction={'row'}>
-                    <Grid item xs={4} />
+                  <Grid item>
+                    {/* TODO move colors to theme */}
                     <Button
                       variant="contained"
                       sx={{

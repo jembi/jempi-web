@@ -22,6 +22,7 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
       value={value}
       onChange={onChange}
       name={name}
+      sx={{ width: 400 }}
     />
   )
 }

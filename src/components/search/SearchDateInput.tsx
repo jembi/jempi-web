@@ -39,7 +39,7 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
             variant="outlined"
             size="small"
             onChange={onChange}
-            sx={{ width: '210px' }}
+            sx={{ width: 400 }}
           />
         )}
       />
