@@ -22,11 +22,11 @@ const SearchFlags: React.FC<SearchFlagsProps> = ({ options }) => {
           sx={{
             width: '129px',
             height: '42px',
-            borderColor: '#1976D2',
-            color: '#1976D2',
+            borderColor: theme => theme.palette.primary.main,
+            color: theme => theme.palette.primary.main,
             '&.Mui-selected, &.Mui-selected:hover': {
               color: 'white',
-              backgroundColor: '#1976D2'
+              backgroundColor: theme => theme.palette.primary.main
             }
           }}
           options={options}

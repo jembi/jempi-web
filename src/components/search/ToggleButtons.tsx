@@ -65,7 +65,9 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
               sx={sx}
               key={value}
             >
-              <Typography id={name}>{value}</Typography>
+              <Typography id={name} variant="button">
+                {value}
+              </Typography>
             </ToggleButton>
           )
         })}

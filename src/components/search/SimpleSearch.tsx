@@ -64,23 +64,36 @@ const SimpleSearch: React.FC = () => {
               ]}
             />
           </Grid>
-          <Grid item lg={4}>
-            <SearchFlags
-              options={[
-                FlagLabel.ALL_RECORDS,
-                FlagLabel.GOLDEN_ONLY,
-                FlagLabel.PATIENT_ONLY
-              ]}
-            />
-          </Grid>
-          <Grid item lg={2} textAlign="right">
-            <Button
-              variant="outlined"
-              sx={{ height: '42px', width: '172px' }}
-              href={'/custom-search'}
-            >
-              {'CUSTOM SEARCH'}
-            </Button>
+          <Grid
+            item
+            container
+            direction="row"
+            spacing={2}
+            justifyContent="right"
+            lg={6}
+          >
+            <Grid item>
+              <SearchFlags
+                options={[
+                  FlagLabel.ALL_RECORDS,
+                  FlagLabel.GOLDEN_ONLY,
+                  FlagLabel.PATIENT_ONLY
+                ]}
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  width: '172px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+                href={'/custom-search'}
+              >
+                <Typography variant="button">CUSTOM SEARCH</Typography>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
         <Divider />
