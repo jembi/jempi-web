@@ -1,10 +1,10 @@
-export interface Parameters {
-  field: string
+export interface SearchParameter {
+  fieldName: string
   value: string | Date
   exact: boolean
   distance: number
 }
 
-export interface Search {
-  parameters: Parameters[]
+export interface SearchQuery {
+  parameters: SearchParameter[]
 }

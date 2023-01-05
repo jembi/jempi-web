@@ -1,16 +1,14 @@
 import { TextField } from '@mui/material'
 
 interface SearchTextInputProps {
-  textFieldValue: string | Date
-  onChange:
-    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    | undefined
+  value: string | Date
+  onChange?: (e: React.ChangeEvent<any>) => void
   name: string
   label: string
 }
 
 const SearchTextInput: React.FC<SearchTextInputProps> = ({
-  textFieldValue,
+  value,
   onChange,
   name,
   label
@@ -21,9 +19,10 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
       label={label}
       variant="outlined"
       size="small"
-      value={textFieldValue}
+      value={value}
       onChange={onChange}
       name={name}
+      sx={{ width: 400 }}
     />
   )
 }

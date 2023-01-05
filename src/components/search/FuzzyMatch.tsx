@@ -4,24 +4,23 @@ import { range } from '../../utils/misc'
 import ToggleButtons from './ToggleButtons'
 
 interface FuzzyMatchProps {
-  onChange?: (event: React.MouseEvent<HTMLElement>, value: any) => void
+  onChange?: (event: React.ChangeEvent<any>, value: any) => void
   name: string
+  value: number
   disabled: boolean
-  setFieldValue: Function
 }
 
 const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
   onChange,
   name,
-  disabled,
-  setFieldValue
+  value,
+  disabled
 }) => {
-  const [selectedButton, setSelectedButton] = useState<number>(1)
+  const [selectedButton, setSelectedButton] = useState<number>(value || 1)
 
-  const handleChange = (event: React.MouseEvent<HTMLElement>, value: any) => {
-    setFieldValue(name, value)
-    setSelectedButton(value)
-    onChange && onChange(event, value)
+  const handleChange = (event: React.ChangeEvent<any>) => {
+    setSelectedButton(event.target.value)
+    onChange && onChange(event, event.target.value)
   }
 
   return (

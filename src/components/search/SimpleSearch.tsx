@@ -5,12 +5,13 @@ import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
-import SimpleSearchDataModel from '../../model/search/SimpleSearchDataModel'
+import moment from 'moment'
+import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { Parameters, Search } from '../../types/SimpleSearch'
+import { SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchParameters from './SimpleSearchParameters'
+import SimpleSearchParameter from './SimpleSearchParameters'
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -19,6 +20,7 @@ enum FlagLabel {
 }
 
 const SimpleSearch: React.FC = () => {
+  const { availableFields } = useAppConfig()
   //TODO: find a better way of handling error while posting the search request
   const postSearchQuery = useMutation({
     mutationFn: ApiClient.postSimpleSearchQuery,
@@ -27,12 +29,21 @@ const SimpleSearch: React.FC = () => {
     }
   })
 
-  function handleOnFormSubmit(value: Search) {
+  function handleOnFormSubmit(value: SearchQuery) {
     postSearchQuery.mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
-  const initialValues: Search = SimpleSearchDataModel
+  const initialValues: SearchQuery = {
+    parameters: availableFields.map(({ fieldType, fieldName }) => {
+      return {
+        fieldName,
+        value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
+        exact: false,
+        distance: 1
+      }
+    })
+  }
 
   return (
     <Container maxWidth={false}>
@@ -53,23 +64,36 @@ const SimpleSearch: React.FC = () => {
               ]}
             />
           </Grid>
-          <Grid item lg={4}>
-            <SearchFlags
-              options={[
-                FlagLabel.ALL_RECORDS,
-                FlagLabel.GOLDEN_ONLY,
-                FlagLabel.PATIENT_ONLY
-              ]}
-            />
-          </Grid>
-          <Grid item lg={2} textAlign="right">
-            <Button
-              variant="outlined"
-              sx={{ height: '42px', width: '172px' }}
-              href={'/custom-search'}
-            >
-              {'CUSTOM SEARCH'}
-            </Button>
+          <Grid
+            item
+            container
+            direction="row"
+            spacing={2}
+            justifyContent="right"
+            lg={6}
+          >
+            <Grid item>
+              <SearchFlags
+                options={[
+                  FlagLabel.ALL_RECORDS,
+                  FlagLabel.GOLDEN_ONLY,
+                  FlagLabel.PATIENT_ONLY
+                ]}
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  width: '172px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+                href={'/custom-search'}
+              >
+                <Typography variant="button">CUSTOM SEARCH</Typography>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
         <Divider />
@@ -79,89 +103,55 @@ const SimpleSearch: React.FC = () => {
             handleOnFormSubmit(values)
           }}
         >
-          {({ values, handleChange, setFieldValue }) => (
+          {({ values, handleChange }) => (
             <Form>
               <Box
                 sx={{
                   width: '100%',
                   borderRadius: '4px',
                   boxShadow: '0px 0px 0px 1px #E0E0E0',
-                  background: '#FFFFFF',
                   mt: 4,
-                  padding: 2
+                  padding: 2,
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}
               >
-                <Grid container direction={'column'} justifyContent={'center'}>
-                  <Grid item sx={{ mr: 3 }}>
-                    <Grid container direction={'row'}>
-                      <Grid item xs={4} />
-                      <Grid item>
-                        <Typography
-                          sx={{
-                            fontFamily: 'Roboto',
-                            fontStyle: 'normal',
-                            fontSize: '24px',
-                            color: 'rgba(0, 0, 0, 0.6)'
-                          }}
-                        >
-                          Search Records
-                        </Typography>
-                      </Grid>
+                <Grid container direction="column" width="fit-content">
+                  <Grid item container direction="column" width="fit-content">
+                    <Grid item>
+                      <Typography variant="h5">Search Records</Typography>
+                    </Grid>
+                    <Grid item sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: theme => theme.palette.primary.main
+                        }}
+                      >
+                        Use custom search
+                      </Typography>
                     </Grid>
                   </Grid>
-                  <Grid item sx={{ mb: 2, mr: 3 }}>
-                    <Grid container direction={'row'}>
-                      <Grid item xs={4} />
-                      <Grid item>
-                        <Typography
-                          sx={{
-                            fontStyle: 'normal',
-                            fontSize: '14px',
-                            color: '#1976D2'
-                          }}
-                        >
-                          Use custom search
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
                   <FieldArray name="search">
                     {() => (
-                      <div>
-                        {values.parameters.map(
-                          (data: Parameters, index: number) => {
-                            const inputFieldLabel = data.field
-                              .split(/(?=[A-Z])/)
-                              .join(' ')
-                            const fieldAttribute: string = `parameters[${index}].value`
-                            const exactAttribute: string = `parameters[${index}].exact`
-                            const distanceAttribute: string = `parameters[${index}].distance`
-
-                            return (
-                              <div key={data.field}>
-                                <SimpleSearchParameters
-                                  fieldAttribute={fieldAttribute}
-                                  exactAttribute={exactAttribute}
-                                  distanceAttribute={distanceAttribute}
-                                  label={inputFieldLabel}
-                                  onChange={handleChange}
-                                  textFieldValue={data.value}
-                                  exactValue={data.exact}
-                                  distanceValue={data.distance}
-                                  setFieldValue={setFieldValue}
-                                />
-                              </div>
-                            )
-                          }
-                        )}
-                      </div>
+                      <>
+                        {availableFields.map((field, index) => {
+                          const parameter = values.parameters[index]
+                          return (
+                            <SimpleSearchParameter
+                              field={field}
+                              parameter={parameter}
+                              index={index}
+                              onChange={handleChange}
+                              key={field.fieldName}
+                            />
+                          )
+                        })}
+                      </>
                     )}
                   </FieldArray>
-                </Grid>
-                <Grid item sx={{ mr: 3 }}>
-                  <Grid container direction={'row'}>
-                    <Grid item xs={4} />
+                  <Grid item>
+                    {/* TODO move colors to theme */}
                     <Button
                       variant="contained"
                       sx={{

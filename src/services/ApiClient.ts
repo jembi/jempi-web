@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
-import {Search} from '../types/SimpleSearch'
 import PatientRecord from '../types/PatientRecord'
+import { SearchQuery } from '../types/SimpleSearch'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
@@ -122,12 +122,11 @@ class ApiClient {
       .then(res => res.data)
   }
 
-  async postSimpleSearchQuery(request: Search) {
+  async postSimpleSearchQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
       .then(res => res.data)
   }
 }
-
 
 export default new ApiClient()

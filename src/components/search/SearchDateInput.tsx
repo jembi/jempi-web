@@ -7,19 +7,22 @@ import { useState } from 'react'
 
 export interface SearchDateInputProps {
   name: string
+  value: string | Date
   label: string
-  setFieldValue: Function
+  onChange?: (e: React.ChangeEvent<any>) => void
 }
 
 const SearchDateInput: React.FC<SearchDateInputProps> = ({
   name,
+  value,
   label,
-  setFieldValue
+  onChange
 }) => {
-  const [value, setValue] = useState<Moment | null>(moment())
+  const [dateValue, setDateValue] = useState<Moment | null>(
+    value ? moment(value, 'DD/MM/YYYY') : moment()
+  )
   const handleChange = (newValue: Moment | null) => {
-    setValue(newValue)
-    setFieldValue(name, moment(newValue).format('DD/MM/YYYY'))
+    setDateValue(newValue)
   }
 
   return (
@@ -27,14 +30,16 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
       <DesktopDatePicker
         label={label}
         inputFormat="DD/MM/YYYY"
-        value={value}
+        value={dateValue}
         onChange={handleChange}
         renderInput={params => (
           <TextField
             {...params}
+            name={name}
             variant="outlined"
             size="small"
-            sx={{ width: '210px' }}
+            onChange={onChange}
+            sx={{ width: 400 }}
           />
         )}
       />
