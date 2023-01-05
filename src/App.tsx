@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
+import AuditTrail from './components/auditTrail/AuditTrail'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
@@ -35,6 +36,10 @@ const routes: Route[] = [
   {
     path: '/review-matches',
     element: <ReviewMatches />
+  },
+  {
+    path: '/audit-trail',
+    element: <AuditTrail />
   },
   {
     path: '/match-details',

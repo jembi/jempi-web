@@ -5,7 +5,8 @@ const ROUTES = {
   GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecordDocuments',
   UPDATE_NOTIFICATION: '/NotificationRequest',
   CREATE_GOLDEN_RECORD: '/Unlink',
-  LINK_RECORD: '/Link'
+  LINK_RECORD: '/Link',
+  AUDIT_TRAIL: '/Audit-trail'
 }
 
 export default ROUTES

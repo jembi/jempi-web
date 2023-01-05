@@ -1,3 +1,4 @@
+import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
 
@@ -11,6 +12,41 @@ const notifications: Notification[] = [
     state: NotificationState.New,
     golden_id: '0x45',
     score: 0.5
+  }
+]
+
+const auditTrail: AuditTrailRecord[] = [
+  {
+    process: 'Create user',
+    actionTaken: 'newUserCreated',
+    links: '',
+    when: '10/09/2022 8:16',
+    changedBy: 'User Id 12345',
+    comment: ''
+  },
+  {
+    process: 'Auto-update golden record field',
+    actionTaken: 'grUpdate',
+    links: 'Golden ID (G543)',
+    when: '11/09/2022 10:07',
+    changedBy: 'System',
+    comment: 'Golden ID (G543) updated field values (name, cell number)'
+  },
+  {
+    process: 'Autolink',
+    actionTaken: 'grAndPatientRecordLinked',
+    links: `Golden ID (G123)\n Golden ID (P123-1)`,
+    when: '12/09/2022 9:00',
+    changedBy: 'System',
+    comment: 'Golden ID (G123) linked with Patient ID (P123-1)'
+  },
+  {
+    process: 'Approve link',
+    actionTaken: 'grAndPatientRecordLinkApproved',
+    links: 'Golden ID (G127)\n Golden ID (P127-1)',
+    when: '12/09/2022 10:35',
+    changedBy: 'User ID 12345',
+    comment: 'Golden ID (G127) linked with Patient ID (P127-1) approved'
   }
 ]
 
@@ -48,6 +84,12 @@ const patientRecords = [patientRecord, goldenRecord]
 
 const goldenRecords = [{ customGoldenRecord: goldenRecord }]
 
-const mockData = { notifications, patientRecord, goldenRecords, patientRecords }
+const mockData = {
+  notifications,
+  auditTrail,
+  patientRecord,
+  goldenRecords,
+  patientRecords
+}
 
 export default mockData
