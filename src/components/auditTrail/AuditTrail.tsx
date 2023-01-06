@@ -20,6 +20,29 @@ import PageHeader from '../shell/PageHeader'
 import { TableContent } from './TableContent'
 import { Column, TableHeader } from './TableHeader'
 
+const useAuditTrailQuery = () => {
+  const {
+    data: { uid }
+  } = useMatch()
+  const patientQuery = useQuery<PatientRecord, AxiosError>({
+    queryKey: ['patient', uid],
+    queryFn: async () => await ApiClient.getPatient(uid as string),
+    refetchOnWindowFocus: false
+  })
+  const auditTrailQuery = useQuery<AuditTrailRecord[], AxiosError>({
+    queryKey: ['auditTrail'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => await ApiClient.getAuditTrail()
+  })
+
+  return {
+    patient: patientQuery.data,
+    auditTrail: auditTrailQuery.data,
+    isLoading: patientQuery.isLoading || auditTrailQuery.isLoading,
+    error: patientQuery.error || auditTrailQuery.error
+  }
+}
+
 const auditTrailColumns: readonly Column[] = [
   { id: 'process', label: 'Process', minWidth: 170 },
   {
@@ -56,18 +79,10 @@ const auditTrailColumns: readonly Column[] = [
 
 const AuditTrail = () => {
   const {
-    data: { uid, patient }
+    data: { uid }
   } = useMatch()
   const { getPatientName } = useAppConfig()
-  const { data, error, isLoading, isError } = useQuery<
-    AuditTrailRecord[],
-    AxiosError
-  >({
-    queryKey: ['auditTrail'],
-    refetchOnWindowFocus: false,
-    queryFn: async () => await ApiClient.getAuditTrail()
-  })
-
+  const { patient, auditTrail, isLoading, error } = useAuditTrailQuery()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
@@ -86,43 +101,42 @@ const AuditTrail = () => {
     return <Loading />
   }
 
-  if (isError) {
+  if (error) {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data) {
+  if (!auditTrail) {
     return <NotFound />
   }
-
-  const patientName = getPatientName(patient as PatientRecord)
-  console.log(patient)
 
   return (
     <Container>
       <Grid container sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Grid item>
-          <PageHeader
-            description={
-              <Typography fontSize="16px" letterSpacing="0.15px">
-                {uid as string}
-              </Typography>
-            }
-            title={patientName}
-            breadcrumbs={[
-              {
-                icon: <SearchIcon />,
-                title: 'Search Results'
-              },
-              {
-                icon: <Person />,
-                title: `Record Details`
-              },
-              {
-                icon: <Warning />,
-                title: 'Audit Trail'
+          {patient && (
+            <PageHeader
+              description={
+                <Typography fontSize="16px" letterSpacing="0.15px">
+                  {patient.uid}
+                </Typography>
               }
-            ]}
-          />
+              title={getPatientName(patient)}
+              breadcrumbs={[
+                {
+                  icon: <SearchIcon />,
+                  title: 'Search Results'
+                },
+                {
+                  icon: <Person />,
+                  title: `Record Details`
+                },
+                {
+                  icon: <Warning />,
+                  title: 'Audit Trail'
+                }
+              ]}
+            />
+          )}
         </Grid>
         <Grid item>
           <Button
@@ -151,7 +165,7 @@ const AuditTrail = () => {
           <Table stickyHeader>
             <TableHeader columns={auditTrailColumns} />
             <TableContent
-              data={data}
+              data={auditTrail}
               columns={auditTrailColumns}
               page={page}
               rowsPerPage={rowsPerPage}
@@ -162,7 +176,7 @@ const AuditTrail = () => {
           sx={{ gap: '26px' }}
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={data ? data.length : 0}
+          count={auditTrail ? auditTrail.length : 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

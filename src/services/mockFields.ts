@@ -30,7 +30,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'First Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/search', '/patient/:uid/audit-trail'],
     accessLevel: []
   },
   {
@@ -38,7 +38,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Last Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/search', '/patient/:uid/audit-trail'],
     accessLevel: []
   },
   {
