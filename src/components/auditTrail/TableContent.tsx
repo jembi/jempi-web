@@ -1,15 +1,24 @@
+import Link from '@mui/material/Link'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import React from 'react'
+import AuditTrailRecord from '../../types/AuditTrail'
+import { ACTION_TYPE } from '../../utils/constants'
 import { Column } from './TableHeader'
 
-export const TableContent: React.FC<{
-  data: any[]
+export interface TableContentProps<T> {
+  data: T[] | undefined
   columns: readonly Column[]
   page: number
   rowsPerPage: number
-}> = ({ data, columns, page, rowsPerPage }) => {
+}
+
+export const TableContent: React.FC<TableContentProps<AuditTrailRecord>> = ({
+  data,
+  columns,
+  page,
+  rowsPerPage
+}) => {
   return (
     <TableBody>
       {data
@@ -23,15 +32,24 @@ export const TableContent: React.FC<{
               key={row?.process}
               sx={{ backgroundColor: 'rgba(255, 255, 255, 0.002)' }}
             >
-              {columns.map(column => {
-                const value = row[column.id]
+              {columns.map(({ id, align }) => {
+                const value = row[id]
                 return (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    sx={{ minWidth: 140 }}
-                  >
-                    {value}
+                  <TableCell key={id} align={align} sx={{ minWidth: 140 }}>
+                    {id === 'links'
+                      ? value.split(',').map(link => (
+                          <Link
+                            key={link}
+                            href={'#'}
+                            display="block"
+                            whiteSpace="nowrap"
+                          >
+                            {link}
+                          </Link>
+                        ))
+                      : id === 'actionTaken'
+                      ? ACTION_TYPE[value]
+                      : value}
                   </TableCell>
                 )
               })}

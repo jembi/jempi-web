@@ -35,7 +35,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Autolink',
     actionTaken: 'grAndPatientRecordLinked',
-    links: `Golden ID (G123)\n Golden ID (P123-1)`,
+    links: `Golden ID (G123),Golden ID (P123-1)`,
     when: '12/09/2022 9:00',
     changedBy: 'System',
     comment: 'Golden ID (G123) linked with Patient ID (P123-1)'
@@ -43,7 +43,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Approve link',
     actionTaken: 'grAndPatientRecordLinkApproved',
-    links: 'Golden ID (G127)\n Golden ID (P127-1)',
+    links: 'Golden ID (G127),Golden ID (P127-1)',
     when: '12/09/2022 10:35',
     changedBy: 'User ID 12345',
     comment: 'Golden ID (G127) linked with Patient ID (P127-1) approved'

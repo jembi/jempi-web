@@ -73,7 +73,6 @@ const AuditTrail = () => {
       ) : (
         <Card
           sx={{
-            maxWidth: 1300,
             background: '#FFFFFF',
             boxShadow: '0px 0px 0px 1px #E0E0E0',
             borderRadius: '4px'
@@ -83,7 +82,7 @@ const AuditTrail = () => {
             <Table stickyHeader>
               <TableHeader columns={auditTrailColumns} />
               <TableContent
-                data={data || [{}]}
+                data={data}
                 columns={auditTrailColumns}
                 page={page}
                 rowsPerPage={rowsPerPage}
