@@ -14,7 +14,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   return (
     <>
-      <Breadcrumbs>
+      <Breadcrumbs maxItems={3} aria-label="breadcrumb">
         <IconButton href="/">
           <HomeIcon />
         </IconButton>

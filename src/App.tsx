@@ -17,6 +17,7 @@ import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
+import ApiClient from './services/ApiClient'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -36,14 +37,20 @@ const ReactLocationDevtools =
       )
 
 const routes: Route[] = [
-  { path: '/', element: <Dashboard /> },
+  {
+    path: '/',
+    element: <Dashboard />
+  },
   {
     path: '/review-matches',
     element: <ReviewMatches />
   },
   {
-    path: '/audit-trail',
-    element: <AuditTrail />
+    path: '/patient/:uid/audit-trail',
+    element: <AuditTrail />,
+    loader: async ({ params }) => ({
+      uid: params.uid
+    })
   },
   {
     path: '/match-details',
@@ -54,7 +61,8 @@ const routes: Route[] = [
     path: '/patient/:uid',
     element: <PatientDetails />,
     loader: async ({ params }) => ({
-      uid: params.uid
+      uid: params.uid,
+      patient: await ApiClient.getPatient(params.uid)
     })
   },
   { element: <NotFound /> }
