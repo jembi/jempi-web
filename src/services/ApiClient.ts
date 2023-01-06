@@ -3,6 +3,7 @@ import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import { SearchQuery } from '../types/SimpleSearch'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
@@ -125,6 +126,12 @@ class ApiClient {
       .patch(
         `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
       )
+      .then(res => res.data)
+  }
+
+  async postSimpleSearchQuery(request: SearchQuery) {
+    return await client
+      .post(ROUTES.POST_SIMPLE_SEARCH, request)
       .then(res => res.data)
   }
 }

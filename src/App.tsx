@@ -14,13 +14,17 @@ import NotFound from './components/error/NotFound'
 import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
-import Search from './components/search/Search'
+import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
 import theme from './theme'
 
 const location = new ReactLocation()
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {}
+  }
+})
 
 const ReactLocationDevtools =
   process.env.NODE_ENV === 'production'
@@ -45,7 +49,7 @@ const routes: Route[] = [
     path: '/match-details',
     element: <MatchDetails />
   },
-  { path: '/search', element: <Search /> },
+  { path: '/search', element: <SimpleSearch /> },
   {
     path: '/patient/:uid',
     element: <PatientDetails />,
