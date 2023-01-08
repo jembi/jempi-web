@@ -10,6 +10,7 @@ import { lazy } from 'react'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import Import from './components/import/Import'
 import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
@@ -41,6 +42,7 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <Search /> },
+  { path: '/import', element: <Import /> },
   {
     path: '/patient/:uid',
     element: <PatientDetails />,

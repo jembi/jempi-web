@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
@@ -118,6 +118,12 @@ class ApiClient {
       .patch(
         `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
       )
+      .then(res => res.data)
+  }
+
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
 }
