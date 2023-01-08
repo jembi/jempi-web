@@ -8,12 +8,12 @@ import { FC } from 'react'
 import { FileObj, UploadStatus } from '../../types/FileUpload'
 import './Import.css'
 
-interface FileObjData {
+interface FileObjProps {
   fileObj: FileObj
   handleRemoveFile: (fileObj: FileObj) => void
 }
 
-const UploadFileListItem: FC<FileObjData> = (props: FileObjData) => {
+const UploadFileListItem: FC<FileObjProps> = (props: FileObjProps) => {
   return (
     <Grid
       container
