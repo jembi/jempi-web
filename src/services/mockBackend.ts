@@ -11,9 +11,13 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
   delayResponse: 0
 })
 
-const { notifications, patientRecords, goldenRecords } = mockData
+const { notifications, patientRecords, goldenRecords, currentUser } = mockData
 
 axiosMockAdapterInstance
+  .onPost(ROUTES.VALIDATE_OAUTH)
+  .reply(200, { user: currentUser })
+  .onGet(ROUTES.CURRENT_USER)
+  .reply(200, { user: currentUser })
   .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
   .onGet(ROUTES.GET_PATIENT_DOCUMENT)
