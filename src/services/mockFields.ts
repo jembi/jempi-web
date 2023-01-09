@@ -163,6 +163,54 @@ const FIELDS_CONFIG: Fields = [
     groups: ['relationships'],
     scope: ['/patient/:uid'],
     accessLevel: []
+  },
+  {
+    fieldName: 'process',
+    fieldType: 'String',
+    fieldLabel: 'Process',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
+  },
+  {
+    fieldName: 'actionTaken',
+    fieldType: 'String',
+    fieldLabel: 'Action taken',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
+  },
+  {
+    fieldName: 'links',
+    fieldType: 'String',
+    fieldLabel: 'Links',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
+  },
+  {
+    fieldName: 'when',
+    fieldType: 'Date',
+    fieldLabel: 'When',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
+  },
+  {
+    fieldName: 'changedBy',
+    fieldType: 'String',
+    fieldLabel: 'Changed by',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
+  },
+  {
+    fieldName: 'comment',
+    fieldType: 'String',
+    fieldLabel: 'Comment',
+    groups: ['audit_trail'],
+    scope: ['/patient/:uid', '/patient/:uid/audit-trail'],
+    accessLevel: []
   }
 ]
 

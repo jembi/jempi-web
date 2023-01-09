@@ -1,12 +1,6 @@
-export type ActionType =
-  | 'newUserCreated'
-  | 'grUpdate'
-  | 'grAndPatientRecordLinked'
-  | 'grAndPatientRecordLinkApproved'
-
 export default interface AuditTrailRecord {
   process: string
-  actionTaken: ActionType
+  actionTaken: string
   links: string
   when: string
   changedBy: string
