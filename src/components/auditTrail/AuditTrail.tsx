@@ -1,6 +1,6 @@
 import { Person, Warning } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Card, Divider, Grid, Typography } from '@mui/material'
+import { Button, Card, Divider, Grid, Link, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { GridColumns } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid/DataGrid'
@@ -11,6 +11,7 @@ import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import AuditTrailRecord from '../../types/AuditTrail'
 import PatientRecord from '../../types/PatientRecord'
+import { ACTION_TYPE } from '../../utils/constants'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
@@ -53,6 +54,16 @@ const AuditTrail = () => {
         headerName: fieldLabel,
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
+        renderCell: ({ value }) =>
+          fieldName === 'links'
+            ? value.split(',').map((link: string) => (
+                <Link key={link} href={'#'} display="block" whiteSpace="nowrap">
+                  {link}
+                </Link>
+              ))
+            : fieldName === 'actionTaken'
+            ? ACTION_TYPE[value]
+            : value,
         sortable: false,
         disableColumnMenu: true
       }
