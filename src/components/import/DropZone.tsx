@@ -2,6 +2,7 @@ import { UploadFile as UploadFileIcon } from '@mui/icons-material'
 import { Box, Button, CardActions, Container, Typography } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosProgressEvent, AxiosRequestConfig } from 'axios'
+import { useSnackbar } from 'notistack'
 import { FC, useState } from 'react'
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone'
 import ApiClient from '../../services/ApiClient'
@@ -11,6 +12,7 @@ import UploadFileListItem from './UploadFileListItem'
 
 const DropZone: FC = () => {
   const [fileObjs, setFilesObj] = useState<FileObj[]>([])
+  const { enqueueSnackbar } = useSnackbar()
 
   const onDrop = (
     acceptedFiles: File[],
@@ -33,7 +35,7 @@ const DropZone: FC = () => {
   } = useDropzone({
     accept: { 'text/csv': ['.csv'] },
     onDrop,
-    maxFiles: 5,
+    maxFiles: 1,
     multiple: true
   })
 
@@ -101,9 +103,17 @@ const DropZone: FC = () => {
     mutationFn: uploadFile,
     onSuccess: (data, fileObj) => {
       setUploadStatus(fileObj, UploadStatus.Complete)
+      enqueueSnackbar(`${fileObj.file.name} file imported`, {
+        variant: 'success'
+      })
     },
     onError: (error: AxiosError, data) => {
-      console.log(`Error uploading files: ${error.message}`)
+      enqueueSnackbar(
+        `Error importing ${data.file.name} file: ${error.message}`,
+        {
+          variant: 'error'
+        }
+      )
       setUploadStatus(data, UploadStatus.Failed)
     }
   })
@@ -144,7 +154,7 @@ const DropZone: FC = () => {
         className="dropzone"
         {...getRootProps({ isFocused, isDragAccept, isDragReject })}
       >
-        <div className="dropzone-div">
+        <div className="dropzone-inner">
           <input {...getInputProps()} />
           <Box className="import__upload-icon">
             <UploadFileIcon />

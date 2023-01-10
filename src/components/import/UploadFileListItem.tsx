@@ -14,15 +14,22 @@ interface FileObjProps {
 }
 
 const UploadFileListItem: FC<FileObjProps> = (props: FileObjProps) => {
+  const addStatusClass = (status: UploadStatus): string => {
+    switch (status) {
+      case UploadStatus.Failed:
+        return 'failed'
+      default:
+        return ''
+    }
+  }
+
   return (
     <Grid
       container
       justifyContent="center"
       alignItems="center"
       spacing={0}
-      className={`import__upload-list-item ${
-        props.fileObj.status === UploadStatus.Failed ? 'failed' : ''
-      }`}
+      className={`import__upload-list-item ${addStatusClass}`}
       key={props.fileObj.file.name}
     >
       <Grid
@@ -43,9 +50,7 @@ const UploadFileListItem: FC<FileObjProps> = (props: FileObjProps) => {
         <Typography
           color="#00000099"
           fontSize="14px"
-          className={`import__upload-list-item ${
-            props.fileObj.status === UploadStatus.Failed ? 'failed' : ''
-          }`}
+          className={`import__upload-list-item ${addStatusClass}`}
         >
           {Math.round(props.fileObj.file.size / 1000)}kb
           {'  '}
@@ -68,14 +73,6 @@ const UploadFileListItem: FC<FileObjProps> = (props: FileObjProps) => {
           <CloseIcon />
         </Box>
       </Grid>
-
-      <Grid
-        item
-        xs={1}
-        justifyContent="center"
-        alignItems="center"
-        textAlign="center"
-      ></Grid>
       <Grid item xs={10} justifyContent="center" alignItems="center">
         <LinearProgress
           className="import__upload-progress-bar"
@@ -84,13 +81,6 @@ const UploadFileListItem: FC<FileObjProps> = (props: FileObjProps) => {
           valueBuffer={100}
         />
       </Grid>
-      <Grid
-        item
-        xs={1}
-        justifyContent="center"
-        alignItems="center"
-        textAlign="center"
-      ></Grid>
     </Grid>
   )
 }
