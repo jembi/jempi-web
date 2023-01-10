@@ -11,7 +11,7 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
   delayResponse: 0
 })
 
-const { notifications, patientRecords, goldenRecords } = mockData
+const { notifications, patientRecords, goldenRecords, linkedRecords } = mockData
 
 axiosMockAdapterInstance
   .onGet(ROUTES.GET_NOTIFICATIONS)
@@ -35,5 +35,7 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
+  .onGet(ROUTES.GET_LINKED_RECORDS)
+  .reply(200, linkedRecords)
 
 export default moxios
