@@ -5,49 +5,31 @@ import { Container } from '@mui/system'
 import { GridColumns } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid/DataGrid'
 import { useMatch } from '@tanstack/react-location'
-import { useQuery } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import ApiClient from '../../services/ApiClient'
-import AuditTrailRecord from '../../types/AuditTrail'
-import PatientRecord from '../../types/PatientRecord'
-import { ACTION_TYPE } from '../../utils/constants'
+import { useAuditTrailQuery } from '../../hooks/useAuditTrailQuery'
+import { DisplayField } from '../../types/Fields'
+import { ACTION_TYPE, AUDIT_TRAIL_FIELDS } from '../../utils/constants'
+import { getFieldValueFormatter } from '../../utils/formatters'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
 import PageHeader from '../shell/PageHeader'
 
-const useAuditTrailQuery = () => {
-  const {
-    data: { uid }
-  } = useMatch()
-  const patientQuery = useQuery<PatientRecord, AxiosError>({
-    queryKey: ['patient', uid],
-    queryFn: async () => await ApiClient.getPatient(uid as string),
-    refetchOnWindowFocus: false
-  })
-  const auditTrailQuery = useQuery<AuditTrailRecord[], AxiosError>({
-    queryKey: ['auditTrail'],
-    refetchOnWindowFocus: false,
-    queryFn: async () => await ApiClient.getAuditTrail()
-  })
-
+const displayedFields: DisplayField[] = AUDIT_TRAIL_FIELDS.map(field => {
   return {
-    patient: patientQuery.data,
-    auditTrail: auditTrailQuery.data,
-    isLoading: patientQuery.isLoading || auditTrailQuery.isLoading,
-    error: patientQuery.error || auditTrailQuery.error
+    ...field,
+    formatValue: getFieldValueFormatter(field.fieldType)
   }
-}
+})
 
 const AuditTrail = () => {
   const {
     data: { uid }
   } = useMatch()
-  const { getPatientName, getFieldsByGroup } = useAppConfig()
+  const { getPatientName } = useAppConfig()
   const { patient, auditTrail, isLoading, error } = useAuditTrailQuery()
 
-  const columns: GridColumns = getFieldsByGroup('audit_trail').map(
+  const columns: GridColumns = displayedFields.map(
     ({ fieldName, fieldLabel, formatValue }) => {
       return {
         field: fieldName,
