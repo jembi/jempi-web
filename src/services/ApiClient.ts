@@ -75,6 +75,19 @@ class ApiClient {
       .then(res => res.data.goldenRecords.map(gr => gr.customGoldenRecord))
   }
 
+  async getLinkedRecords(uid: string) {
+    return await client
+      .get<PatientRecord[]>(ROUTES.GET_LINKED_RECORDS, {
+        params: {
+          uid
+        },
+        paramsSerializer: {
+          indexes: null
+        }
+      })
+      .then(res => res.data)
+  }
+
   //TODO Move this logic to the backend and just get match details by notification ID
   async getMatchDetails(uid: string, goldenId: string, candidates: string[]) {
     const patientRecord = this.getPatient(uid)
