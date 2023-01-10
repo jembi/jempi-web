@@ -2,7 +2,8 @@ import {
   AccountCircle as AccountCircleIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
+  UploadFile as UploadFileIcon
 } from '@mui/icons-material'
 import {
   AppBar,
@@ -61,6 +62,13 @@ const Shell = () => {
               sx={{ color: theme => theme.palette.text.primary }}
             >
               Matches
+            </Button>
+            <Button
+              href="/import"
+              startIcon={<UploadFileIcon />}
+              sx={{ color: theme => theme.palette.text.primary }}
+            >
+              Import
             </Button>
           </Box>
           <IconButton size="large" edge="end">
