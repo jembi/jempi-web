@@ -1,4 +1,4 @@
-import { useMatchRoute } from '@tanstack/react-location'
+import { matchByPath, useLocation } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React, { useCallback, useMemo } from 'react'
@@ -25,7 +25,7 @@ export interface AppConfigProviderProps {
 export const AppConfigProvider = ({
   children
 }: AppConfigProviderProps): JSX.Element => {
-  const matchRoute = useMatchRoute()
+  const location = useLocation()
   const {
     data: fields,
     error,
@@ -39,14 +39,18 @@ export const AppConfigProvider = ({
 
   const availableFields: DisplayField[] = useMemo(() => {
     return (fields || [])
-      .filter(({ scope }) => scope.some(path => matchRoute({ to: path })))
+      .filter(({ scope }) =>
+        scope.some(path => {
+          return matchByPath(location.current, { to: path })
+        })
+      )
       .map(field => {
         return {
           ...field,
           formatValue: getFieldValueFormatter(field.fieldType)
         }
       })
-  }, [fields, matchRoute])
+  }, [fields, location.current])
 
   const getFieldsByGroup = useCallback(
     (groupName: FieldGroup) => {
