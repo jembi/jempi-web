@@ -2,11 +2,19 @@ import { Fields } from '../types/Fields'
 
 const FIELDS_CONFIG: Fields = [
   {
+    fieldName: 'type',
+    fieldType: 'String',
+    fieldLabel: 'Record Type',
+    groups: ['demographics'],
+    scope: ['/patient/:uid', '/match-details'],
+    accessLevel: []
+  },
+  {
     fieldName: 'uid',
     fieldType: 'String',
     fieldLabel: 'UID',
     groups: ['identifiers', 'sub_heading'],
-    scope: ['/patient/:uid'],
+    scope: ['/patient/:uid', '/match-details'],
     accessLevel: []
   },
   {
@@ -14,7 +22,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'National ID',
     groups: ['identifiers'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search'],
     accessLevel: []
   },
   {
@@ -30,7 +38,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'First Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search'],
     accessLevel: []
   },
   {
@@ -38,7 +46,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Last Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search'],
     accessLevel: []
   },
   {
@@ -46,7 +54,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Gender',
     groups: ['demographics', 'sub_heading'],
-    scope: ['/patient/:uid'],
+    scope: ['/patient/:uid', '/match-details'],
     accessLevel: []
   },
   {
@@ -54,7 +62,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'Date',
     fieldLabel: 'Date of Birth',
     groups: ['demographics', 'sub_heading'],
-    scope: ['/patient/:uid', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search'],
     accessLevel: []
   },
   {
@@ -62,7 +70,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Phone No',
     groups: ['demographics'],
-    scope: ['/patient/:uid'],
+    scope: ['/patient/:uid', '/match-details'],
     accessLevel: []
   },
   {
@@ -70,15 +78,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'City',
     groups: ['demographics'],
-    scope: ['/patient/:uid'],
-    accessLevel: []
-  },
-  {
-    fieldName: 'type',
-    fieldType: 'String',
-    fieldLabel: 'Record Type',
-    groups: ['demographics'],
-    scope: ['/patient/:uid'],
+    scope: ['/patient/:uid', '/match-details'],
     accessLevel: []
   },
   {
