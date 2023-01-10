@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material'
 
-const overrides = {
+const overrides = createTheme({
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -9,7 +9,10 @@ const overrides = {
         }
       }
     }
+  }, 
+  typography: {
+    fontFamily: 'Roboto',
   }
-}
+})
 
-export default createTheme(overrides)
+export default overrides

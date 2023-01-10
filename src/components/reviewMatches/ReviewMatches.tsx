@@ -1,15 +1,6 @@
 import { AxiosError } from 'axios'
 
-import {
-  Alert,
-  AlertTitle,
-  Breadcrumbs,
-  Chip,
-  Container,
-  Link,
-  Skeleton,
-  Typography
-} from '@mui/material'
+import { Alert, AlertTitle, Chip, Container, Skeleton } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -23,6 +14,7 @@ import { Link as LocationLink } from '@tanstack/react-location'
 import moment from 'moment'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
+import PageHeader from '../shell/PageHeader'
 
 const columns: GridColDef[] = [
   {
@@ -134,13 +126,15 @@ const ReviewMatches = () => {
     </Container>
   ) : (
     <Container>
-      <Typography variant="h5">Review Matches</Typography>
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/">
-          Home
-        </Link>
-        <Typography color="text.primary">Matches</Typography>
-      </Breadcrumbs>
+      <PageHeader
+        title={'Review Matches'}
+        breadcrumbs={[
+          {
+            link: '/review-matches/',
+            title: 'Matches'
+          }
+        ]}
+      />
       <DataGrid
         columns={columns}
         rows={data as Notification[]}

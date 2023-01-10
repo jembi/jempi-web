@@ -1,4 +1,6 @@
-import { Breadcrumbs, Container, Grid, Link, Typography } from '@mui/material'
+import { Person } from '@mui/icons-material'
+import SearchIcon from '@mui/icons-material/Search'
+import { Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -8,6 +10,7 @@ import PatientRecord from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
 import DemographicsPanel from './DemographicsPanel'
 import IdentifiersPanel from './IdentifiersPanel'
@@ -45,17 +48,22 @@ const PatientDetails = () => {
 
   return (
     <Container maxWidth="xl">
-      <Breadcrumbs>
-        <Link underline="hover" color="inherit" href="/">
-          Home
-        </Link>
-        <Link underline="hover" color="inherit" href="/search">
-          Search results
-        </Link>
-        <Typography color="text.primary">{patientName}</Typography>
-      </Breadcrumbs>
-      <Typography variant="h4">{patientName}</Typography>
-      <SubHeading data={data} />
+      <PageHeader
+        description={<SubHeading data={data} />}
+        title={patientName}
+        breadcrumbs={[
+          {
+            icon: <SearchIcon />,
+            title: 'Search Results'
+          },
+          {
+            icon: <Person />,
+            title: `${
+              data.type === 'Golden' ? 'Golden' : 'Patient'
+            } Record Details`
+          }
+        ]}
+      />
       <Grid container spacing={4}>
         <Grid item xs={4}>
           <IdentifiersPanel data={data} />
