@@ -1,6 +1,14 @@
+export enum ACTIONS {
+  newnewUserCreated,
+  grUpdate,
+  grAndPatientRecordLinked,
+  grAndPatientRecordLinkApproved
+}
+
 export const ACTION_TYPE: { [key: string]: string } = {
-  newUserCreated: 'New user created',
-  grUpdate: 'GR updated',
-  grAndPatientRecordLinked: 'GR and Patient record linked',
-  grAndPatientRecordLinkApproved: 'GR and Patient record link approved'
+  [ACTIONS.newnewUserCreated]: 'New user created',
+  [ACTIONS.grUpdate]: 'GR updated',
+  [ACTIONS.grAndPatientRecordLinked]: 'GR and Patient record linked',
+  [ACTIONS.grAndPatientRecordLinkApproved]:
+    'GR and Patient record link approved'
 }
