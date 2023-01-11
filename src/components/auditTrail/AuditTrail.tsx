@@ -38,8 +38,13 @@ const AuditTrail = () => {
         valueFormatter: ({ value }) => formatValue(value),
         renderCell: ({ value }) =>
           fieldName === 'links'
-            ? value.split(',').map((link: string) => (
-                <Link key={link} href={'#'} display="block" whiteSpace="nowrap">
+            ? value.map((link: string) => (
+                <Link
+                  key={link}
+                  href={`patient/${link}`}
+                  display="block"
+                  whiteSpace="nowrap"
+                >
                   {link}
                 </Link>
               ))

@@ -19,7 +19,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Create user',
     actionTaken: 'newUserCreated',
-    links: '',
+    links: [],
     when: '10/09/2022 8:16',
     changedBy: 'User Id 12345',
     comment: ''
@@ -27,7 +27,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Auto-update golden record field',
     actionTaken: 'grUpdate',
-    links: 'Golden ID (G543)',
+    links: ['G543'],
     when: '11/09/2022 10:07',
     changedBy: 'System',
     comment: 'Golden ID (G543) updated field values (name, cell number)'
@@ -35,7 +35,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Autolink',
     actionTaken: 'grAndPatientRecordLinked',
-    links: `Golden ID (G123),Golden ID (P123-1)`,
+    links: ['G123', 'P123-1'],
     when: '12/09/2022 9:00',
     changedBy: 'System',
     comment: 'Golden ID (G123) linked with Patient ID (P123-1)'
@@ -43,7 +43,7 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Approve link',
     actionTaken: 'grAndPatientRecordLinkApproved',
-    links: 'Golden ID (G127),Golden ID (P127-1)',
+    links: ['G127', 'P127-1'],
     when: '12/09/2022 10:35',
     changedBy: 'User ID 12345',
     comment: 'Golden ID (G127) linked with Patient ID (P127-1) approved'
