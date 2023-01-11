@@ -7,20 +7,65 @@ import { DataGrid } from '@mui/x-data-grid/DataGrid'
 import { useMatch } from '@tanstack/react-location'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { useAuditTrailQuery } from '../../hooks/useAuditTrailQuery'
-import { DisplayField } from '../../types/Fields'
-import { ACTION_TYPE, AUDIT_TRAIL_FIELDS } from '../../utils/constants'
-import { getFieldValueFormatter } from '../../utils/formatters'
+import { ACTION_TYPE } from '../../utils/constants'
+import { formatDate } from '../../utils/formatters'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
 import PageHeader from '../shell/PageHeader'
 
-const displayedFields: DisplayField[] = AUDIT_TRAIL_FIELDS.map(field => {
-  return {
-    ...field,
-    formatValue: getFieldValueFormatter(field.fieldType)
+const AUDIT_TRAIL_COLUMNS: GridColumns = [
+  {
+    field: 'process',
+    headerName: 'Process',
+    flex: 1,
+    sortable: false,
+    disableColumnMenu: true
+  },
+  {
+    field: 'actionTaken',
+    headerName: 'Action taken',
+    renderCell: ({ value }) => ACTION_TYPE[value],
+    sortable: false,
+    disableColumnMenu: true
+  },
+  {
+    field: 'links',
+    headerName: 'Links',
+    renderCell: ({ value }) =>
+      value.map((link: string) => (
+        <Link
+          key={link}
+          href={`patient/${link}`}
+          display="block"
+          whiteSpace="nowrap"
+        >
+          {link}
+        </Link>
+      )),
+    sortable: false,
+    disableColumnMenu: true
+  },
+  {
+    field: 'when',
+    headerName: 'When',
+    valueFormatter: ({ value }) => formatDate(value),
+    sortable: false,
+    disableColumnMenu: true
+  },
+  {
+    field: 'changedBy',
+    headerName: 'Changed By',
+    sortable: false,
+    disableColumnMenu: true
+  },
+  {
+    field: 'comment',
+    headerName: 'Comment',
+    sortable: false,
+    disableColumnMenu: true
   }
-})
+]
 
 const AuditTrail = () => {
   const {
@@ -28,34 +73,6 @@ const AuditTrail = () => {
   } = useMatch()
   const { getPatientName } = useAppConfig()
   const { patient, auditTrail, isLoading, error } = useAuditTrailQuery()
-
-  const columns: GridColumns = displayedFields.map(
-    ({ fieldName, fieldLabel, formatValue }) => {
-      return {
-        field: fieldName,
-        headerName: fieldLabel,
-        flex: 1,
-        valueFormatter: ({ value }) => formatValue(value),
-        renderCell: ({ value }) =>
-          fieldName === 'links'
-            ? value.map((link: string) => (
-                <Link
-                  key={link}
-                  href={`patient/${link}`}
-                  display="block"
-                  whiteSpace="nowrap"
-                >
-                  {link}
-                </Link>
-              ))
-            : fieldName === 'actionTaken'
-            ? ACTION_TYPE[value]
-            : value,
-        sortable: false,
-        disableColumnMenu: true
-      }
-    }
-  )
 
   if (isLoading) {
     return <Loading />
@@ -123,7 +140,7 @@ const AuditTrail = () => {
       >
         <DataGrid
           getRowId={({ process }) => process}
-          columns={columns}
+          columns={AUDIT_TRAIL_COLUMNS}
           rows={auditTrail}
           autoHeight
           sx={{
