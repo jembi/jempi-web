@@ -1,6 +1,6 @@
 import { People } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Card, Divider } from '@mui/material'
+import { Button, Card, Divider, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
@@ -66,6 +66,19 @@ const LinkedRecords = () => {
             icon: <People />,
             title: 'Linked Records'
           }
+        ]}
+        buttons={[
+          <Button
+            variant="contained"
+            sx={{
+              height: '36px',
+              width: '152px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+            href={`/patient/${uid}`}
+          >
+            <Typography variant="button">BACK TO RECORD</Typography>
+          </Button>
         ]}
       />
       <Divider />
