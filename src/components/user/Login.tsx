@@ -13,8 +13,8 @@ const Login = () => {
       sx={{
         background:
           'radial-gradient(65.9% 107.97% at 50% 50%, #8EF680 0%, #377D69 100%)',
-        height: 800,
         display: 'flex',
+        height: '1000px',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
