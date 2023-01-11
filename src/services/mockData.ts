@@ -8,9 +8,9 @@ const notifications: Notification[] = [
     type: 'Threshold',
     created: 1605112212,
     names: 'Bob Smith',
-    patient_id: '0x5a',
+    patient_id: 'P098',
     state: NotificationState.New,
-    golden_id: '0x45',
+    golden_id: 'P09833',
     score: 0.5
   }
 ]
@@ -51,10 +51,10 @@ const auditTrail: AuditTrailRecord[] = [
 ]
 
 const patientRecord: PatientRecord = {
-  auxId: '0x66',
+  auxId: 'P066',
   type: 'Current',
   score: 0,
-  uid: '0x98',
+  uid: 'P098',
   nationalId: '123456',
   givenName: 'Bob',
   familyName: 'Smith',
@@ -66,10 +66,10 @@ const patientRecord: PatientRecord = {
 }
 
 const goldenRecord: PatientRecord = {
-  auxId: '0x77',
+  auxId: 'P077',
   type: 'Golden',
   score: 0,
-  uid: '0x9833',
+  uid: 'P09833',
   nationalId: '123456',
   givenName: 'Bob',
   familyName: 'Smith',

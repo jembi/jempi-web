@@ -87,7 +87,6 @@ class ApiClient {
     const patientRecord = this.getPatient(uid)
     const goldenRecord = this.getGoldenRecords([goldenId])
     const candidateRecords = this.getGoldenRecords(candidates)
-
     return (await axios
       .all<any>([patientRecord, goldenRecord, candidateRecords])
       .then(response => {
