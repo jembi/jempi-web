@@ -124,7 +124,7 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'siteCode',
     fieldType: 'String',
     fieldLabel: 'Site Code',
-    groups: ['registering_facility', 'linked_records'],
+    groups: ['registering_facility'],
     scope: ['/patient/:uid', '/patient/:uid/linked-records'],
     accessLevel: []
   },
