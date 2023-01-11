@@ -59,7 +59,7 @@ const SimpleSearch: React.FC = () => {
             title: 'Search'
           }
         ]}
-        buttonComponents={[
+        buttons={[
           <SearchFlags
             options={[
               FlagLabel.ALL_RECORDS,

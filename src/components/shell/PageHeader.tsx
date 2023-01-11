@@ -10,14 +10,14 @@ import {
 
 interface PageHeaderProps {
   breadcrumbs: Array<{ icon?: JSX.Element; title?: string; link?: string }>
-  buttonComponents?: JSX.Element[]
+  buttons?: JSX.Element[]
   title: string
   description?: string | JSX.Element
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   breadcrumbs,
-  buttonComponents,
+  buttons,
   title,
   description
 }) => {
@@ -74,8 +74,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           </Grid>
         </Grid>
         <Grid item container spacing={2} xs="auto">
-          {buttonComponents?.map(elem => (
-            <Grid item>{elem}</Grid>
+          {buttons?.map(button => (
+            <Grid item>{button}</Grid>
           ))}
         </Grid>
       </Grid>
