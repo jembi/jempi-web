@@ -37,7 +37,7 @@ axiosMockAdapterInstance
     })
     return [200, { goldenRecords: records }]
   })
-  .onGet('/Fields')
+  .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
 
 export default moxios
