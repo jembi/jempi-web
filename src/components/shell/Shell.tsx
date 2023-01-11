@@ -13,14 +13,20 @@ import {
   Typography
 } from '@mui/material'
 
-import { Outlet } from '@tanstack/react-location'
+import { Outlet, useLocation } from '@tanstack/react-location'
 import ErrorBoundary from '../error/ErrorBoundary'
 
 const barColour =
   'linear-gradient(90.05deg, #8BF280 -4.51%, #3B826B -4.5%, #58AB73 99.95%)'
 
 const Shell = () => {
-  return (
+  const location = useLocation()
+
+  return location.current.pathname === '/login' ? (
+    <ErrorBoundary>
+      <Outlet />
+    </ErrorBoundary>
+  ) : (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed">
         <Toolbar sx={{ order: 0 }}>

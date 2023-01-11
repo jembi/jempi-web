@@ -1,5 +1,6 @@
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import { User } from '../types/User'
 
 const notifications: Notification[] = [
   {
@@ -48,6 +49,21 @@ const patientRecords = [patientRecord, goldenRecord]
 
 const goldenRecords = [{ customGoldenRecord: goldenRecord }]
 
-const mockData = { notifications, patientRecord, goldenRecords, patientRecords }
+const currentUser: User = {
+  id: 1,
+  username: 'jhon',
+  email: 'jhon.doe@jembi.org',
+  firstName: 'Jhon',
+  lastName: 'Doe',
+  provider: 'keycloak'
+}
+
+const mockData = {
+  notifications,
+  patientRecord,
+  goldenRecords,
+  patientRecords,
+  currentUser
+}
 
 export default mockData
