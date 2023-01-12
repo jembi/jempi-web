@@ -4,7 +4,6 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import AuditTrail from './components/auditTrail/AuditTrail'
@@ -17,7 +16,6 @@ import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
-import ApiClient from './services/ApiClient'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -42,28 +40,35 @@ const routes: Route[] = [
     element: <Dashboard />
   },
   {
-    path: '/review-matches',
+    path: 'review-matches',
     element: <ReviewMatches />
   },
+
   {
-    path: '/patient/:uid/audit-trail',
-    element: <AuditTrail />,
-    loader: async ({ params }) => ({
-      uid: params.uid
-    })
-  },
-  {
-    path: '/match-details',
+    path: 'match-details',
     element: <MatchDetails />
   },
-  { path: '/search', element: <SimpleSearch /> },
+  { path: 'search', element: <SimpleSearch /> },
   {
-    path: '/patient/:uid',
-    element: <PatientDetails />,
-    loader: async ({ params }) => ({
-      uid: params.uid,
-      patient: await ApiClient.getPatient(params.uid)
-    })
+    path: 'patient',
+    children: [
+      {
+        path: ':uid',
+        element: <PatientDetails />,
+        loader: async ({ params }) => ({
+          uid: params.uid
+        }),
+        children: [
+          {
+            path: 'audit-trail',
+            element: <AuditTrail />,
+            loader: async ({ params }) => ({
+              uid: params.uid
+            })
+          }
+        ]
+      }
+    ]
   },
   { element: <NotFound /> }
 ]
