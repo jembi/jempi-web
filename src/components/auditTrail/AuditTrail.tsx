@@ -35,7 +35,12 @@ const AUDIT_TRAIL_COLUMNS: GridColumns = [
     headerName: 'Links',
     renderCell: ({ value }) =>
       value.map((link: string) => (
-        <Link key={link} href={`${link}`} display="block" whiteSpace="nowrap">
+        <Link
+          key={link}
+          href={`patient/${link}`}
+          display="block"
+          whiteSpace="nowrap"
+        >
           {link}
         </Link>
       )),
