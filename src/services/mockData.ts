@@ -35,18 +35,18 @@ const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Autolink',
     actionTaken: 'grAndPatientRecordLinked',
-    links: ['G123', 'P123-1'],
+    links: ['G543', 'P09833'],
     when: '12/09/2022 9:00',
     changedBy: 'System',
-    comment: 'Golden ID (G123) linked with Patient ID (P123-1)'
+    comment: 'Golden ID (G543) linked with Patient ID (P09833)'
   },
   {
     process: 'Approve link',
     actionTaken: 'grAndPatientRecordLinkApproved',
-    links: ['G127', 'P127-1'],
+    links: ['G543', 'P09833'],
     when: '12/09/2022 10:35',
     changedBy: 'User ID 12345',
-    comment: 'Golden ID (G127) linked with Patient ID (P127-1) approved'
+    comment: 'Golden ID (G543) linked with Patient ID (P09833) approved'
   }
 ]
 
@@ -54,7 +54,7 @@ const patientRecord: PatientRecord = {
   auxId: 'P066',
   type: 'Current',
   score: 0,
-  uid: 'P098',
+  uid: 'G543',
   nationalId: '123456',
   givenName: 'Bob',
   familyName: 'Smith',
