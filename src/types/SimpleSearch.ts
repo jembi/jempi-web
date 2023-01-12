@@ -15,3 +15,9 @@ export interface CustomSearchQuery {
 export interface SearchQuery {
   parameters: SearchParameter[]
 }
+
+export enum FlagLabel {
+  ALL_RECORDS = 'ALL RECORDS',
+  GOLDEN_ONLY = 'GOLDEN ONLY',
+  PATIENT_ONLY = 'PATIENT ONLY'
+}

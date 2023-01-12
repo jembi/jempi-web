@@ -8,16 +8,10 @@ import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { CustomSearchQuery } from '../../types/SimpleSearch'
+import { CustomSearchQuery, FlagLabel } from '../../types/SimpleSearch'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import CustomSearchRow from './CustomSearchRow'
-
-enum FlagLabel {
-  ALL_RECORDS = 'ALL RECORDS',
-  GOLDEN_ONLY = 'GOLDEN ONLY',
-  PATIENT_ONLY = 'PATIENT ONLY'
-}
 
 const CustomSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
@@ -201,7 +195,7 @@ const CustomSearch: React.FC = () => {
                             borderColor: theme => theme.palette.primary.main,
                             color: theme => theme.palette.primary.main
                           }}
-                          href='/search'
+                          href="/search"
                         >
                           Cancel
                         </Button>
