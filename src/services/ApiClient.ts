@@ -1,4 +1,5 @@
 import axios from 'axios'
+import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
@@ -51,6 +52,12 @@ class ApiClient {
     return await client
       .get<NotificationResponse>(ROUTES.GET_NOTIFICATIONS)
       .then(res => res.data.records)
+  }
+
+  async getAuditTrail() {
+    return await client
+      .get<AuditTrailRecord[]>(ROUTES.AUDIT_TRAIL)
+      .then(res => res.data)
   }
 
   async getPatient(uid: string) {
