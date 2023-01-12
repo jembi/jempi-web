@@ -1,11 +1,10 @@
-import './App.css'
-
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
+import './App.css'
 import AuditTrail from './components/auditTrail/AuditTrail'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
@@ -36,35 +35,39 @@ const ReactLocationDevtools =
 
 const routes: Route[] = [
   {
-    path: '/',
-    element: <Dashboard />
-  },
-  {
-    path: 'review-matches',
-    element: <ReviewMatches />
-  },
-
-  {
-    path: 'match-details',
-    element: <MatchDetails />
-  },
-  { path: 'search', element: <SimpleSearch /> },
-  {
-    path: 'patient',
+    path: '',
     children: [
+      { path: '/', element: <Dashboard /> },
       {
-        path: ':uid',
-        element: <PatientDetails />,
-        loader: async ({ params }) => ({
-          uid: params.uid
-        }),
+        path: 'review-matches',
+        element: <ReviewMatches />
+      },
+      {
+        path: 'match-details',
+        element: <MatchDetails />
+      },
+      { path: 'search', element: <SimpleSearch /> },
+      {
+        path: 'patient',
         children: [
           {
-            path: 'audit-trail',
-            element: <AuditTrail />,
-            loader: async ({ params }) => ({
-              uid: params.uid
-            })
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              },
+              {
+                path: 'audit-trail',
+                element: <AuditTrail />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              }
+            ]
           }
         ]
       }

@@ -4,7 +4,7 @@ import { Button, Card, Divider, Grid, Link, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { GridColumns } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid/DataGrid'
-import { useMatch } from '@tanstack/react-location'
+import { useMatch, useNavigate } from '@tanstack/react-location'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { useAuditTrailQuery } from '../../hooks/useAuditTrailQuery'
 import { ACTION_TYPE } from '../../utils/constants'
@@ -35,12 +35,7 @@ const AUDIT_TRAIL_COLUMNS: GridColumns = [
     headerName: 'Links',
     renderCell: ({ value }) =>
       value.map((link: string) => (
-        <Link
-          key={link}
-          href={`patient/${link}`}
-          display="block"
-          whiteSpace="nowrap"
-        >
+        <Link key={link} href={`${link}`} display="block" whiteSpace="nowrap">
           {link}
         </Link>
       )),
@@ -76,6 +71,7 @@ const AuditTrail = () => {
   const {
     data: { uid }
   } = useMatch()
+  const navigate = useNavigate()
   const { getPatientName } = useAppConfig()
   const { patient, auditTrail, isLoading, error } = useAuditTrailQuery()
 
@@ -128,7 +124,7 @@ const AuditTrail = () => {
               width: '152px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={`patient/${uid}`}
+            onClick={() => navigate({ to: `patient/${uid}` })}
           >
             <Typography variant="button">BACK TO RECORD</Typography>
           </Button>
