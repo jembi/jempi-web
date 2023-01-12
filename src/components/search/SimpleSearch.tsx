@@ -41,97 +41,73 @@ const SimpleSearch: React.FC = () => {
 
   return (
     <Container maxWidth={false}>
-      <Grid container direction={'column'}>
-        <Grid item container direction={'row'}>
-          <Grid item lg={6}>
-            <PageHeader
-              description="Our quick and simple search."
-              title="Simple Patient Search"
-              breadcrumbs={[
-                {
-                  icon: <MoreHorizOutlined />
-                },
-                {
-                  icon: <SearchIcon />,
-                  title: 'Search'
-                }
-              ]}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            direction="row"
-            spacing={2}
-            justifyContent="right"
-            lg={6}
+      <PageHeader
+        description="Our quick and simple search."
+        title="Simple Patient Search"
+        breadcrumbs={[
+          {
+            icon: <MoreHorizOutlined />
+          },
+          {
+            icon: <SearchIcon />,
+            title: 'Search'
+          }
+        ]}
+        buttons={[
+          <SearchFlags
+            options={[
+              FlagLabel.ALL_RECORDS,
+              FlagLabel.GOLDEN_ONLY,
+              FlagLabel.PATIENT_ONLY
+            ]}
+          />,
+          <Button
+            variant="outlined"
+            sx={{
+              height: '42px',
+              width: '172px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+            href={'/custom-search'}
           >
-            <Grid item>
-              <SearchFlags
-                options={[
-                  FlagLabel.ALL_RECORDS,
-                  FlagLabel.GOLDEN_ONLY,
-                  FlagLabel.PATIENT_ONLY
-                ]}
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                variant="outlined"
-                sx={{
-                  height: '42px',
-                  width: '172px',
-                  borderColor: theme => theme.palette.primary.main
-                }}
-                href={'/custom-search'}
-              >
-                <Typography variant="button">CUSTOM SEARCH</Typography>
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Divider />
-        <Formik
-          initialValues={initialValues}
-          onSubmit={values => {
-            handleOnFormSubmit(values)
-          }}
-        >
-          {({ values, handleChange }) => (
-            <Form>
-              <Box
-                sx={{
-                  width: '100%',
-                  borderRadius: '4px',
-                  boxShadow: '0px 0px 0px 1px #E0E0E0',
-                  mt: 4,
-                  padding: 2,
-                  display: 'flex',
-                  justifyContent: 'center'
-                }}
-              >
-                <Grid container direction="column" width="fit-content">
-                  <Grid item container direction="column" width="fit-content">
-                    <Grid item>
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          color: 'rgba(0, 0, 0, 0.6)'
-                        }}
-                      >
-                        Search Records
-                      </Typography>
-                    </Grid>
-                    <Grid item sx={{ mb: 2 }}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: theme => theme.palette.primary.main
-                        }}
-                      >
-                        Use custom search
-                      </Typography>
-                    </Grid>
+            <Typography variant="button">CUSTOM SEARCH</Typography>
+          </Button>
+        ]}
+      />
+      <Divider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={values => {
+          handleOnFormSubmit(values)
+        }}
+      >
+        {({ values, handleChange }) => (
+          <Form>
+            <Box
+              sx={{
+                width: '100%',
+                borderRadius: '4px',
+                boxShadow: '0px 0px 0px 1px #E0E0E0',
+                mt: 4,
+                padding: 2,
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Grid container direction="column" width="fit-content">
+                <Grid item container direction="column" width="fit-content">
+                  <Grid item>
+                    <Typography variant="h5">Search Records</Typography>
+                  </Grid>
+                  <Grid item sx={{ mb: 2 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: theme => theme.palette.primary.main
+                      }}
+                    >
+                      Use custom search
+                    </Typography>
                   </Grid>
                   <FieldArray name="search">
                     {() => (
@@ -166,11 +142,11 @@ const SimpleSearch: React.FC = () => {
                     </Button>
                   </Grid>
                 </Grid>
-              </Box>
-            </Form>
-          )}
-        </Formik>
-      </Grid>
+              </Grid>
+            </Box>
+          </Form>
+        )}
+      </Formik>
     </Container>
   )
 }

@@ -38,7 +38,12 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'First Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
+    scope: [
+      '/patient/:uid',
+      '/match-details',
+      '/search', '/custom-search',
+      '/patient/:uid/audit-trail'
+    ],
     accessLevel: []
   },
   {
@@ -46,7 +51,12 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Last Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
+    scope: [
+      '/patient/:uid',
+      '/match-details',
+      '/search', '/custom-search',
+      '/patient/:uid/audit-trail'
+    ],
     accessLevel: []
   },
   {
