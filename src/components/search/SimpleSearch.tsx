@@ -11,7 +11,7 @@ import ApiClient from '../../services/ApiClient'
 import { SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchParameter from './SimpleSearchParameters'
+import SimpleSearchRow from './SimpleSearchRow'
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -119,7 +119,14 @@ const SimpleSearch: React.FC = () => {
                 <Grid container direction="column" width="fit-content">
                   <Grid item container direction="column" width="fit-content">
                     <Grid item>
-                      <Typography variant="h5">Search Records</Typography>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          color: 'rgba(0, 0, 0, 0.6)'
+                        }}
+                      >
+                        Search Records
+                      </Typography>
                     </Grid>
                     <Grid item sx={{ mb: 2 }}>
                       <Typography
@@ -138,7 +145,7 @@ const SimpleSearch: React.FC = () => {
                         {availableFields.map((field, index) => {
                           const parameter = values.parameters[index]
                           return (
-                            <SimpleSearchParameter
+                            <SimpleSearchRow
                               field={field}
                               parameter={parameter}
                               index={index}

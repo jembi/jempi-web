@@ -22,7 +22,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'National ID',
     groups: ['identifiers'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
     accessLevel: []
   },
   {
@@ -38,7 +38,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'First Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
     accessLevel: []
   },
   {
@@ -46,7 +46,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Last Name',
     groups: ['name', 'demographics'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
     accessLevel: []
   },
   {
@@ -62,7 +62,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'Date',
     fieldLabel: 'Date of Birth',
     groups: ['demographics', 'sub_heading'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    scope: ['/patient/:uid', '/match-details', '/search', '/custom-search'],
     accessLevel: []
   },
   {
@@ -70,7 +70,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Phone No',
     groups: ['demographics'],
-    scope: ['/patient/:uid', '/match-details'],
+    scope: ['/patient/:uid', '/match-details', '/custom-search'],
     accessLevel: []
   },
   {
@@ -78,7 +78,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'City',
     groups: ['demographics'],
-    scope: ['/patient/:uid', '/match-details'],
+    scope: ['/patient/:uid', '/match-details', '/custom-search'],
     accessLevel: []
   },
   {

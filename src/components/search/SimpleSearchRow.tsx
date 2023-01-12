@@ -6,14 +6,14 @@ import FuzzyMatch from './FuzzyMatch'
 import SearchDateInput from './SearchDateInput'
 import SearchTextInput from './SearchTextInput'
 
-interface SimpleSearchParameterProps {
+interface SimpleSearchRowProps {
   field: DisplayField
   parameter: SearchParameter
   index: number
   onChange?: (e: React.ChangeEvent<any>) => void
 }
 
-const SimpleSearchParameter: React.FC<SimpleSearchParameterProps> = ({
+const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
   field,
   parameter,
   index,
@@ -64,4 +64,4 @@ const SimpleSearchParameter: React.FC<SimpleSearchParameterProps> = ({
   )
 }
 
-export default SimpleSearchParameter
+export default SimpleSearchRow

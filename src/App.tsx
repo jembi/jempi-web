@@ -17,6 +17,7 @@ import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
 import theme from './theme'
+import CustomSearch from './components/customSearch/CustomSearch'
 
 const location = new ReactLocation()
 const queryClient = new QueryClient({
@@ -45,6 +46,7 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <SimpleSearch /> },
+  {path: '/custom-search', element: <CustomSearch/>},
   {
     path: '/patient/:uid',
     element: <PatientDetails />,
