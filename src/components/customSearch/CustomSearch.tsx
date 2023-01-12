@@ -42,7 +42,7 @@ const CustomSearch: React.FC = () => {
         value: '',
         exact: false,
         distance: 1,
-        operator: ''
+        condition: ''
       }
     ]
   }
@@ -171,7 +171,7 @@ const CustomSearch: React.FC = () => {
                                   value: '',
                                   exact: false,
                                   distance: 1,
-                                  operator: ''
+                                  condition: ''
                                 })
                               }}
                             >

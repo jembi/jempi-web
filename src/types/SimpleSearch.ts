@@ -6,7 +6,7 @@ export interface SearchParameter {
 }
 
 export interface CustomSearchParameters extends SearchParameter {
-  operator: string
+  condition: string
 }
 
 export interface CustomSearchQuery {

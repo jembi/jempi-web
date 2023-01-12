@@ -1,7 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Grid,
-  IconButton,
+  IconButton
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 import { useState } from 'react'
@@ -11,8 +11,8 @@ import ExactSwitch from '../search/ExactSwitch'
 import FuzzyMatch from '../search/FuzzyMatch'
 import SearchDateInput from '../search/SearchDateInput'
 import SearchTextInput from '../search/SearchTextInput'
-import SelectCondition from './SelectCondition'
 import CustomSearchSelectField from './CustomSearchSelectField'
+import SelectCondition from './SelectCondition'
 
 interface CustomSearchRowProps {
   parameter: CustomSearchParameters
@@ -61,8 +61,8 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
         {enableCondition ? (
           <SelectCondition
             onChange={onChange}
-            name={`parameters[${index}].operator`}
-            value={parameter.operator}
+            name={`parameters[${index}].condition`}
+            value={parameter.condition}
           />
         ) : null}
       </Grid>
