@@ -18,52 +18,52 @@ const AUDIT_TRAIL_COLUMNS: GridColumns = [
   {
     field: 'process',
     headerName: 'Process',
-    flex: 1,
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   },
   {
     field: 'actionTaken',
     headerName: 'Action taken',
     renderCell: ({ value }) => ACTION_TYPE[value],
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   },
   {
     field: 'links',
     headerName: 'Links',
     renderCell: ({ value }) =>
       value.map((link: string) => (
-        <Link
-          key={link}
-          href={`patient/${link}`}
-          display="block"
-          whiteSpace="nowrap"
-        >
+        <Link key={link} href={`${link}`} display="block" whiteSpace="nowrap">
           {link}
         </Link>
       )),
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   },
   {
     field: 'when',
     headerName: 'When',
     valueFormatter: ({ value }) => formatDate(value),
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   },
   {
     field: 'changedBy',
     headerName: 'Changed By',
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   },
   {
     field: 'comment',
     headerName: 'Comment',
     sortable: false,
-    disableColumnMenu: true
+    disableColumnMenu: true,
+    flex: 1
   }
 ]
 
