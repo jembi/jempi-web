@@ -16,7 +16,8 @@ const {
   patientRecords,
   goldenRecords,
   auditTrail,
-  currentUser
+  currentUser,
+  linkedRecords
 } = mockData
 
 axiosMockAdapterInstance
@@ -45,6 +46,8 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
+  .onGet(ROUTES.GET_LINKED_RECORDS)
+  .reply(200, linkedRecords)
   .onGet(ROUTES.AUDIT_TRAIL)
   .reply(200, auditTrail)
 
