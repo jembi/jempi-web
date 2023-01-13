@@ -11,7 +11,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
   const { user } = useAuth()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const isOpen = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -22,9 +22,9 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
   return (
     <>
       <IconButton
-        aria-controls={open ? 'basic-menu' : undefined}
+        aria-controls={isOpen ? 'basic-menu' : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
+        aria-expanded={isOpen ? 'true' : undefined}
         onClick={handleClick}
         size="large"
         edge="end"
@@ -34,7 +34,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button'
