@@ -40,8 +40,6 @@ const HomePage = () => {
             maxWidth: '700px',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
             gap: '20px'
           }}
         >
@@ -58,8 +56,6 @@ const HomePage = () => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
               gap: '8px'
             }}
           >
@@ -101,8 +97,6 @@ const HomePage = () => {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
               gap: '4px'
             }}
           >
