@@ -47,7 +47,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient/:uid',
       '/match-details',
       '/search',
-      '/patient/:uid/linked-records'
+      '/patient/:uid/linked-records',
+      '/patient/:uid/audit-trail'
     ],
     accessLevel: []
   },
@@ -60,7 +61,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient/:uid',
       '/match-details',
       '/search',
-      '/patient/:uid/linked-records'
+      '/patient/:uid/linked-records',
+      '/patient/:uid/audit-trail'
     ],
     accessLevel: []
   },

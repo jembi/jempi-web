@@ -6,9 +6,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
+import AuditTrail from './components/auditTrail/AuditTrail'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import Import from './components/import/Import'
 import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
@@ -16,6 +18,7 @@ import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
+import ApiClient from './services/ApiClient'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -35,14 +38,21 @@ const ReactLocationDevtools =
       )
 
 const routes: Route[] = [
-  { path: '/', element: <Dashboard /> },
+  {
+    path: '/',
+    element: <Dashboard />
+  },
   {
     path: '/review-matches',
     element: <ReviewMatches />
   },
   {
     path: '/patient/:uid/linked-records',
-    element: <LinkedRecords />,
+    element: <LinkedRecords />
+  },
+  {
+    path: '/patient/:uid/audit-trail',
+    element: <AuditTrail />,
     loader: async ({ params }) => ({
       uid: params.uid
     })
@@ -52,11 +62,13 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <SimpleSearch /> },
+  { path: '/import', element: <Import /> },
   {
     path: '/patient/:uid',
     element: <PatientDetails />,
     loader: async ({ params }) => ({
-      uid: params.uid
+      uid: params.uid,
+      patient: await ApiClient.getPatient(params.uid)
     })
   },
   { element: <NotFound /> }

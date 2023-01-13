@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
+import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
@@ -51,6 +52,12 @@ class ApiClient {
     return await client
       .get<NotificationResponse>(ROUTES.GET_NOTIFICATIONS)
       .then(res => res.data.records)
+  }
+
+  async getAuditTrail() {
+    return await client
+      .get<AuditTrailRecord[]>(ROUTES.AUDIT_TRAIL)
+      .then(res => res.data)
   }
 
   async getPatient(uid: string) {
@@ -137,6 +144,12 @@ class ApiClient {
   async postSimpleSearchQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
+      .then(res => res.data)
+  }
+
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
 }
