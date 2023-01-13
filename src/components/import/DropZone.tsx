@@ -19,22 +19,37 @@ const DropZone: FC = () => {
     fileRejections: FileRejection[],
     event: DropEvent
   ): void => {
+    validate(acceptedFiles, fileRejections)
+    setFilesObj([
+      ...fileObjs,
+      { file: acceptedFiles[0], progress: 0, status: UploadStatus.Pending }
+    ])
+  }
+
+  const validate = (
+    acceptedFiles: File[],
+    fileRejections: FileRejection[]
+  ): void => {
     if (fileRejections.length > 0) {
       enqueueSnackbar('File type not supported', {
         variant: 'error'
       })
       return
     }
+
     if (fileObjs.some(x => x.file.name === acceptedFiles[0].name)) {
       enqueueSnackbar('File already queued', {
         variant: 'error'
       })
       return
     }
-    setFilesObj([
-      ...fileObjs,
-      { file: acceptedFiles[0], progress: 0, status: UploadStatus.Pending }
-    ])
+
+    if (uploadFileMutation.isLoading) {
+      enqueueSnackbar('Please wait for current import to be completed', {
+        variant: 'warning'
+      })
+      return
+    }
   }
 
   const {
