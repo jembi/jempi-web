@@ -6,8 +6,9 @@ const ROUTES = {
   UPDATE_NOTIFICATION: '/NotificationRequest',
   CREATE_GOLDEN_RECORD: '/Unlink',
   LINK_RECORD: '/Link',
+  POST_SIMPLE_SEARCH: '/SimpleSearchRequest', //TODO: replace with the correct route.
   AUDIT_TRAIL: '/Audit-trail',
-  POST_SIMPLE_SEARCH: '/SimpleSearchRequest' //TODO: replace with the correct route.
+  UPLOAD: '/Upload'
 }
 
 export default ROUTES

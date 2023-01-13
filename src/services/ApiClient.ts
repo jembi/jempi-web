@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
@@ -131,6 +131,12 @@ class ApiClient {
   async postSimpleSearchQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
+      .then(res => res.data)
+  }
+
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
 }
