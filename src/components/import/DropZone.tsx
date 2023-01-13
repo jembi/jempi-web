@@ -19,6 +19,18 @@ const DropZone: FC = () => {
     fileRejections: FileRejection[],
     event: DropEvent
   ): void => {
+    if (fileRejections.length > 0) {
+      enqueueSnackbar('File type not supported', {
+        variant: 'error'
+      })
+      return
+    }
+    if (fileObjs.some(x => x.file.name === acceptedFiles[0].name)) {
+      enqueueSnackbar('File already queued', {
+        variant: 'error'
+      })
+      return
+    }
     setFilesObj([
       ...fileObjs,
       { file: acceptedFiles[0], progress: 0, status: UploadStatus.Pending }
@@ -152,7 +164,11 @@ const DropZone: FC = () => {
     <Container>
       <Box
         className="dropzone"
-        {...getRootProps({ isFocused, isDragAccept, isDragReject })}
+        {...getRootProps({
+          isFocused,
+          isDragAccept,
+          isDragReject
+        })}
       >
         <div className="dropzone-inner">
           <input {...getInputProps()} />
@@ -171,7 +187,12 @@ const DropZone: FC = () => {
       <CardActions
         sx={{ display: 'block', textAlign: 'center', marginTop: '5%' }}
       >
-        <Button variant="contained" size="small" onClick={handleUpload}>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={handleUpload}
+          disabled={uploadFileMutation.isLoading}
+        >
           Upload
         </Button>
         <Button variant="outlined" size="small" onClick={handleCancel}>
