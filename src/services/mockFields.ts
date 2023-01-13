@@ -5,24 +5,29 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'type',
     fieldType: 'String',
     fieldLabel: 'Record Type',
-    groups: ['demographics'],
-    scope: ['/patient/:uid', '/match-details'],
+    groups: ['demographics', 'linked_records'],
+    scope: ['/patient/:uid', '/match-details', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
     fieldName: 'uid',
     fieldType: 'String',
     fieldLabel: 'UID',
-    groups: ['identifiers', 'sub_heading'],
-    scope: ['/patient/:uid', '/match-details'],
+    groups: ['identifiers', 'sub_heading', 'linked_records'],
+    scope: ['/patient/:uid', '/match-details', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
     fieldName: 'nationalId',
     fieldType: 'String',
     fieldLabel: 'National ID',
-    groups: ['identifiers'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    groups: ['identifiers', 'linked_records'],
+    scope: [
+      '/patient/:uid',
+      '/match-details',
+      '/search',
+      '/patient/:uid/linked-records'
+    ],
     accessLevel: []
   },
   {
@@ -37,11 +42,12 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'givenName',
     fieldType: 'String',
     fieldLabel: 'First Name',
-    groups: ['name', 'demographics'],
+    groups: ['name', 'demographics', 'linked_records'],
     scope: [
       '/patient/:uid',
       '/match-details',
       '/search',
+      '/patient/:uid/linked-records',
       '/patient/:uid/audit-trail'
     ],
     accessLevel: []
@@ -50,11 +56,12 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'familyName',
     fieldType: 'String',
     fieldLabel: 'Last Name',
-    groups: ['name', 'demographics'],
+    groups: ['name', 'demographics', 'linked_records'],
     scope: [
       '/patient/:uid',
       '/match-details',
       '/search',
+      '/patient/:uid/linked-records',
       '/patient/:uid/audit-trail'
     ],
     accessLevel: []
@@ -63,32 +70,37 @@ const FIELDS_CONFIG: Fields = [
     fieldName: 'gender',
     fieldType: 'String',
     fieldLabel: 'Gender',
-    groups: ['demographics', 'sub_heading'],
-    scope: ['/patient/:uid', '/match-details'],
+    groups: ['demographics', 'sub_heading', 'linked_records'],
+    scope: ['/patient/:uid', '/match-details', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
     fieldName: 'dob',
     fieldType: 'Date',
     fieldLabel: 'Date of Birth',
-    groups: ['demographics', 'sub_heading'],
-    scope: ['/patient/:uid', '/match-details', '/search'],
+    groups: ['demographics', 'sub_heading', 'linked_records'],
+    scope: [
+      '/patient/:uid',
+      '/match-details',
+      '/search',
+      '/patient/:uid/linked-records'
+    ],
     accessLevel: []
   },
   {
     fieldName: 'phoneNumber',
     fieldType: 'String',
     fieldLabel: 'Phone No',
-    groups: ['demographics'],
-    scope: ['/patient/:uid', '/match-details'],
+    groups: ['demographics', 'linked_records'],
+    scope: ['/patient/:uid', '/match-details', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
     fieldName: 'city',
     fieldType: 'String',
     fieldLabel: 'City',
-    groups: ['demographics'],
-    scope: ['/patient/:uid', '/match-details'],
+    groups: ['demographics', 'linked_records'],
+    scope: ['/patient/:uid', '/match-details', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
@@ -115,15 +127,15 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Site Code',
     groups: ['registering_facility'],
-    scope: ['/patient/:uid'],
+    scope: ['/patient/:uid', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {
     fieldName: 'facilityName',
     fieldType: 'String',
     fieldLabel: 'Facility Name',
-    groups: ['registering_facility'],
-    scope: ['/patient/:uid'],
+    groups: ['registering_facility', 'linked_records'],
+    scope: ['/patient/:uid', '/patient/:uid/linked-records'],
     accessLevel: []
   },
   {

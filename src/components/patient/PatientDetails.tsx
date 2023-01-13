@@ -1,6 +1,6 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Container, Grid } from '@mui/material'
+import { Button, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -62,6 +62,30 @@ const PatientDetails = () => {
               data.type === 'Golden' ? 'Golden' : 'Patient'
             } Record Details`
           }
+        ]}
+        buttons={[
+          <Button
+            variant="outlined"
+            sx={{
+              height: '36px',
+              width: '117px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+            href={`/patient/${uid}/audit-trail`}
+          >
+            AUDIT TRAIL
+          </Button>,
+          <Button
+            variant="contained"
+            sx={{
+              height: '36px',
+              width: '152px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+            href={`/patient/${uid}/linked-records`}
+          >
+            LINKED RECORDS
+          </Button>
         ]}
       />
       <Grid container spacing={4}>

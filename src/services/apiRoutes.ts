@@ -1,5 +1,6 @@
 const ROUTES = {
   GET_FIELDS_CONFIG: '/Fields',
+  GET_LINKED_RECORDS: '/LinkedRecords',
   GET_NOTIFICATIONS: '/MatchesForReview',
   GET_PATIENT_DOCUMENT: '/Document',
   GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecordDocuments',
