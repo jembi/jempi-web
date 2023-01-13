@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
@@ -143,6 +143,11 @@ class ApiClient {
 
   async getCurrentUser() {
     return await client.get(ROUTES.CURRENT_USER).then(res => res.data)
+  }
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
+      .then(res => res.data)
   }
 }
 

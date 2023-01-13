@@ -95,6 +95,7 @@ const currentUser: User = {
 }
 
 const mockData = {
+  auditTrail,
   notifications,
   patientRecord,
   goldenRecords,

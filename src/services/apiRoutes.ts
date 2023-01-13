@@ -9,7 +9,8 @@ const ROUTES = {
   POST_SIMPLE_SEARCH: '/SimpleSearchRequest', //TODO: replace with the correct route.
   CURRENT_USER: '/CurrentUser',
   VALIDATE_OAUTH: '/ValidateOAuth',
-  AUDIT_TRAIL: '/Audit-trail'
+  AUDIT_TRAIL: '/Audit-trail',
+  UPLOAD: '/Upload'
 }
 
 export default ROUTES
