@@ -3,10 +3,15 @@ import { Box, Divider, IconButton, Typography } from '@mui/material'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import * as React from 'react'
+import { useAuth } from '../../hooks/useAuth'
 
 interface NavigationMenuProp {}
 
 const NavigationMenu: React.FC<NavigationMenuProp> = () => {
+  const { user } = useAuth()
+
+  console.log(user)
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,7 +50,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
               lineHeight="150%"
               letterSpacing={'0.15px'}
             >
-              John Schmidt
+              {`${user?.firstName} ${user?.lastName}`}
             </Typography>
             <Typography
               fontWeight={400}
@@ -53,7 +58,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
               lineHeight="143%"
               letterSpacing={'0.17px'}
             >
-              johnshmidt@match.com
+              {user?.email}
             </Typography>
           </Box>
         </MenuItem>

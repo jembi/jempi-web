@@ -119,9 +119,9 @@ const goldenRecords = [{ customGoldenRecord: goldenRecord }]
 
 const currentUser: User = {
   id: 1,
-  username: 'jhon',
-  email: 'jhon.doe@jembi.org',
-  firstName: 'Jhon',
+  username: 'john',
+  email: 'john.doe@jembi.org',
+  firstName: 'John',
   lastName: 'Doe',
   provider: 'keycloak'
 }
