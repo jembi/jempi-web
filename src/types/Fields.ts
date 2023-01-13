@@ -10,6 +10,7 @@ export type FieldGroup =
   | 'relationships'
   | 'sub_heading'
   | 'system'
+  | 'linked_records'
   | 'audit_trail'
 
 export type FieldType = 'String' | 'Number' | 'Date' | 'Boolean'

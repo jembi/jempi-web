@@ -4,13 +4,14 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import AuditTrail from './components/auditTrail/AuditTrail'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import Import from './components/import/Import'
+import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
@@ -47,6 +48,10 @@ const routes: Route[] = [
     element: <ReviewMatches />
   },
   {
+    path: '/patient/:uid/linked-records',
+    element: <LinkedRecords />
+  },
+  {
     path: '/patient/:uid/audit-trail',
     element: <AuditTrail />,
     loader: async ({ params }) => ({
@@ -58,6 +63,7 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <SimpleSearch /> },
+  { path: '/import', element: <Import /> },
   {path: '/custom-search', element: <CustomSearch/>},
   {
     path: '/patient/:uid',

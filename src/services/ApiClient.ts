@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
@@ -82,6 +82,19 @@ class ApiClient {
       .then(res => res.data.goldenRecords.map(gr => gr.customGoldenRecord))
   }
 
+  async getLinkedRecords(uid: string) {
+    return await client
+      .get<PatientRecord[]>(ROUTES.GET_LINKED_RECORDS, {
+        params: {
+          uid
+        },
+        paramsSerializer: {
+          indexes: null
+        }
+      })
+      .then(res => res.data)
+  }
+
   //TODO Move this logic to the backend and just get match details by notification ID
   async getMatchDetails(uid: string, goldenId: string, candidates: string[]) {
     const patientRecord = this.getPatient(uid)
@@ -131,6 +144,12 @@ class ApiClient {
   async postSimpleSearchQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
+      .then(res => res.data)
+  }
+
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
   async postCustomSearchQuery(request: CustomSearchQuery) {
