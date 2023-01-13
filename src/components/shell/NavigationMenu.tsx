@@ -10,8 +10,6 @@ interface NavigationMenuProp {}
 const NavigationMenu: React.FC<NavigationMenuProp> = () => {
   const { user } = useAuth()
 
-  console.log(user)
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
