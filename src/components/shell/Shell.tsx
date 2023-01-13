@@ -1,6 +1,6 @@
 import {
   AccountCircle as AccountCircleIcon,
-  Dashboard as DashboardIcon,
+  Home,
   People as PeopleIcon,
   Search as SearchIcon,
   UploadFile as UploadFileIcon
@@ -44,10 +44,10 @@ const Shell = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Button
               href="/"
-              startIcon={<DashboardIcon />}
+              startIcon={<Home />}
               sx={{ color: theme => theme.palette.text.primary }}
             >
-              Dashboard
+              Home
             </Button>
             <Button
               href="/search"

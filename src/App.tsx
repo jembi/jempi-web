@@ -7,9 +7,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import AuditTrail from './components/auditTrail/AuditTrail'
-import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import HomePage from './components/home/HomePage'
 import Import from './components/import/Import'
 import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
@@ -40,7 +40,7 @@ const ReactLocationDevtools =
 const routes: Route[] = [
   {
     path: '/',
-    element: <Dashboard />
+    element: <HomePage />
   },
   {
     path: '/review-matches',
