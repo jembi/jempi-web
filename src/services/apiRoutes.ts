@@ -8,7 +8,8 @@ const ROUTES = {
   LINK_RECORD: '/Link',
   POST_SIMPLE_SEARCH: '/SimpleSearchRequest', //TODO: replace with the correct route.
   CURRENT_USER: '/CurrentUser',
-  VALIDATE_OAUTH: '/ValidateOAuth'
+  VALIDATE_OAUTH: '/ValidateOAuth',
+  AUDIT_TRAIL: '/Audit-trail'
 }
 
 export default ROUTES

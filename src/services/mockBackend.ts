@@ -11,7 +11,13 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
   delayResponse: 0
 })
 
-const { notifications, patientRecords, goldenRecords, currentUser } = mockData
+const {
+  notifications,
+  patientRecords,
+  goldenRecords,
+  auditTrail,
+  currentUser
+} = mockData
 
 axiosMockAdapterInstance
   .onPost(ROUTES.VALIDATE_OAUTH)
@@ -39,5 +45,7 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
+  .onGet(ROUTES.AUDIT_TRAIL)
+  .reply(200, auditTrail)
 
 export default moxios

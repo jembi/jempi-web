@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
+import AuditTrail from './components/auditTrail/AuditTrail'
 import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
@@ -19,6 +20,7 @@ import Login from './components/user/Login'
 import { config } from './config'
 import { AppConfigProvider } from './hooks/useAppConfig'
 import { AuthProvider } from './hooks/useAuth'
+import ApiClient from './services/ApiClient'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -44,6 +46,13 @@ const routes: Route[] = [
     element: <ReviewMatches />
   },
   {
+    path: '/patient/:uid/audit-trail',
+    element: <AuditTrail />,
+    loader: async ({ params }) => ({
+      uid: params.uid
+    })
+  },
+  {
     path: '/match-details',
     element: <MatchDetails />
   },
@@ -52,7 +61,8 @@ const routes: Route[] = [
     path: '/patient/:uid',
     element: <PatientDetails />,
     loader: async ({ params }) => ({
-      uid: params.uid
+      uid: params.uid,
+      patient: await ApiClient.getPatient(params.uid)
     })
   },
   { element: <NotFound /> }
