@@ -15,9 +15,8 @@ import CustomSearchRow from './CustomSearchRow'
 
 const CustomSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
-  console.log(availableFields)
   //TODO: find a better way of handling error while posting the search request
-  const postSearchQuery = useMutation({
+  const {mutate} = useMutation({
     mutationFn: ApiClient.postCustomSearchQuery,
     onError: (error: AxiosError) => {
       console.log(`Oops! Error getting search result: ${error.message}`)
@@ -25,7 +24,7 @@ const CustomSearch: React.FC = () => {
   })
 
   function handleOnFormSubmit(value: CustomSearchQuery) {
-    postSearchQuery.mutate(value)
+    mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
