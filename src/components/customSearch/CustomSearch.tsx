@@ -6,22 +6,32 @@ import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
-import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { CustomSearchQuery, FlagLabel } from '../../types/SimpleSearch'
+import {
+  CustomSearchQuery,
+  FlagLabel,
+  CustomSearchParameters
+} from '../../types/SimpleSearch'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import CustomSearchRow from './CustomSearchRow'
 
 const CustomSearch: React.FC = () => {
-  const { availableFields } = useAppConfig()
   //TODO: find a better way of handling error while posting the search request
-  const {mutate} = useMutation({
+  const { mutate } = useMutation({
     mutationFn: ApiClient.postCustomSearchQuery,
     onError: (error: AxiosError) => {
       console.log(`Oops! Error getting search result: ${error.message}`)
     }
   })
+
+  const initialCustomSearchValues: CustomSearchParameters = {
+    fieldName: '',
+    value: '',
+    exact: false,
+    distance: 1,
+    condition: ''
+  }
 
   function handleOnFormSubmit(value: CustomSearchQuery) {
     mutate(value)
@@ -30,13 +40,7 @@ const CustomSearch: React.FC = () => {
 
   const initialValues: CustomSearchQuery = {
     parameters: [
-      {
-        fieldName: '',
-        value: '',
-        exact: false,
-        distance: 1,
-        condition: ''
-      }
+      initialCustomSearchValues
     ]
   }
 
@@ -159,13 +163,7 @@ const CustomSearch: React.FC = () => {
                               variant="outlined"
                               startIcon={<AddIcon />}
                               onClick={() => {
-                                push({
-                                  fieldName: '',
-                                  value: '',
-                                  exact: false,
-                                  distance: 1,
-                                  condition: ''
-                                })
+                                push(initialCustomSearchValues)
                               }}
                             >
                               Add field
