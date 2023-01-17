@@ -12,6 +12,7 @@ import { SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SimpleSearchParameter from './SimpleSearchParameters'
+import { Link as LocationLink } from '@tanstack/react-location'
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -136,17 +137,19 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: '#274263',
-                      color: 'white',
-                      '&:hover': { backgroundColor: '#375982' }
-                    }}
-                    type="submit"
-                  >
-                    Search
-                  </Button>
+                  <LocationLink to="/search-results" search={{parameters: values.parameters}}>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: '#274263',
+                        color: 'white',
+                        '&:hover': { backgroundColor: '#375982' }
+                      }}
+                      type="submit"
+                    >
+                      Search
+                    </Button>
+                  </LocationLink>
                 </Grid>
               </Grid>
             </Box>

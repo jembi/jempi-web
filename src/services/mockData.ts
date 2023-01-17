@@ -1,6 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import SearchResults from '../types/SearchResults'
 
 const notifications: Notification[] = [
   {
@@ -12,6 +13,39 @@ const notifications: Notification[] = [
     state: NotificationState.New,
     golden_id: '0x45',
     score: 0.5
+  }
+]
+
+const searchResult: SearchResults[] = [
+  {
+    id: 'G1001',
+    firstName: 'Joe',
+    lastName: 'Bernard',
+    gender: 'Male'
+  },
+  {
+    id: 'G1002',
+    firstName: 'Louis',
+    lastName: 'Muluer',
+    gender: 'Male'
+  },
+  {
+    id: 'G1003',
+    firstName: 'Hope',
+    lastName: 'Krood',
+    gender: 'Female'
+  },
+  {
+    id: 'G1004',
+    firstName: 'Francine',
+    lastName: 'Melechon',
+    gender: 'Female'
+  },
+  {
+    id: 'G1005',
+    firstName: 'Morris',
+    lastName: 'Van Der Sarr',
+    gender: 'Male'
   }
 ]
 
@@ -122,7 +156,8 @@ const mockData = {
   goldenRecords,
   patientRecords,
   linkedRecords,
-  auditTrail
+  auditTrail,
+  searchResult
 }
 
 export default mockData

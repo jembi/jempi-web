@@ -16,6 +16,7 @@ import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
+import SearchResult from './components/searchResult/SearchResult'
 import Shell from './components/shell/Shell'
 import { AppConfigProvider } from './hooks/useAppConfig'
 import ApiClient from './services/ApiClient'
@@ -62,6 +63,7 @@ const routes: Route[] = [
     element: <MatchDetails />
   },
   { path: '/search', element: <SimpleSearch /> },
+  { path: '/search-results', element: <SearchResult /> },
   { path: '/import', element: <Import /> },
   {
     path: '/patient/:uid',

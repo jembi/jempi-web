@@ -16,7 +16,8 @@ const {
   patientRecords,
   goldenRecords,
   auditTrail,
-  linkedRecords
+  linkedRecords,
+  searchResult
 } = mockData
 
 axiosMockAdapterInstance
@@ -49,6 +50,7 @@ axiosMockAdapterInstance
 const sleep = (value: number) =>
   new Promise(resolve => setTimeout(resolve, value))
 
+axiosMockAdapterInstance.onPost(ROUTES.POST_SEARCH_REQUEST).reply(200, searchResult)
 //Successful upload
 axiosMockAdapterInstance.onPost(ROUTES.UPLOAD).reply(async config => {
   const total = 1024 // mocked file size
