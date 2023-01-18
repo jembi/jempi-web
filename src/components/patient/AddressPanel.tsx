@@ -4,7 +4,10 @@ import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
 
-const AddressPanel: FC<{ data: PatientRecord }> = ({ data }) => {
+const AddressPanel: FC<{ data: PatientRecord; isDataEditable: boolean }> = ({
+  data,
+  isDataEditable: isEditable
+}) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('address').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -14,7 +17,9 @@ const AddressPanel: FC<{ data: PatientRecord }> = ({ data }) => {
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
-        disableColumnMenu: true
+        disableColumnMenu: true,
+        editable: isEditable,
+        isRowSelectable: () => true
       }
     }
   )

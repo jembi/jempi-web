@@ -1,9 +1,10 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Container, Grid } from '@mui/material'
+import { Box, Button, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import PatientRecord from '../../types/PatientRecord'
@@ -18,7 +19,17 @@ import RegisteringFacilityPanel from './RegisteringFacilityPanel'
 import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
 
+interface UpdatedFields {
+  id: number
+  field: string
+  original: any
+  new: any
+  timeStamp: Date
+}
+
 const PatientDetails = () => {
+  const [isEditable, setIsEditable] = useState(false)
+  const [updatedFields, setUpdatedFields] = useState<UpdatedFields[]>([])
   const {
     data: { uid }
   } = useMatch()
@@ -31,6 +42,32 @@ const PatientDetails = () => {
     queryFn: async () => await ApiClient.getPatient(uid as string),
     refetchOnWindowFocus: false
   })
+
+  const onDataChange = (newRow: PatientRecord) => {
+    const newlyUpdatedFields: UpdatedFields[] = Object.keys(data || {}).reduce(
+      (acc: UpdatedFields[], curr, idx: number) => {
+        if (data && data[curr] !== newRow[curr]) {
+          acc.push({
+            id: idx,
+            field: curr,
+            original: data[curr],
+            new: newRow[curr],
+            timeStamp: new Date()
+          })
+        }
+        return acc
+      },
+      []
+    )
+
+    setUpdatedFields([...updatedFields, ...newlyUpdatedFields])
+  }
+
+  console.log(updatedFields)
+  const onDataSave = () => {
+    console.log('holaa')
+    setIsEditable(false)
+  }
 
   if (isLoading) {
     return <Loading />
@@ -90,21 +127,60 @@ const PatientDetails = () => {
       />
       <Grid container spacing={4}>
         <Grid item xs={4}>
-          <IdentifiersPanel data={data} />
+          <IdentifiersPanel
+            data={data}
+            isDataEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={3}>
-          <RegisteringFacilityPanel data={data} />
+          <RegisteringFacilityPanel data={data} isDataEditable={isEditable} />
         </Grid>
         <Grid item xs={5}>
-          <AddressPanel data={data} />
+          <AddressPanel data={data} isDataEditable={isEditable} />
         </Grid>
         <Grid item xs={8}>
-          <DemographicsPanel data={data} />
+          <DemographicsPanel
+            data={data}
+            isDataEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={4}>
-          <RelationshipPanel data={data} />
+          <RelationshipPanel data={data} isDataEditable={isEditable} />
         </Grid>
       </Grid>
+      <Box
+        sx={{
+          py: 4,
+          display: 'flex',
+          gap: '4px'
+        }}
+      >
+        {isEditable ? (
+          <Button
+            onClick={() => onDataSave()}
+            variant="outlined"
+            sx={{
+              height: '42px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+          >
+            {isEditable ? 'Save' : 'Edit Golden Record'}
+          </Button>
+        ) : (
+          <Button
+            onClick={() => setIsEditable(true)}
+            variant="outlined"
+            sx={{
+              height: '42px',
+              borderColor: theme => theme.palette.primary.main
+            }}
+          >
+            Edit Golden Record
+          </Button>
+        )}
+      </Box>
     </Container>
   )
 }
