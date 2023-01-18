@@ -7,7 +7,8 @@ import PatientRecord from '../../types/PatientRecord'
 const RegisteringFacilityPanel: FC<{
   data: PatientRecord
   isDataEditable: boolean
-}> = ({ data, isDataEditable }) => {
+  onChange: (newRow: PatientRecord) => void
+}> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('registering_facility').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -23,6 +24,11 @@ const RegisteringFacilityPanel: FC<{
     }
   )
 
+  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
+    onChange(newRow)
+    return newRow
+  }
+
   return (
     <Paper sx={{ p: 1 }}>
       <Typography variant="h6">Registering Facility</Typography>
@@ -32,6 +38,9 @@ const RegisteringFacilityPanel: FC<{
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
+        // TO-DO: handle errors
+        onProcessRowUpdateError={e => console.log(e)}
       />
     </Paper>
   )
