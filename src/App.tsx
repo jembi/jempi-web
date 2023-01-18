@@ -17,7 +17,10 @@ import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
 import Shell from './components/shell/Shell'
+import Login from './components/user/Login'
+import { config } from './config'
 import { AppConfigProvider } from './hooks/useAppConfig'
+import { AuthProvider } from './hooks/useAuth'
 import ApiClient from './services/ApiClient'
 import theme from './theme'
 
@@ -28,20 +31,17 @@ const queryClient = new QueryClient({
   }
 })
 
-const ReactLocationDevtools =
-  process.env.NODE_ENV === 'production'
-    ? () => null
-    : lazy(() =>
-        import('@tanstack/react-location-devtools').then(res => ({
-          default: res.ReactLocationDevtools
-        }))
-      )
+const ReactLocationDevtools = !config.isDev
+  ? () => null
+  : lazy(() =>
+      import('@tanstack/react-location-devtools').then(res => ({
+        default: res.ReactLocationDevtools
+      }))
+    )
 
 const routes: Route[] = [
-  {
-    path: '/',
-    element: <Dashboard />
-  },
+  { path: '/', element: <Dashboard /> },
+  { path: '/login', element: <Login /> },
   {
     path: '/review-matches',
     element: <ReviewMatches />
@@ -83,15 +83,17 @@ const App = () => {
           <SnackbarProvider
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            <ErrorBoundary>
-              <AppConfigProvider>
-                <Shell />
-              </AppConfigProvider>
-            </ErrorBoundary>
+            <AuthProvider>
+              <ErrorBoundary>
+                <AppConfigProvider>
+                  <Shell />
+                </AppConfigProvider>
+              </ErrorBoundary>
+            </AuthProvider>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
+          <ReactQueryDevtools />
         </Router>
-        <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>
   )
