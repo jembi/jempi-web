@@ -4,10 +4,11 @@ import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
 
-const AddressPanel: FC<{ data: PatientRecord; isDataEditable: boolean }> = ({
-  data,
-  isDataEditable: isEditable
-}) => {
+const AddressPanel: FC<{
+  data: PatientRecord
+  isDataEditable: boolean
+  onChange: (newRow: PatientRecord) => void
+}> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('address').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -18,11 +19,16 @@ const AddressPanel: FC<{ data: PatientRecord; isDataEditable: boolean }> = ({
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: isEditable,
+        editable: isDataEditable,
         isRowSelectable: () => true
       }
     }
   )
+
+  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
+    onChange(newRow)
+    return newRow
+  }
 
   return (
     <Paper sx={{ p: 1 }}>
@@ -33,6 +39,9 @@ const AddressPanel: FC<{ data: PatientRecord; isDataEditable: boolean }> = ({
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
+        // TO-DO: handle errors
+        onProcessRowUpdateError={e => console.log(e)}
       />
     </Paper>
   )

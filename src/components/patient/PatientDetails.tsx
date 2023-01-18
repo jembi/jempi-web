@@ -13,22 +13,23 @@ import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
+import ConfirmationModal from './ConfirmationModal'
 import DemographicsPanel from './DemographicsPanel'
 import IdentifiersPanel from './IdentifiersPanel'
 import RegisteringFacilityPanel from './RegisteringFacilityPanel'
 import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
 
-interface UpdatedFields {
+export interface UpdatedFields {
   id: number
   field: string
   original: any
   new: any
-  timeStamp: Date
 }
 
 const PatientDetails = () => {
   const [isEditable, setIsEditable] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [updatedFields, setUpdatedFields] = useState<UpdatedFields[]>([])
   const {
     data: { uid }
@@ -43,6 +44,25 @@ const PatientDetails = () => {
     refetchOnWindowFocus: false
   })
 
+  const filterOlderUpdates = (
+    currentUpdate: UpdatedFields[],
+    newUpdate: UpdatedFields[]
+  ) => {
+    newUpdate.forEach(element => {
+      let update: UpdatedFields[] = []
+      const oldField = currentUpdate.find(elem => elem.field)
+      if (oldField) {
+        update.push(
+          ...currentUpdate.filter(elem => elem.field !== element.field),
+          element
+        )
+      } else {
+        update.push(element)
+      }
+      setUpdatedFields(update)
+    })
+  }
+
   const onDataChange = (newRow: PatientRecord) => {
     const newlyUpdatedFields: UpdatedFields[] = Object.keys(data || {}).reduce(
       (acc: UpdatedFields[], curr, idx: number) => {
@@ -51,8 +71,7 @@ const PatientDetails = () => {
             id: idx,
             field: curr,
             original: data[curr],
-            new: newRow[curr],
-            timeStamp: new Date()
+            new: newRow[curr]
           })
         }
         return acc
@@ -60,12 +79,11 @@ const PatientDetails = () => {
       []
     )
 
-    setUpdatedFields([...updatedFields, ...newlyUpdatedFields])
+    filterOlderUpdates(updatedFields, newlyUpdatedFields)
   }
 
-  console.log(updatedFields)
   const onDataSave = () => {
-    console.log('holaa')
+    setIsModalVisible(true)
     setIsEditable(false)
   }
 
@@ -85,6 +103,11 @@ const PatientDetails = () => {
 
   return (
     <Container maxWidth="xl">
+      <ConfirmationModal
+        isVisible={isModalVisible}
+        handleClose={() => setIsModalVisible(false)}
+        updatedFields={updatedFields}
+      />
       <PageHeader
         description={<SubHeading data={data} />}
         title={patientName}
@@ -134,10 +157,18 @@ const PatientDetails = () => {
           />
         </Grid>
         <Grid item xs={3}>
-          <RegisteringFacilityPanel data={data} isDataEditable={isEditable} />
+          <RegisteringFacilityPanel
+            data={data}
+            isDataEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={5}>
-          <AddressPanel data={data} isDataEditable={isEditable} />
+          <AddressPanel
+            data={data}
+            isDataEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={8}>
           <DemographicsPanel
@@ -147,7 +178,11 @@ const PatientDetails = () => {
           />
         </Grid>
         <Grid item xs={4}>
-          <RelationshipPanel data={data} isDataEditable={isEditable} />
+          <RelationshipPanel
+            data={data}
+            isDataEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
       </Grid>
       <Box

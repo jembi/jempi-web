@@ -7,7 +7,8 @@ import PatientRecord from '../../types/PatientRecord'
 const RelationshipPanel: FC<{
   data: PatientRecord
   isDataEditable: boolean
-}> = ({ data, isDataEditable: isEditable }) => {
+  onChange: (newRow: PatientRecord) => void
+}> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('relationships').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -18,10 +19,15 @@ const RelationshipPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: isEditable
+        editable: isDataEditable
       }
     }
   )
+
+  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
+    onChange(newRow)
+    return newRow
+  }
 
   return (
     <Paper sx={{ p: 1 }}>
@@ -32,6 +38,9 @@ const RelationshipPanel: FC<{
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
+        // TO-DO: handle errors
+        onProcessRowUpdateError={e => console.log(e)}
       />
     </Paper>
   )
