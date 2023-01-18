@@ -9,7 +9,7 @@ const Login = () => {
   // const location = useLocation()
   return (
     <Container
-      maxWidth="xl"
+      maxWidth={false}
       sx={{
         background:
           'radial-gradient(65.9% 107.97% at 50% 50%, #8EF680 0%, #377D69 100%)',
