@@ -4,7 +4,11 @@ import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
 
-const IdentifiersPanel: FC<{ data: PatientRecord }> = ({ data }) => {
+const IdentifiersPanel: FC<{
+  data: PatientRecord
+  isDataEditable: boolean
+  onChange: (newRow: PatientRecord) => void
+}> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('identifiers').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -14,10 +18,16 @@ const IdentifiersPanel: FC<{ data: PatientRecord }> = ({ data }) => {
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
-        disableColumnMenu: true
+        disableColumnMenu: true,
+        editable: isDataEditable
       }
     }
   )
+
+  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
+    onChange(newRow)
+    return newRow
+  }
 
   return (
     <Paper sx={{ p: 1 }}>
@@ -28,6 +38,10 @@ const IdentifiersPanel: FC<{ data: PatientRecord }> = ({ data }) => {
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        experimentalFeatures={{ newEditingApi: true }}
+        processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
+        // TO-DO: handle errors
+        onProcessRowUpdateError={e => console.log(e)}
       />
     </Paper>
   )

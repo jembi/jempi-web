@@ -4,7 +4,10 @@ import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
 
-const RelationshipPanel: FC<{ data: PatientRecord }> = ({ data }) => {
+const RelationshipPanel: FC<{
+  data: PatientRecord
+  isDataEditable: boolean
+}> = ({ data, isDataEditable: isEditable }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('relationships').map(
     ({ fieldName, fieldLabel, formatValue }) => {
@@ -14,7 +17,8 @@ const RelationshipPanel: FC<{ data: PatientRecord }> = ({ data }) => {
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
-        disableColumnMenu: true
+        disableColumnMenu: true,
+        editable: isEditable
       }
     }
   )
