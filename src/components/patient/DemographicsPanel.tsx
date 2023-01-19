@@ -3,6 +3,7 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
+import { EditInputCell, handleError } from './utils'
 
 const DemographicsPanel: FC<{
   data: PatientRecord
@@ -11,7 +12,13 @@ const DemographicsPanel: FC<{
 }> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('demographics').map(
-    ({ fieldName, fieldLabel, formatValue }) => {
+    ({
+      fieldName,
+      fieldLabel,
+      readOnly,
+      rules: { required, regex },
+      formatValue
+    }) => {
       return {
         field: fieldName,
         headerName: fieldLabel,
@@ -19,7 +26,15 @@ const DemographicsPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: isDataEditable
+        editable: readOnly ? false : isDataEditable,
+        // a Callback used to validate the user's input
+        preProcessEditCellProps: ({ props }) => {
+          return {
+            ...props,
+            error: handleError(regex, required, props.value, fieldLabel)
+          }
+        },
+        renderEditCell: params => <EditInputCell {...params} />
       }
     }
   )
@@ -41,6 +56,7 @@ const DemographicsPanel: FC<{
         processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
         // TO-DO: handle errors
         onProcessRowUpdateError={e => console.log(e)}
+        disableSelectionOnClick
       />
     </Paper>
   )

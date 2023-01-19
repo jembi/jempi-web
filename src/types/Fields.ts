@@ -22,6 +22,8 @@ export interface Field {
   groups: FieldGroup[]
   scope: string[]
   accessLevel: string[]
+  readOnly: boolean
+  rules: { required: boolean; regex: string }
 }
 
 export interface DisplayField extends Field {

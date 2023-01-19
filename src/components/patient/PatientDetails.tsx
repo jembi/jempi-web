@@ -2,9 +2,9 @@ import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import PatientRecord from '../../types/PatientRecord'
@@ -28,6 +28,9 @@ export interface UpdatedFields {
 }
 
 const PatientDetails = () => {
+  const [patientData, setPatientData] = useState<PatientRecord | undefined>(
+    undefined
+  )
   const [isEditable, setIsEditable] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [updatedFields, setUpdatedFields] = useState<UpdatedFields[]>([])
@@ -42,6 +45,17 @@ const PatientDetails = () => {
     queryKey: ['patient', uid],
     queryFn: async () => await ApiClient.getPatient(uid as string),
     refetchOnWindowFocus: false
+  })
+
+  useEffect(() => {
+    setPatientData(data)
+  }, [data])
+
+  const updatePatientRecord = useMutation({
+    mutationFn: ApiClient.updatedPatientRecord,
+    onError: (error: AxiosError) => {
+      console.log(`Oops! Error persisting data: ${error.message}`)
+    }
   })
 
   const filterOlderUpdates = (
@@ -95,7 +109,7 @@ const PatientDetails = () => {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data) {
+  if (!data || !patientData) {
     return <NotFound />
   }
 
@@ -151,7 +165,7 @@ const PatientDetails = () => {
       <Grid container spacing={4}>
         <Grid item xs={4}>
           <IdentifiersPanel
-            data={data}
+            data={patientData}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
@@ -165,21 +179,21 @@ const PatientDetails = () => {
         </Grid>
         <Grid item xs={5}>
           <AddressPanel
-            data={data}
+            data={patientData}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={8}>
           <DemographicsPanel
-            data={data}
+            data={patientData}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={4}>
           <RelationshipPanel
-            data={data}
+            data={patientData}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
