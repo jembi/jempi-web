@@ -11,7 +11,8 @@ const ROUTES = {
   CURRENT_USER: '/CurrentUser',
   VALIDATE_OAUTH: '/ValidateOAuth',
   AUDIT_TRAIL: '/Audit-trail',
-  UPLOAD: '/Upload'
+  UPLOAD: '/Upload',
+  UPDATE_PATIENT_RECORD: '/Patient'
 }
 
 export default ROUTES

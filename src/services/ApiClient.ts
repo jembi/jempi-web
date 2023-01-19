@@ -158,6 +158,12 @@ class ApiClient {
     return await client.get(ROUTES.CURRENT_USER).then(res => res.data.user)
   }
 
+  async updatedPatientRecord(request: PatientRecord) {
+    return await client
+      .post(ROUTES.UPDATE_PATIENT_RECORD, request)
+      .then(res => res)
+  }
+
   uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
     await client
       .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)

@@ -3,6 +3,7 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
+import { handleError } from './utils'
 
 const RegisteringFacilityPanel: FC<{
   data: PatientRecord
@@ -11,7 +12,13 @@ const RegisteringFacilityPanel: FC<{
 }> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('registering_facility').map(
-    ({ fieldName, fieldLabel, formatValue }) => {
+    ({
+      fieldName,
+      fieldLabel,
+      readOnly,
+      rules: { required, regex },
+      formatValue
+    }) => {
       return {
         field: fieldName,
         headerName: fieldLabel,
@@ -19,7 +26,14 @@ const RegisteringFacilityPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: isDataEditable
+        editable: readOnly ? false : isDataEditable,
+        // a Callback used to validate the user's input
+        preProcessEditCellProps: ({ props }) => {
+          return {
+            ...props,
+            error: handleError(regex, required, props.value, fieldLabel)
+          }
+        }
       }
     }
   )
@@ -40,7 +54,7 @@ const RegisteringFacilityPanel: FC<{
         hideFooter={true}
         processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
         // TO-DO: handle errors
-        onProcessRowUpdateError={e => console.log(e)}
+        disableSelectionOnClick
       />
     </Paper>
   )
