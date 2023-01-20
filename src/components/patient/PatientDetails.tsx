@@ -94,6 +94,11 @@ const PatientDetails = () => {
     )
 
     filterOlderUpdates(updatedFields, newlyUpdatedFields)
+    const updatedPatientRecord = { ...patientData }
+    updatedFields.forEach(field => {
+      updatedPatientRecord[field.field] = field.new
+    })
+    setPatientData(updatedPatientRecord as PatientRecord)
   }
 
   const onDataSave = () => {
@@ -113,14 +118,23 @@ const PatientDetails = () => {
     return <NotFound />
   }
 
+  const onConfirm = () => {
+    updatePatientRecord.mutate(patientData)
+    setIsModalVisible(false)
+  }
+  const onCancel = () => {
+    setPatientData(data)
+    setIsModalVisible(false)
+  }
   const patientName = getPatientName(data)
 
   return (
     <Container maxWidth="xl">
       <ConfirmationModal
         isVisible={isModalVisible}
-        handleClose={() => setIsModalVisible(false)}
+        handleClose={onCancel}
         updatedFields={updatedFields}
+        onConfirm={onConfirm}
       />
       <PageHeader
         description={<SubHeading data={data} />}

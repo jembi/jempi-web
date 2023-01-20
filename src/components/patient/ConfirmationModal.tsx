@@ -33,8 +33,9 @@ const columns = [
 const ConfirmationModal: React.FC<{
   isVisible: boolean
   handleClose: () => void
+  onConfirm: () => void
   updatedFields: UpdatedFields[]
-}> = ({ isVisible, handleClose, updatedFields }) => {
+}> = ({ isVisible, handleClose, updatedFields, onConfirm }) => {
   return (
     <Modal
       open={isVisible}
@@ -82,7 +83,7 @@ const ConfirmationModal: React.FC<{
           }}
         >
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Confirm</Button>
+          <Button onClick={onConfirm}>Confirm</Button>
         </Box>
       </Box>
     </Modal>
