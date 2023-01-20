@@ -32,7 +32,6 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
       direction="row"
       alignItems="center"
       width="fit-content"
-      sx={{ mb: 3 }}
     >
       <Grid item>
         {field.fieldType === 'Date' ? (
@@ -58,7 +57,8 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
           index={index}
           title={'Match Type'}
           description={'Select Match Type'}
-          sx={{ width: 220, marginLeft: 2 }}
+          helperText = {'Sets distance parameter 0-3'}
+          sx={{ width: 220, marginLeft: 2 , marginTop: 3 }}
         />
       </Grid>
     </Grid>
