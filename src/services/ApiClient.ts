@@ -1,16 +1,18 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
+import { config } from '../config'
+import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
-import { CustomSearchQuery, SearchQuery } from '../types/SimpleSearch'
+import { SearchQuery } from '../types/SimpleSearch'
+import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
-const client = process.env.REACT_APP_MOCK_BACKEND
+const client = config.shouldMockBackend
   ? moxios
   : axios.create({
-      baseURL:
-        process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
+      baseURL: config.apiUrl || 'http://localhost:50000/JeMPI'
     })
 
 interface NotificationRequest {
@@ -53,6 +55,12 @@ class ApiClient {
       .then(res => res.data.records)
   }
 
+  async getAuditTrail() {
+    return await client
+      .get<AuditTrailRecord[]>(ROUTES.AUDIT_TRAIL)
+      .then(res => res.data)
+  }
+
   async getPatient(uid: string) {
     return await client
       .get<PatientRecordResponse>(ROUTES.GET_PATIENT_DOCUMENT, {
@@ -73,6 +81,19 @@ class ApiClient {
         }
       })
       .then(res => res.data.goldenRecords.map(gr => gr.customGoldenRecord))
+  }
+
+  async getLinkedRecords(uid: string) {
+    return await client
+      .get<PatientRecord[]>(ROUTES.GET_LINKED_RECORDS, {
+        params: {
+          uid
+        },
+        paramsSerializer: {
+          indexes: null
+        }
+      })
+      .then(res => res.data)
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
@@ -126,9 +147,20 @@ class ApiClient {
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
       .then(res => res.data)
   }
-  async postCustomSearchQuery(request: CustomSearchQuery) {
+
+  async validateOAuth(oauthParams: OAuthParams) {
     return await client
-      .post(ROUTES.POST_CUSTOM_SEARCH, request)
+      .post(ROUTES.VALIDATE_OAUTH, oauthParams)
+      .then(res => res.data as { user: User })
+  }
+
+  async getCurrentUser() {
+    return await client.get(ROUTES.CURRENT_USER).then(res => res.data.user)
+  }
+
+  uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
+    await client
+      .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
 }

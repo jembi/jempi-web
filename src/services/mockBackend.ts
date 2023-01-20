@@ -11,9 +11,20 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
   delayResponse: 0
 })
 
-const { notifications, patientRecords, goldenRecords } = mockData
+const {
+  notifications,
+  patientRecords,
+  goldenRecords,
+  auditTrail,
+  currentUser,
+  linkedRecords
+} = mockData
 
 axiosMockAdapterInstance
+  .onPost(ROUTES.VALIDATE_OAUTH)
+  .reply(200, { user: currentUser })
+  .onGet(ROUTES.CURRENT_USER)
+  .reply(200, { user: currentUser })
   .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
   .onGet(ROUTES.GET_PATIENT_DOCUMENT)
@@ -35,5 +46,36 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
+  .onGet(ROUTES.GET_LINKED_RECORDS)
+  .reply(200, linkedRecords)
+  .onGet(ROUTES.AUDIT_TRAIL)
+  .reply(200, auditTrail)
+
+const sleep = (value: number) =>
+  new Promise(resolve => setTimeout(resolve, value))
+
+//Successful upload
+axiosMockAdapterInstance.onPost(ROUTES.UPLOAD).reply(async config => {
+  const total = 1024 // mocked file size
+  for (const progress of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+    await sleep(500)
+    if (config.onUploadProgress) {
+      config.onUploadProgress({ loaded: total * progress, total, bytes: total })
+    }
+  }
+  return [200, {}]
+})
+
+// Failed upload
+// axiosMockAdapterInstance.onPost(ROUTES.UPLOAD).reply(async config => {
+//   const total = 1024 // mocked file size
+//   for (const progress of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+//     await sleep(500)
+//     if (config.onUploadProgress) {
+//       config.onUploadProgress({ loaded: total * progress, total, bytes: total })
+//     }
+//   }
+//   return [500, {}]
+// })
 
 export default moxios
