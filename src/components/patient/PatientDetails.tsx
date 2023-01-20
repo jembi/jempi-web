@@ -28,7 +28,7 @@ export interface UpdatedFields {
 }
 
 const PatientDetails = () => {
-  const [patientData, setPatientData] = useState<PatientRecord | undefined>(
+  const [patientRecord, setPatientRecord] = useState<PatientRecord | undefined>(
     undefined
   )
   const [isEditable, setIsEditable] = useState(false)
@@ -46,10 +46,6 @@ const PatientDetails = () => {
     queryFn: async () => await ApiClient.getPatient(uid as string),
     refetchOnWindowFocus: false
   })
-
-  useEffect(() => {
-    setPatientData(data)
-  }, [data])
 
   const updatePatientRecord = useMutation({
     mutationFn: ApiClient.updatedPatientRecord,
@@ -94,17 +90,18 @@ const PatientDetails = () => {
     )
 
     filterOlderUpdates(updatedFields, newlyUpdatedFields)
-    const updatedPatientRecord = { ...patientData }
-    updatedFields.forEach(field => {
-      updatedPatientRecord[field.field] = field.new
-    })
-    setPatientData(updatedPatientRecord as PatientRecord)
+    setPatientRecord(newRow)
   }
 
   const onDataSave = () => {
     setIsModalVisible(true)
-    setIsEditable(false)
   }
+
+  useEffect(() => {
+    if (patientRecord === undefined) {
+      setPatientRecord(data)
+    }
+  }, [data, patientRecord])
 
   if (isLoading) {
     return <Loading />
@@ -114,16 +111,17 @@ const PatientDetails = () => {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data || !patientData) {
+  if (!data || !patientRecord) {
     return <NotFound />
   }
 
   const onConfirm = () => {
-    updatePatientRecord.mutate(patientData)
+    updatePatientRecord.mutate(patientRecord)
     setIsModalVisible(false)
+    setIsEditable(false)
   }
   const onCancel = () => {
-    setPatientData(data)
+    setPatientRecord(data)
     setIsModalVisible(false)
   }
   const patientName = getPatientName(data)
@@ -179,7 +177,7 @@ const PatientDetails = () => {
       <Grid container spacing={4}>
         <Grid item xs={4}>
           <IdentifiersPanel
-            data={patientData}
+            data={patientRecord}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
@@ -193,21 +191,21 @@ const PatientDetails = () => {
         </Grid>
         <Grid item xs={5}>
           <AddressPanel
-            data={patientData}
+            data={patientRecord}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={8}>
           <DemographicsPanel
-            data={patientData}
+            data={patientRecord}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={4}>
           <RelationshipPanel
-            data={patientData}
+            data={patientRecord}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
