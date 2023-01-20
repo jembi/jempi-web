@@ -39,8 +39,7 @@ const SimpleSearch: React.FC = () => {
       return {
         fieldName,
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
-        exact: false,
-        distance: 1
+        distance: '0'
       }
     })
   }
@@ -122,7 +121,7 @@ const SimpleSearch: React.FC = () => {
                       {availableFields.map((field, index) => {
                         const parameter = values.parameters[index]
                         return (
-                          <SimpleSearchParameter
+                          <SimpleSearchRow
                             field={field}
                             parameter={parameter}
                             index={index}

@@ -1,16 +1,15 @@
 import { Grid } from '@mui/material'
 import { DisplayField } from '../../types/Fields'
 import { SearchParameter } from '../../types/SimpleSearch'
-import ExactSwitch from './ExactSwitch'
-import FuzzyMatch from './FuzzyMatch'
 import SearchDateInput from './SearchDateInput'
+import SearchDropdown from './SearchDropdown'
 import SearchTextInput from './SearchTextInput'
 
 interface SimpleSearchRowProps {
   field: DisplayField
   parameter: SearchParameter
   index: number
-  onChange?: (e: React.ChangeEvent<any>) => void
+  onChange: (e: React.ChangeEvent<any>) => void
 }
 
 const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
@@ -19,6 +18,13 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
   index,
   onChange
 }) => {
+  const options = [
+    'Exact',
+    'Low Fuzziness',
+    'Medium Fuzziness',
+    'High Fuzziness'
+  ]
+
   return (
     <Grid
       item
@@ -26,7 +32,7 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
       direction="row"
       alignItems="center"
       width="fit-content"
-      sx={{ mb: 1 }}
+      sx={{ mb: 3 }}
     >
       <Grid item>
         {field.fieldType === 'Date' ? (
@@ -45,19 +51,14 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
           />
         )}
       </Grid>
-      <Grid item sx={{ ml: 2, mr: 4 }}>
-        <ExactSwitch
+      <Grid>
+        <SearchDropdown
+          options={options}
           onChange={onChange}
-          value={parameter.exact}
-          name={`parameters[${index}].exact`}
-        />
-      </Grid>
-      <Grid item>
-        <FuzzyMatch
-          disabled={!!parameter.exact}
-          onChange={onChange}
-          name={`parameters[${index}].distance`}
-          value={parameter.distance}
+          index={index}
+          title={'Match Type'}
+          description={'Select Match Type'}
+          sx={{ width: 220, marginLeft: 2 }}
         />
       </Grid>
     </Grid>
