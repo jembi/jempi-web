@@ -1,3 +1,4 @@
+
 export default interface SearchResultProps {
   id: string
   firstName: string
@@ -5,7 +6,6 @@ export default interface SearchResultProps {
   gender: string
 }
 
-// export default interface SearchResultsProps{
-//   searchResult: SearchResultProps[]
-// }
-
+export interface SearchResultsWithLinkedRecordsProps extends SearchResultProps {
+  linkedRecord: SearchResultProps[]
+}

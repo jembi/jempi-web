@@ -1,7 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
-import SearchResults from '../types/SearchResults'
+import {SearchResultsWithLinkedRecordsProps} from '../types/SearchResults'
 
 const notifications: Notification[] = [
   {
@@ -16,36 +16,136 @@ const notifications: Notification[] = [
   }
 ]
 
-const searchResult: SearchResults[] = [
+const searchResult: SearchResultsWithLinkedRecordsProps[] = [
   {
     id: 'G1001',
     firstName: 'Joe',
     lastName: 'Bernard',
-    gender: 'Male'
+    gender: 'Male',
+    linkedRecord: [
+      {
+        id: 'G1010',
+        firstName: 'Bob',
+        lastName: 'Shallow',
+        gender: 'Male',
+      },
+      {
+        id: 'G1011',
+        firstName: 'Kondo',
+        lastName: 'Mandanda',
+        gender: 'Male',
+      },
+      {
+        id: 'G1012',
+        firstName: 'Asir',
+        lastName: 'Ahle',
+        gender: 'Male',
+      }
+    ]
   },
   {
     id: 'G1002',
     firstName: 'Louis',
     lastName: 'Muluer',
-    gender: 'Male'
+    gender: 'Male',
+    linkedRecord: [
+      {
+        id: 'N5056',
+        firstName: 'Ndoyi',
+        lastName: 'Kerk',
+        gender: 'Male',
+      },
+      {
+        id: 'J3250',
+        firstName: 'Fab',
+        lastName: 'Lucious',
+        gender: 'Male',
+      },
+      {
+        id: 'J3250',
+        firstName: 'Mongando',
+        lastName: 'Sibole',
+        gender: 'Male',
+      }
+    ]
   },
   {
     id: 'G1003',
     firstName: 'Hope',
     lastName: 'Krood',
-    gender: 'Female'
+    gender: 'Female',
+    linkedRecord: [
+      {
+        id: 'G1001',
+        firstName: 'Barton',
+        lastName: 'Manjde',
+        gender: 'Male',
+      },
+      {
+        id: 'J3250',
+        firstName: 'Filo',
+        lastName: 'Lodi',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Mais',
+        lastName: 'Cependant',
+        gender: 'Male',
+      }
+    ]
   },
   {
     id: 'G1004',
     firstName: 'Francine',
     lastName: 'Melechon',
-    gender: 'Female'
+    gender: 'Female',
+    linkedRecord: [
+      {
+        id: 'G1001',
+        firstName: 'Yango',
+        lastName: 'Ndoyi',
+        gender: 'Male',
+      },
+      {
+        id: 'J3250',
+        firstName: 'Mukondo',
+        lastName: 'David',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Okay',
+        lastName: 'Demain',
+        gender: 'Male',
+      }
+    ]
   },
   {
     id: 'G1005',
     firstName: 'Morris',
     lastName: 'Van Der Sarr',
-    gender: 'Male'
+    gender: 'Male',
+    linkedRecord: [
+      {
+        id: 'G1001',
+        firstName: 'Surpris',
+        lastName: 'Beacoup',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Titche',
+        lastName: 'Efula',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Maintenant',
+        lastName: 'Jamais',
+        gender: 'Male',
+      }
+    ]
   }
 ]
 

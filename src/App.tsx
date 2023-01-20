@@ -64,6 +64,7 @@ const routes: Route[] = [
   },
   { path: '/search', element: <SimpleSearch /> },
   { path: '/search-results', element: <SearchResult /> },
+
   { path: '/import', element: <Import /> },
   {
     path: '/patient/:uid',
