@@ -3,7 +3,6 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
-import { EditInputCell, handleError } from './utils'
 
 const DemographicsPanel: FC<{
   data: PatientRecord
@@ -19,6 +18,7 @@ const DemographicsPanel: FC<{
       rules: { required, regex },
       formatValue
     }) => {
+      const regexp = new RegExp(regex)
       return {
         field: fieldName,
         headerName: fieldLabel,
@@ -31,10 +31,11 @@ const DemographicsPanel: FC<{
         preProcessEditCellProps: ({ props }) => {
           return {
             ...props,
-            error: handleError(regex, required, props.value, fieldLabel)
+            error:
+              !regexp.test(props.value) ||
+              (required && props.value.length === 0)
           }
-        },
-        renderEditCell: params => <EditInputCell {...params} />
+        }
       }
     }
   )
@@ -53,9 +54,9 @@ const DemographicsPanel: FC<{
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
         // TO-DO: handle errors
-        onProcessRowUpdateError={e => console.log(e)}
         disableSelectionOnClick
       />
     </Paper>
