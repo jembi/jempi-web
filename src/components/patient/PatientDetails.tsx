@@ -53,15 +53,14 @@ const PatientDetails = () => {
       console.log(`Oops! Error persisting data: ${error.message}`)
     }
   })
-
   const filterOlderUpdates = (
     currentUpdate: UpdatedFields[],
     newUpdate: UpdatedFields[]
   ) => {
     newUpdate.forEach(element => {
       let update: UpdatedFields[] = []
-      const oldField = currentUpdate.find(elem => elem.field)
-      if (oldField) {
+      const oldField = currentUpdate.find(elem => elem.field === element.field)
+      if (!oldField) {
         update.push(
           ...currentUpdate.filter(elem => elem.field !== element.field),
           element
@@ -69,7 +68,8 @@ const PatientDetails = () => {
       } else {
         update.push(element)
       }
-      setUpdatedFields(update)
+
+      setUpdatedFields([...update])
     })
   }
 
@@ -88,7 +88,6 @@ const PatientDetails = () => {
       },
       []
     )
-
     filterOlderUpdates(updatedFields, newlyUpdatedFields)
     setPatientRecord(newRow)
   }
@@ -122,6 +121,7 @@ const PatientDetails = () => {
   }
   const onCancel = () => {
     setPatientRecord(data)
+    setUpdatedFields([])
     setIsModalVisible(false)
   }
   const patientName = getPatientName(data)
