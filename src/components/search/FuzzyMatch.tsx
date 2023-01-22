@@ -6,7 +6,7 @@ import ToggleButtons from './ToggleButtons'
 interface FuzzyMatchProps {
   onChange?: (event: React.ChangeEvent<any>, value: any) => void
   name: string
-  value: number
+  value: string
   disabled: boolean
 }
 
@@ -16,7 +16,7 @@ const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
   value,
   disabled
 }) => {
-  const [selectedButton, setSelectedButton] = useState<number>(value || 1)
+  const [selectedButton, setSelectedButton] = useState<string>(value || '1')
 
   const handleChange = (event: React.ChangeEvent<any>) => {
     setSelectedButton(event.target.value)
@@ -34,7 +34,7 @@ const FuzzyMatch: React.FC<FuzzyMatchProps> = ({
         Fuzzy match
       </Typography>
       <ToggleButtons
-        selectedButton={selectedButton}
+        selectedButton={parseInt(selectedButton)}
         onChange={handleChange}
         disabled={disabled}
         sx={{

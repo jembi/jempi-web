@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material'
+import { SxProps, TextField, Theme } from '@mui/material'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -10,13 +10,17 @@ export interface SearchDateInputProps {
   value: string | Date
   label: string
   onChange?: (e: React.ChangeEvent<any>) => void
+  sx: SxProps<Theme>
+  size: 'small' | 'medium' | undefined
 }
 
 const SearchDateInput: React.FC<SearchDateInputProps> = ({
   name,
   value,
   label,
-  onChange
+  onChange,
+  sx = { width: 220 },
+  size = 'small'
 }) => {
   const [dateValue, setDateValue] = useState<Moment | null>(
     value ? moment(value, 'DD/MM/YYYY') : moment()
@@ -37,9 +41,9 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
             {...params}
             name={name}
             variant="outlined"
-            size="small"
+            size={size}
             onChange={onChange}
-            sx={{ width: 400 }}
+            sx={sx}
           />
         )}
       />

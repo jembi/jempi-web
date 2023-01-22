@@ -1,4 +1,5 @@
-import { TextField } from '@mui/material'
+import { SxProps, TextField, Theme } from '@mui/material'
+import { StringifyOptions } from 'querystring'
 
 interface SearchTextInputProps {
   value: string | Date
@@ -6,6 +7,8 @@ interface SearchTextInputProps {
   name: string
   label: string
   disabled?: boolean
+  sx: SxProps<Theme>
+  size: 'small' | 'medium' | undefined
 }
 
 const SearchTextInput: React.FC<SearchTextInputProps> = ({
@@ -13,18 +16,20 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
   onChange,
   name,
   label,
-  disabled = false
+  disabled = false,
+  sx = { width: 220 },
+  size = 'small'
 }) => {
   return (
     <TextField
       id="outlined-basic"
       label={label}
       variant="outlined"
-      size="small"
+      size={size}
       value={value}
       onChange={onChange}
       name={name}
-      sx={{ width: 400 }}
+      sx={sx}
       disabled={disabled}
     />
   )

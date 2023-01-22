@@ -35,6 +35,8 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
             value={parameter.value}
             onChange={onChange}
             name={`parameters[${index}].value`}
+            sx={{width: 400}}
+            size='small'
           />
         ) : (
           <SearchTextInput
@@ -42,6 +44,8 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
             value={parameter.value}
             onChange={onChange}
             name={`parameters[${index}].value`}
+            sx={{width: 400}}
+            size='small'
           />
         )}
       </Grid>

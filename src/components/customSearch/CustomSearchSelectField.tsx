@@ -1,42 +1,60 @@
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
-  Select
+  Select,
+  SxProps,
+  Theme
 } from '@mui/material'
-import { useAppConfig } from '../../hooks/useAppConfig'
-import { SelectChangeEvent } from '@mui/material/Select'
 
 interface CustomSearchSelectFieldProps {
   index: number
-  onChange: (event: SelectChangeEvent) => void
+  onChange: ((event: any) => void) | undefined
   fieldName: string
+  options: any[]
+  targetField: string
+  title: string
+  description?: string
+  helperText?: string
+  sx?: SxProps<Theme>
+  fieldGroup: string
 }
 
-const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({index, onChange, fieldName}) => {
-  const { availableFields } = useAppConfig()
-
+const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
+  index,
+  onChange,
+  fieldName,
+  options,
+  targetField,
+  title,
+  description,
+  helperText,
+  sx = { width: 200 },
+  fieldGroup
+}) => {
   return (
-    <FormControl fullWidth size={'small'} sx={{ width: 400 }}>
-      <InputLabel>Select Field</InputLabel>
+    <FormControl fullWidth sx={sx}>
+      <InputLabel>{title}</InputLabel>
       <Select
         value={fieldName}
         label="Field"
         onChange={onChange}
-        name={`parameters[${index}].fieldName`}
+        name={`parameters.${fieldGroup}[${index}].${targetField}`}
       >
         <MenuItem value="" disabled>
-          <em>Select Field Type</em>
+          <em>{description}</em>
         </MenuItem>
 
-        {availableFields.map((field, index) => {
+        {options.map((item, index) => {
           return (
-            <MenuItem value={field.fieldName} key={index}>
-              {field.fieldLabel}
+            <MenuItem value={item.fieldName || item} key={index}>
+              {item.fieldLabel || item}
             </MenuItem>
           )
         })}
       </Select>
+      <FormHelperText>{helperText || ''}</FormHelperText>
     </FormControl>
   )
 }
