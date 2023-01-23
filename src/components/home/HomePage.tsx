@@ -10,7 +10,7 @@ import group from './Group.png'
 
 const HomePage = () => {
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Typography
         variant="h5"
         sx={{
@@ -24,7 +24,6 @@ const HomePage = () => {
       <Divider />
       <Card
         sx={{
-          height: '592px',
           marginTop: '33px',
           background: '#FFFFFF',
           boxShadow: '0px 0px 0px 1px #E0E0E0',
@@ -37,7 +36,9 @@ const HomePage = () => {
       >
         <Box
           sx={{
-            maxWidth: '700px',
+            py: '50px',
+            px: '15px',
+            maxWidth: 'sm',
             display: 'flex',
             flexDirection: 'column',
             gap: '20px'
@@ -45,13 +46,13 @@ const HomePage = () => {
         >
           <Typography
             fontWeight={300}
-            fontSize={60}
+            fontSize={'60px'}
             lineHeight={'120%'}
             color={'rgba(0, 0, 0, 0.6)'}
           >
             Welcome to JeMPI
           </Typography>
-          <img alt="home" src={group} />
+          <img alt="home" width={'100%'} height={'100%'} src={group} />
           <Box
             sx={{
               display: 'flex',
