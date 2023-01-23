@@ -80,7 +80,8 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const signInWithKeyCloak = () => {
     keycloak.init({
       onLoad: 'login-required',
-      redirectUri: currentUrl
+      redirectUri: currentUrl,
+      checkLoginIframe: false
     })
   }
 
