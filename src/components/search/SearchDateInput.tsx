@@ -9,9 +9,14 @@ export interface SearchDateInputProps {
   name: string
   value: string | Date
   label: string
-  onChange?: (e: React.ChangeEvent<any>) => void
+  onChange?: (e: React.ChangeEvent<any>) => void | null
   sx: SxProps<Theme>
   size: 'small' | 'medium' | undefined
+  setFieldValue?: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) => void
 }
 
 const SearchDateInput: React.FC<SearchDateInputProps> = ({
@@ -20,13 +25,16 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
   label,
   onChange,
   sx = { width: 220 },
-  size = 'small'
+  size = 'small',
+  setFieldValue
 }) => {
   const [dateValue, setDateValue] = useState<Moment | null>(
     value ? moment(value, 'DD/MM/YYYY') : moment()
   )
-  const handleChange = (newValue: Moment | null) => {
-    setDateValue(newValue)
+  const handleChange = (value: Moment | null) => {
+    setDateValue(moment(value, 'DD/MM/YYYY'))
+    let newDate = moment(value).format('DD/MM/YYYY')
+    setFieldValue && setFieldValue(name, newDate)
   }
 
   return (

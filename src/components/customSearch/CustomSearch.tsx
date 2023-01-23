@@ -104,7 +104,7 @@ const CustomSearch: React.FC = () => {
               handleOnFormSubmit(values)
             }}
           >
-            {({ values, handleChange }) => (
+            {({ values, handleChange, setFieldValue }) => (
               <Form>
                 <Box
                   sx={{
@@ -149,6 +149,7 @@ const CustomSearch: React.FC = () => {
                                 fieldGroupIndex={index}
                                 removeFieldGroup={remove}
                                 key={index}
+                                setFieldValue={setFieldValue}
                               />
                             )
                           })}

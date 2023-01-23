@@ -10,6 +10,7 @@ interface FieldGroupProps {
   initialCustomSearchValues: SearchParameter
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = ({
@@ -17,7 +18,8 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
   handleChange,
   initialCustomSearchValues,
   fieldGroupIndex,
-  removeFieldGroup
+  removeFieldGroup,
+  setFieldValue
 }) => {
   return (
     <Grid item container direction="column" width="100%" alignItems={'center'}>
@@ -77,6 +79,7 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
                     enableCondition={index > 0}
                     enableDelete={index > 0}
                     key={index}
+                    setFieldValue={setFieldValue}
                   />
                 )
               })}

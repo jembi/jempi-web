@@ -8,7 +8,7 @@ import {
   Theme
 } from '@mui/material'
 
-interface CustomSearchSelectFieldProps {
+interface SearchSelectFieldProps {
   index: number
   onChange: ((event: any) => void) | undefined
   fieldName: string
@@ -19,29 +19,23 @@ interface CustomSearchSelectFieldProps {
   helperText?: string
   sx?: SxProps<Theme>
   fieldGroupIndex: number
+  name: string
 }
 
-const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
-  index,
+const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
   onChange,
   fieldName,
   options,
-  targetField,
   title,
   description,
   helperText,
   sx = { width: 200 },
-  fieldGroupIndex
+  name
 }) => {
   return (
     <FormControl fullWidth sx={sx}>
       <InputLabel>{title}</InputLabel>
-      <Select
-        value={fieldName}
-        label="Field"
-        onChange={onChange}
-        name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].${targetField}`}
-      >
+      <Select value={fieldName} label="Field" onChange={onChange} name={name}>
         <MenuItem value="" disabled>
           <em>{description}</em>
         </MenuItem>
@@ -59,4 +53,4 @@ const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
   )
 }
 
-export default CustomSearchSelectField
+export default SearchSelectField

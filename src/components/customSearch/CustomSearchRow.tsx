@@ -5,8 +5,8 @@ import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { SearchParameter } from '../../types/SimpleSearch'
 import SearchDateInput from '../search/SearchDateInput'
+import SearchSelectField from '../search/SearchSelectField'
 import SearchTextInput from '../search/SearchTextInput'
-import CustomSearchSelectField from './CustomSearchSelectField'
 
 interface CustomSearchRowProps {
   parameter: SearchParameter
@@ -16,6 +16,7 @@ interface CustomSearchRowProps {
   enableDelete?: boolean
   enableCondition?: boolean
   fieldGroupIndex: number
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
 const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
@@ -24,7 +25,8 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
   onChange,
   enableDelete = true,
   remove,
-  fieldGroupIndex
+  fieldGroupIndex,
+  setFieldValue
 }) => {
   const { availableFields } = useAppConfig()
 
@@ -90,7 +92,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
         spacing={1}
       >
         <Grid item>
-          <CustomSearchSelectField
+          <SearchSelectField
             fieldName={fieldName}
             onChange={handleFieldNameChange}
             index={index}
@@ -100,6 +102,8 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             title={'Select Type'}
             description={'Select Field Type'}
             sx={{ width: 220 }}
+            name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].fieldName`}
+
           />
         </Grid>
         <Grid item>
@@ -111,6 +115,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
               name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].value`}
               sx={{ width: 220 }}
               size="medium"
+              setFieldValue={setFieldValue}
             />
           ) : (
             <SearchTextInput
@@ -125,7 +130,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
           )}
         </Grid>
         <Grid item>
-          <CustomSearchSelectField
+          <SearchSelectField
             fieldName={matchType}
             onChange={handleStrictLevelChange}
             index={index}
@@ -136,6 +141,8 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             description={'Select Match Type'}
             helperText={'Sets distance parameter 0-3'}
             sx={{ width: 220, marginTop: 3 }}
+            name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].distance`}
+
           />
         </Grid>
         <Grid item minWidth={'48px'}>
