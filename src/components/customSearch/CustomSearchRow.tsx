@@ -15,7 +15,7 @@ interface CustomSearchRowProps {
   remove: <T>(index: number) => T | undefined
   enableDelete?: boolean
   enableCondition?: boolean
-  fieldGroup: string
+  fieldGroupIndex: number
 }
 
 const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
@@ -24,7 +24,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
   onChange,
   enableDelete = true,
   remove,
-  fieldGroup
+  fieldGroupIndex
 }) => {
   const { availableFields } = useAppConfig()
 
@@ -43,7 +43,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
 
   function handleFieldNameChange(event: SelectChangeEvent) {
     const field = availableFields.find(
-      obj => obj.fieldName == event.target.value
+      obj => obj.fieldName === event.target.value
     )
     setFieldLabel(field?.fieldLabel)
     setFieldName(event.target.value)
@@ -52,13 +52,33 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
 
   function handleStrictLevelChange(event: React.ChangeEvent<any>) {
     setMatchType(event.target.value)
+
+    switch (event.target.value) {
+      case 'exact':
+        event.target.value = 0
+        break
+      case 'Low Fuzziness':
+        event.target.value = 1
+        break
+      case 'Medium Fuzziness':
+        event.target.value = 2
+        break
+      case 'High Fuzziness':
+        event.target.value = 3
+        break
+      default:
+        event.target.value = 0
+    }
+
     onChange && onChange(event)
   }
   return (
     <Grid item container direction={'column'}>
-      {index > 0 ? <Grid item container direction={'row'} justifyContent={'center'}>
-        <Typography>{fieldGroup.toUpperCase()}</Typography>
-      </Grid> : null}
+      {index > 0 ? (
+        <Grid item container direction={'row'} justifyContent={'center'}>
+          <Typography>And</Typography>
+        </Grid>
+      ) : null}
 
       <Grid
         item
@@ -74,12 +94,12 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             fieldName={fieldName}
             onChange={handleFieldNameChange}
             index={index}
+            fieldGroupIndex={fieldGroupIndex}
             options={availableFields}
             targetField="fieldName"
             title={'Select Type'}
             description={'Select Field Type'}
             sx={{ width: 220 }}
-            fieldGroup={fieldGroup}
           />
         </Grid>
         <Grid item>
@@ -88,7 +108,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
               label={fieldLabel || 'Select a field type'}
               value={parameter?.value}
               onChange={onChange}
-              name={`parameters.${fieldGroup}[${index}].value`}
+              name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].value`}
               sx={{ width: 220 }}
               size="medium"
             />
@@ -97,7 +117,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
               label={fieldLabel || 'Select a field type'}
               value={parameter?.value}
               onChange={onChange}
-              name={`parameters.${fieldGroup}[${index}].value`}
+              name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].value`}
               disabled={!fieldName}
               sx={{ width: 220 }}
               size="medium"
@@ -109,13 +129,13 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             fieldName={matchType}
             onChange={handleStrictLevelChange}
             index={index}
+            fieldGroupIndex={fieldGroupIndex}
             options={strictLevel}
             targetField="distance"
             title={'Match Type'}
             description={'Select Match Type'}
             helperText={'Sets distance parameter 0-3'}
             sx={{ width: 220, marginTop: 3 }}
-            fieldGroup={fieldGroup}
           />
         </Grid>
         <Grid item minWidth={'48px'}>

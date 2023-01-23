@@ -1,16 +1,14 @@
 export interface SearchParameter {
   fieldName: string
   value: string | Date
-  exact: boolean
-  distance: string
-}
-export interface fieldGroups {
-  and:  SearchParameter[]
-  or:  SearchParameter[]
+  distance: number
 }
 
 export interface CustomSearchQuery {
-  parameters: fieldGroups
+  parameters: SearchParameter[]
+}
+export interface fieldGroups {
+  fieldGroups: CustomSearchQuery[]
 }
 export interface SearchQuery {
   parameters: SearchParameter[]

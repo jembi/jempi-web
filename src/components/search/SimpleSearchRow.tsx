@@ -1,8 +1,6 @@
 import { Grid } from '@mui/material'
 import { DisplayField } from '../../types/Fields'
 import { SearchParameter } from '../../types/SimpleSearch'
-import ExactSwitch from './ExactSwitch'
-import FuzzyMatch from './FuzzyMatch'
 import SearchDateInput from './SearchDateInput'
 import SearchTextInput from './SearchTextInput'
 
@@ -48,21 +46,6 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
             size='small'
           />
         )}
-      </Grid>
-      <Grid item sx={{ ml: 2, mr: 4 }}>
-        <ExactSwitch
-          onChange={onChange}
-          value={parameter.exact}
-          name={`parameters[${index}].exact`}
-        />
-      </Grid>
-      <Grid item>
-        <FuzzyMatch
-          disabled={!!parameter.exact}
-          onChange={onChange}
-          name={`parameters[${index}].distance`}
-          value={parameter.distance}
-        />
       </Grid>
     </Grid>
   )

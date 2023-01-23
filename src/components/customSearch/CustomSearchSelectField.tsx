@@ -18,7 +18,7 @@ interface CustomSearchSelectFieldProps {
   description?: string
   helperText?: string
   sx?: SxProps<Theme>
-  fieldGroup: string
+  fieldGroupIndex: number
 }
 
 const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
@@ -31,7 +31,7 @@ const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
   description,
   helperText,
   sx = { width: 200 },
-  fieldGroup
+  fieldGroupIndex
 }) => {
   return (
     <FormControl fullWidth sx={sx}>
@@ -40,7 +40,7 @@ const CustomSearchSelectField: React.FC<CustomSearchSelectFieldProps> = ({
         value={fieldName}
         label="Field"
         onChange={onChange}
-        name={`parameters.${fieldGroup}[${index}].${targetField}`}
+        name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].${targetField}`}
       >
         <MenuItem value="" disabled>
           <em>{description}</em>

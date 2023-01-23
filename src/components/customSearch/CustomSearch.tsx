@@ -5,10 +5,10 @@ import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { Form, Formik } from 'formik'
+import { FieldArray, Form, Formik } from 'formik'
 import ApiClient from '../../services/ApiClient'
 import {
-  CustomSearchQuery,
+  fieldGroups,
   FlagLabel,
   SearchParameter
 } from '../../types/SimpleSearch'
@@ -28,20 +28,21 @@ const CustomSearch: React.FC = () => {
   const initialCustomSearchValues: SearchParameter = {
     fieldName: '',
     value: '',
-    exact: false,
-    distance: ''
+    distance: 0
   }
 
-  function handleOnFormSubmit(value: CustomSearchQuery) {
+  function handleOnFormSubmit(value: fieldGroups) {
+    console.log('hello here')
     mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
-  const initialValues: CustomSearchQuery = {
-    parameters: {
-      and: [initialCustomSearchValues],
-      or: [initialCustomSearchValues]
-    }
+  const initialValues: fieldGroups = {
+    fieldGroups: [
+      {
+        parameters: [initialCustomSearchValues]
+      }
+    ]
   }
 
   return (
@@ -134,38 +135,56 @@ const CustomSearch: React.FC = () => {
                         </Typography>
                       </Grid>
                     </Grid>
-                    <FieldGroup
-                      values={values}
-                      fieldGroup={'and'}
-                      handleChange={handleChange}
-                      initialCustomSearchValues={initialCustomSearchValues}
-                    />
-                    <FieldGroup
-                      values={values}
-                      fieldGroup={'or'}
-                      handleChange={handleChange}
-                      initialCustomSearchValues={initialCustomSearchValues}
-                    />
-                    <Grid
-                      item
-                      container
-                      direction="column"
-                      width="100%"
-                      alignItems={'center'}
-                      sx={{ mt: 1 }}
-                    >
-                      <Grid
-                        item
-                        container
-                        direction="row"
-                        width="756px"
-                        justifyContent={'flex-end'}
-                      >
-                        <Button variant="text" startIcon={<AddIcon />}>
-                          Add Field Group
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    <FieldArray name="fieldGroups">
+                      {({ push, remove }) => (
+                        <>
+                          {values.fieldGroups.map((parameters, index) => {
+                            return (
+                              <FieldGroup
+                                values={parameters}
+                                handleChange={handleChange}
+                                initialCustomSearchValues={
+                                  initialCustomSearchValues
+                                }
+                                fieldGroupIndex={index}
+                                removeFieldGroup={remove}
+                                key={index}
+                              />
+                            )
+                          })}
+
+                          <Grid
+                            item
+                            container
+                            direction="column"
+                            width="100%"
+                            alignItems={'center'}
+                            sx={{ mt: 1 }}
+                          >
+                            <Grid
+                              item
+                              container
+                              direction="row"
+                              width="756px"
+                              justifyContent={'flex-end'}
+                            >
+                              <Button
+                                variant="text"
+                                startIcon={<AddIcon />}
+                                onClick={() => {
+                                  push({
+                                    parameters: [initialCustomSearchValues]
+                                  })
+                                }}
+                                sx={{ fontSize: '13px' }}
+                              >
+                                Add Group
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </>
+                      )}
+                    </FieldArray>
                     <Grid item>
                       {/* TODO move colors to theme */}
                       <Stack direction={'row'} spacing={1}>

@@ -3,7 +3,7 @@ import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
-import { CustomSearchQuery, SearchQuery } from '../types/SimpleSearch'
+import { fieldGroups, SearchQuery } from '../types/SimpleSearch'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
@@ -152,7 +152,7 @@ class ApiClient {
       .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
-  async postCustomSearchQuery(request: CustomSearchQuery) {
+  async postCustomSearchQuery(request: fieldGroups) {
     return await client
       .post(ROUTES.POST_CUSTOM_SEARCH, request)
       .then(res => res.data)
