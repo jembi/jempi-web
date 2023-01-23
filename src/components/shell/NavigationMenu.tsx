@@ -8,15 +8,19 @@ import { useAuth } from '../../hooks/useAuth'
 interface NavigationMenuProp {}
 
 const NavigationMenu: React.FC<NavigationMenuProp> = () => {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const isOpen = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const open = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
+  const close = () => {
     setAnchorEl(null)
+  }
+  const handleLogout = () => {
+    close()
+    logout()
   }
 
   return (
@@ -25,7 +29,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
         aria-controls={isOpen ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={isOpen ? 'true' : undefined}
-        onClick={handleClick}
+        onClick={open}
         size="large"
         edge="end"
       >
@@ -35,12 +39,12 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
         id="basic-menu"
         anchorEl={anchorEl}
         open={isOpen}
-        onClose={handleClose}
+        onClose={close}
         MenuListProps={{
           'aria-labelledby': 'basic-button'
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography
               fontWeight={400}
@@ -48,7 +52,7 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
               lineHeight="150%"
               letterSpacing={'0.15px'}
             >
-              {`${user?.firstName} ${user?.lastName}`}
+              {`${user?.familyName} ${user?.givenName}`}
             </Typography>
             <Typography
               fontWeight={400}
@@ -61,14 +65,14 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
           </Box>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <Typography
             fontWeight={500}
             fontSize={'13px'}
             lineHeight="22px"
             letterSpacing={'0.17px'}
           >
-            LOG OUT
+            LOGOUT
           </Typography>
         </MenuItem>
       </Menu>

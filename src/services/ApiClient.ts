@@ -7,13 +7,10 @@ import PatientRecord from '../types/PatientRecord'
 import { SearchQuery } from '../types/SimpleSearch'
 import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
+import axiosInstance from './axios'
 import moxios from './mockBackend'
 
-const client = config.shouldMockBackend
-  ? moxios
-  : axios.create({
-      baseURL: config.apiUrl || 'http://localhost:50000/JeMPI'
-    })
+const client = config.shouldMockBackend ? moxios : axiosInstance
 
 interface NotificationRequest {
   notificationId: string
@@ -155,7 +152,11 @@ class ApiClient {
   }
 
   async getCurrentUser() {
-    return await client.get(ROUTES.CURRENT_USER).then(res => res.data.user)
+    return await client.get(ROUTES.CURRENT_USER).then(res => res.data)
+  }
+
+  async logout() {
+    return await client.get(ROUTES.LOGOUT)
   }
 
   uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {

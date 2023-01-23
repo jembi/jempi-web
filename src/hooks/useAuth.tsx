@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from '@tanstack/react-location'
 import {
   QueryObserverResult,
   RefetchOptions,
-  UseMutateFunction,
   useMutation,
   useQuery,
   useQueryClient
@@ -21,7 +20,7 @@ export interface AuthContextValue {
   user: User | undefined
   isAuthenticated: boolean
   setUser: (data: User | undefined) => void
-  logout: UseMutateFunction
+  logout: () => void
   signInWithKeyCloak: () => void
   refetchUser: (
     options?: RefetchOptions | undefined
@@ -57,6 +56,19 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
     retry: false
   })
 
+  const { refetch: logout } = useQuery({
+    queryKey: ['logout'],
+    queryFn: async () => {
+      return await ApiClient.logout()
+    },
+    onSuccess() {
+      queryClient.clear()
+      navigate({ to: '/login' })
+    },
+    refetchOnWindowFocus: false,
+    enabled: false
+  })
+
   const { mutate: validateOAuth } = useMutation({
     mutationFn: ApiClient.validateOAuth,
     onSuccess(response) {
@@ -83,10 +95,6 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
       redirectUri: currentUrl,
       checkLoginIframe: false
     })
-  }
-
-  const logout = () => {
-    queryClient.clear()
   }
 
   useEffect(() => {

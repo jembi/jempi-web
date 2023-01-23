@@ -121,8 +121,8 @@ const currentUser: User = {
   id: 1,
   username: 'john',
   email: 'john.doe@jembi.org',
-  firstName: 'John',
-  lastName: 'Doe',
+  familyName: 'John',
+  givenName: 'Doe',
   provider: 'keycloak'
 }
 
