@@ -11,7 +11,7 @@ import ApiClient from '../../services/ApiClient'
 import { SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchParameter from './SimpleSearchParameters'
+import SimpleSearchRow from './SimpleSearchRow'
 
 enum FlagLabel {
   ALL_RECORDS = 'ALL RECORDS',
@@ -39,8 +39,7 @@ const SimpleSearch: React.FC = () => {
       return {
         fieldName,
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
-        exact: false,
-        distance: 1
+        distance: 0
       }
     })
   }
@@ -122,7 +121,7 @@ const SimpleSearch: React.FC = () => {
                       {availableFields.map((field, index) => {
                         const parameter = values.parameters[index]
                         return (
-                          <SimpleSearchParameter
+                          <SimpleSearchRow
                             field={field}
                             parameter={parameter}
                             index={index}
