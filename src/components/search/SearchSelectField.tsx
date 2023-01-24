@@ -18,6 +18,7 @@ interface SearchSelectFieldProps {
   helperText?: string
   sx?: SxProps<Theme>
   name: string
+  size?: 'small' | 'medium' | undefined
 }
 
 const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
@@ -28,10 +29,11 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
   description,
   helperText,
   sx = { width: 200 },
-  name
+  name,
+  size='medium'
 }) => {
   return (
-    <FormControl fullWidth sx={sx}>
+    <FormControl fullWidth sx={sx} size={size}>
       <InputLabel>{title}</InputLabel>
       <Select value={fieldName} label="Field" onChange={onChange} name={name}>
         <MenuItem value="" disabled>
