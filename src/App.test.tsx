@@ -5,6 +5,6 @@ test('renders JeMPI logo', async () => {
   await act(() => {
     render(<App />)
   })
-  const linkElement = screen.getByText(/MPI/i)
-  expect(linkElement).toBeInTheDocument()
+  const linkElement = screen.getAllByText(/MPI/i)
+  expect(linkElement[0]).toBeInTheDocument()
 })
