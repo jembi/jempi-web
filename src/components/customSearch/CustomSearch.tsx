@@ -32,7 +32,6 @@ const CustomSearch: React.FC = () => {
   }
 
   function handleOnFormSubmit(value: fieldGroups) {
-    console.log('hello here')
     mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
