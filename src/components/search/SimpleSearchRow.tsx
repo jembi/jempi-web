@@ -29,7 +29,7 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
 
   const [matchType, setMatchType] = useState<string>('')
 
-  function handleStrictLevelChange(event: React.ChangeEvent<any>) {
+  const handleStrictLevelChange = (event: React.ChangeEvent<any>) => {
     setMatchType(event.target.value)
     onChange && onChange(event)
   }
