@@ -39,7 +39,7 @@ const SimpleSearch: React.FC = () => {
       return {
         fieldName,
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
-        distance: '0'
+        distance: 0
       }
     })
   }

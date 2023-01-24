@@ -1,8 +1,9 @@
 import { Grid } from '@mui/material'
+import { useState } from 'react'
 import { DisplayField } from '../../types/Fields'
 import { SearchParameter } from '../../types/SimpleSearch'
 import SearchDateInput from './SearchDateInput'
-import SearchDropdown from './SearchDropdown'
+import SearchDropdown from './SearchSelectField'
 import SearchTextInput from './SearchTextInput'
 
 interface SimpleSearchRowProps {
@@ -18,12 +19,38 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
   index,
   onChange
 }) => {
+  
   const options = [
     'Exact',
     'Low Fuzziness',
     'Medium Fuzziness',
     'High Fuzziness'
   ]
+
+  const [matchType, setMatchType] = useState<string>('')
+
+  function handleStrictLevelChange(event: React.ChangeEvent<any>) {
+    setMatchType(event.target.value)
+
+    switch (event.target.value) {
+      case 'exact':
+        event.target.value = 0
+        break
+      case 'Low Fuzziness':
+        event.target.value = 1
+        break
+      case 'Medium Fuzziness':
+        event.target.value = 2
+        break
+      case 'High Fuzziness':
+        event.target.value = 3
+        break
+      default:
+        event.target.value = 0
+    }
+
+    onChange && onChange(event)
+  }
 
   return (
     <Grid
@@ -32,6 +59,7 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
       direction="row"
       alignItems="center"
       width="fit-content"
+      sx={{ mb: 3 }}
     >
       <Grid item>
         {field.fieldType === 'Date' ? (
@@ -53,12 +81,13 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
       <Grid>
         <SearchDropdown
           options={options}
-          onChange={onChange}
+          onChange={handleStrictLevelChange}
           index={index}
           title={'Match Type'}
           description={'Select Match Type'}
-          helperText = {'Sets distance parameter 0-3'}
-          sx={{ width: 220, marginLeft: 2 , marginTop: 3 }}
+          sx={{ width: 220, ml: 2, mt: 0.5 }}
+          name={`parameters[${index}].distance`}
+          fieldName={matchType}
         />
       </Grid>
     </Grid>

@@ -1,7 +1,7 @@
 export interface SearchParameter {
   fieldName: string
   value: string | Date
-  distance: string
+  distance: number
 }
 
 export interface CustomSearchParameters extends SearchParameter {
