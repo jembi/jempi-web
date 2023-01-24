@@ -1,17 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
 import { fieldGroups, SearchQuery } from '../types/SimpleSearch'
+import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
 
-const client = process.env.REACT_APP_MOCK_BACKEND
+const client = config.shouldMockBackend
   ? moxios
   : axios.create({
-      baseURL:
-        process.env.REACT_APP_JEMPI_BASE_URL || 'http://localhost:50000/JeMPI'
+      baseURL: config.apiUrl || 'http://localhost:50000/JeMPI'
     })
 
 interface NotificationRequest {
@@ -145,6 +146,16 @@ class ApiClient {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH, request)
       .then(res => res.data)
+  }
+
+  async validateOAuth(oauthParams: OAuthParams) {
+    return await client
+      .post(ROUTES.VALIDATE_OAUTH, oauthParams)
+      .then(res => res.data as { user: User })
+  }
+
+  async getCurrentUser() {
+    return await client.get(ROUTES.CURRENT_USER).then(res => res.data.user)
   }
 
   uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {

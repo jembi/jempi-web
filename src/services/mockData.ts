@@ -1,6 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
+import { User } from '../types/User'
 
 const notifications: Notification[] = [
   {
@@ -116,13 +117,23 @@ const patientRecords = [patientRecord, goldenRecord]
 
 const goldenRecords = [{ customGoldenRecord: goldenRecord }]
 
+const currentUser: User = {
+  id: 1,
+  username: 'john',
+  email: 'john.doe@jembi.org',
+  firstName: 'John',
+  lastName: 'Doe',
+  provider: 'keycloak'
+}
+
 const mockData = {
+  auditTrail,
   notifications,
   patientRecord,
   goldenRecords,
   patientRecords,
-  linkedRecords,
-  auditTrail
+  currentUser,
+  linkedRecords
 }
 
 export default mockData
