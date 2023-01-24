@@ -8,6 +8,10 @@ import {
   Theme
 } from '@mui/material'
 
+interface optionsProp {
+  value: number
+  label: string
+}
 interface SearchSelectFieldProps {
   index: number
   onChange: ((event: any) => void) | undefined
@@ -18,6 +22,7 @@ interface SearchSelectFieldProps {
   helperText?: string
   sx?: SxProps<Theme>
   name: string
+  size: 'small' | 'medium' | undefined
 }
 
 const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
@@ -28,10 +33,11 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
   description,
   helperText,
   sx = { width: 200 },
-  name
+  name,
+  size='small'
 }) => {
   return (
-    <FormControl fullWidth sx={sx} size={'small'}>
+    <FormControl fullWidth sx={sx} size={size}>
       <InputLabel>{title}</InputLabel>
       <Select value={fieldName} label="Field" onChange={onChange} name={name}>
         <MenuItem value="" disabled>
@@ -40,8 +46,8 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
 
         {options.map((item, index) => {
           return (
-            <MenuItem value={item.fieldName || item} key={index}>
-              {item.fieldLabel || item}
+            <MenuItem value={item.fieldName || item.value} key={index}>
+              {item.fieldLabel || item.label}
             </MenuItem>
           )
         })}
