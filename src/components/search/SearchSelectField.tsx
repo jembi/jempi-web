@@ -13,12 +13,10 @@ interface SearchSelectFieldProps {
   onChange: ((event: any) => void) | undefined
   fieldName: string
   options: any[]
-  targetField: string
   title: string
   description?: string
   helperText?: string
   sx?: SxProps<Theme>
-  fieldGroupIndex: number
   name: string
 }
 
