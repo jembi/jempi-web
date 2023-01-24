@@ -8,6 +8,10 @@ import {
   Theme
 } from '@mui/material'
 
+interface optionsProp {
+  value: number
+  label: string
+}
 interface SearchSelectFieldProps {
   index: number
   onChange: ((event: any) => void) | undefined
@@ -42,8 +46,8 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
 
         {options.map((item, index) => {
           return (
-            <MenuItem value={item.fieldName || item} key={index}>
-              {item.fieldLabel || item}
+            <MenuItem value={item.fieldName || item.value} key={index}>
+              {item.fieldLabel || item.label}
             </MenuItem>
           )
         })}

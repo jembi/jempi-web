@@ -33,7 +33,6 @@ const SimpleSearch: React.FC = () => {
       return {
         fieldName,
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
-        exact: false,
         distance: 0
       }
     })
@@ -109,38 +108,38 @@ const SimpleSearch: React.FC = () => {
                       Use custom search
                     </Typography>
                   </Grid>
-                  <FieldArray name="search">
-                    {() => (
-                      <>
-                        {availableFields.map((field, index) => {
-                          const parameter = values.parameters[index]
-                          return (
-                            <SimpleSearchRow
-                              field={field}
-                              parameter={parameter}
-                              index={index}
-                              onChange={handleChange}
-                              key={field.fieldName}
-                            />
-                          )
-                        })}
-                      </>
-                    )}
-                  </FieldArray>
-                  <Grid item>
-                    {/* TODO move colors to theme */}
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: '#274263',
-                        color: 'white',
-                        '&:hover': { backgroundColor: '#375982' }
-                      }}
-                      type="submit"
-                    >
-                      Search
-                    </Button>
-                  </Grid>
+                </Grid>
+                <FieldArray name="search">
+                  {() => (
+                    <>
+                      {availableFields.map((field, index) => {
+                        const parameter = values.parameters[index]
+                        return (
+                          <SimpleSearchRow
+                            field={field}
+                            parameter={parameter}
+                            index={index}
+                            onChange={handleChange}
+                            key={field.fieldName}
+                          />
+                        )
+                      })}
+                    </>
+                  )}
+                </FieldArray>
+                <Grid item>
+                  {/* TODO move colors to theme */}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#274263',
+                      color: 'white',
+                      '&:hover': { backgroundColor: '#375982' }
+                    }}
+                    type="submit"
+                  >
+                    Search
+                  </Button>
                 </Grid>
               </Grid>
             </Box>

@@ -23,7 +23,6 @@ import { AppConfigProvider } from './hooks/useAppConfig'
 import { AuthProvider } from './hooks/useAuth'
 import ApiClient from './services/ApiClient'
 import theme from './theme'
-import CustomSearch from './components/customSearch/CustomSearch'
 
 const location = new ReactLocation()
 const queryClient = new QueryClient({
