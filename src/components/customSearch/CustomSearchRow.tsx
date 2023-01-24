@@ -30,11 +30,11 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
 }) => {
   const { availableFields } = useAppConfig()
 
-  const strictLevel = [
-    'Exact',
-    'Low Fuzziness',
-    'Medium Fuzziness',
-    'High Fuzziness'
+  const options = [
+    { value: 0, label: 'Exact' },
+    { value: 1, label: 'Low Fuzziness'},
+    { value: 2, label: 'Medium Fuzziness'},
+    { value: 3, label: 'High Fuzziness'}
   ]
 
   const [fieldName, setFieldName] = useState<string>('')
@@ -53,27 +53,12 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
   }
 
   function handleStrictLevelChange(event: React.ChangeEvent<any>) {
+
     setMatchType(event.target.value)
-
-    switch (event.target.value) {
-      case 'exact':
-        event.target.value = 0
-        break
-      case 'Low Fuzziness':
-        event.target.value = 1
-        break
-      case 'Medium Fuzziness':
-        event.target.value = 2
-        break
-      case 'High Fuzziness':
-        event.target.value = 3
-        break
-      default:
-        event.target.value = 0
-    }
-
     onChange && onChange(event)
+
   }
+
   return (
     <Grid item container direction={'column'}>
       {index > 0 ? (
@@ -132,7 +117,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             fieldName={matchType}
             onChange={handleStrictLevelChange}
             index={index}
-            options={strictLevel}
+            options={options}
             title={'Match Type'}
             description={'Select Match Type'}
             helperText={'Sets distance parameter 0-3'}
