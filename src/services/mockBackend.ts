@@ -27,9 +27,10 @@ axiosMockAdapterInstance
   .reply(200, { user: currentUser })
   .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
-  .onGet(ROUTES.GET_PATIENT_DOCUMENT)
+  .onGet(new RegExp(`^${ROUTES.PATIENT_ROUTE}/[A-z0-9]+$`))
   .reply(config => {
-    const patient = patientRecords.find(({ uid }) => uid === config.params.uid)
+    const id = config.url?.split('/').pop()
+    const patient = patientRecords.find(({ uid }) => uid === id)
     if (patient) {
       return [200, { document: patient }]
     }

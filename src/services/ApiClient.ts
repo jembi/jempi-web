@@ -60,9 +60,7 @@ class ApiClient {
 
   async getPatient(uid: string) {
     return await client
-      .get<PatientRecordResponse>(ROUTES.GET_PATIENT_DOCUMENT, {
-        params: { uid }
-      })
+      .get<PatientRecordResponse>(`${ROUTES.PATIENT_ROUTE}/${uid}`)
       .then(res => res.data.document)
   }
 
