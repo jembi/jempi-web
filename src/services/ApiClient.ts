@@ -152,7 +152,10 @@ class ApiClient {
   }
 
   async getCurrentUser() {
-    return await client.get(ROUTES.CURRENT_USER).then(res => res.data)
+    return await client
+      .get(ROUTES.CURRENT_USER)
+      .then(res => res.data)
+      .catch(() => null)
   }
 
   async logout() {
