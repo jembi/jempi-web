@@ -8,7 +8,7 @@ import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import ApiClient from '../../services/ApiClient'
 import {
-  fieldGroups,
+  $or,
   FlagLabel,
   SearchParameter
 } from '../../types/SimpleSearch'
@@ -31,13 +31,13 @@ const CustomSearch: React.FC = () => {
     distance: 0
   }
 
-  function handleOnFormSubmit(value: fieldGroups) {
+  function handleOnFormSubmit(value: $or) {
     mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
-  const initialValues: fieldGroups = {
-    fieldGroups: [
+  const initialValues: $or = {
+    $or: [
       {
         parameters: [initialCustomSearchValues]
       }
@@ -134,10 +134,10 @@ const CustomSearch: React.FC = () => {
                         </Typography>
                       </Grid>
                     </Grid>
-                    <FieldArray name="fieldGroups">
+                    <FieldArray name="$or">
                       {({ push, remove }) => (
                         <>
-                          {values.fieldGroups.map((parameters, index) => {
+                          {values.$or.map((parameters, index) => {
                             return (
                               <FieldGroup
                                 values={parameters}

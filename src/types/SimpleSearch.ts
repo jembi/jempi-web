@@ -7,8 +7,8 @@ export interface SearchParameter {
 export interface CustomSearchQuery {
   parameters: SearchParameter[]
 }
-export interface fieldGroups {
-  fieldGroups: CustomSearchQuery[]
+export interface $or {
+  $or: CustomSearchQuery[]
 }
 export interface SearchQuery {
   parameters: SearchParameter[]

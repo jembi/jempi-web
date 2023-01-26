@@ -85,7 +85,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             title={'Select Type'}
             description={'Select Field Type'}
             sx={{ width: 220 }}
-            name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].fieldName`}
+            name={`$or[${fieldGroupIndex}].parameters[${index}].fieldName`}
 
           />
         </Grid>
@@ -95,7 +95,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
               label={fieldLabel || 'Select a field type'}
               value={parameter?.value}
               onChange={onChange}
-              name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].value`}
+              name={`$or[${fieldGroupIndex}].parameters[${index}].value`}
               sx={{ width: 220 }}
               size="medium"
               setFieldValue={setFieldValue}
@@ -105,7 +105,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
               label={fieldLabel || 'Select a field type'}
               value={parameter?.value}
               onChange={onChange}
-              name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].value`}
+              name={`$or[${fieldGroupIndex}].parameters[${index}].value`}
               disabled={!fieldName}
               sx={{ width: 220 }}
               size="medium"
@@ -122,7 +122,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
             description={'Select Match Type'}
             helperText={'Sets distance parameter 0-3'}
             sx={{ width: 220, marginTop: 3 }}
-            name={`fieldGroups[${fieldGroupIndex}].parameters[${index}].distance`}
+            name={`$or[${fieldGroupIndex}].parameters[${index}].distance`}
 
           />
         </Grid>

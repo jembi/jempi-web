@@ -4,7 +4,7 @@ import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import PatientRecord from '../types/PatientRecord'
-import { fieldGroups, SearchQuery } from '../types/SimpleSearch'
+import { $or, SearchQuery } from '../types/SimpleSearch'
 import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
 import moxios from './mockBackend'
@@ -163,7 +163,7 @@ class ApiClient {
       .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
       .then(res => res.data)
   }
-  async postCustomSearchQuery(request: fieldGroups) {
+  async postCustomSearchQuery(request: $or) {
     return await client
       .post(ROUTES.POST_CUSTOM_SEARCH, request)
       .then(res => res.data)

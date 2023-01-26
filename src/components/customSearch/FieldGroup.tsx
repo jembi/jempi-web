@@ -64,7 +64,7 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
           </Grid>
         ) : null}
 
-        <FieldArray name={`fieldGroups[${fieldGroupIndex}]parameters`}>
+        <FieldArray name={`$or[${fieldGroupIndex}]parameters`}>
           {({ push, remove }) => (
             <>
               {values.parameters.map((p: SearchParameter, index: number) => {
