@@ -1,4 +1,4 @@
-import PatientRecord, { ValueOf } from './PatientRecord'
+import { AnyRecord, ValueOf } from './PatientRecord'
 
 export type FieldGroup =
   | 'none'
@@ -25,7 +25,7 @@ export interface Field {
 }
 
 export interface DisplayField extends Field {
-  formatValue: (v: ValueOf<PatientRecord>) => string | undefined
+  formatValue: (v: ValueOf<AnyRecord>) => string | undefined
 }
 
 export type Fields = Field[]

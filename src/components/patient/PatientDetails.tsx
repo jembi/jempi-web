@@ -4,9 +4,10 @@ import { Button, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import PatientRecord from '../../types/PatientRecord'
+import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
@@ -18,17 +19,27 @@ import RegisteringFacilityPanel from './RegisteringFacilityPanel'
 import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
 
-const PatientDetails = () => {
+type PatientDetailsProps = {
+  isGoldenRecord: boolean
+}
+
+const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const {
     data: { uid }
   } = useMatch()
   const { getPatientName } = useAppConfig()
   const { data, error, isLoading, isError } = useQuery<
-    PatientRecord,
+    PatientRecord | GoldenRecord,
     AxiosError
   >({
-    queryKey: ['patient', uid],
-    queryFn: async () => await ApiClient.getPatient(uid as string),
+    queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', uid],
+    queryFn: async () => {
+      if (isGoldenRecord) {
+        return await ApiClient.getGoldenRecord(uid as string)
+      } else {
+        return await ApiClient.getPatientRecord(uid as string)
+      }
+    },
     refetchOnWindowFocus: false
   })
 
@@ -49,7 +60,7 @@ const PatientDetails = () => {
   return (
     <Container maxWidth="xl">
       <PageHeader
-        description={<SubHeading data={data} />}
+        description={<SubHeading data={data} isGoldenRecord={isGoldenRecord} />}
         title={patientName}
         breadcrumbs={[
           {
@@ -58,35 +69,37 @@ const PatientDetails = () => {
           },
           {
             icon: <Person />,
-            title: `${
-              data.type === 'Golden' ? 'Golden' : 'Patient'
-            } Record Details`
+            title: `${isGoldenRecord ? 'Golden' : 'Patient'} Record Details`
           }
         ]}
-        buttons={[
-          <Button
-            variant="outlined"
-            sx={{
-              height: '36px',
-              width: '117px',
-              borderColor: theme => theme.palette.primary.main
-            }}
-            href={`/patient/${uid}/audit-trail`}
-          >
-            AUDIT TRAIL
-          </Button>,
-          <Button
-            variant="contained"
-            sx={{
-              height: '36px',
-              width: '152px',
-              borderColor: theme => theme.palette.primary.main
-            }}
-            href={`/patient/${uid}/linked-records`}
-          >
-            LINKED RECORDS
-          </Button>
-        ]}
+        buttons={
+          isGoldenRecord
+            ? [
+                <Button
+                  variant="outlined"
+                  sx={{
+                    height: '36px',
+                    width: '117px',
+                    borderColor: theme => theme.palette.primary.main
+                  }}
+                  href={`/patient/${uid}/audit-trail`}
+                >
+                  AUDIT TRAIL
+                </Button>,
+                <Button
+                  variant="contained"
+                  sx={{
+                    height: '36px',
+                    width: '152px',
+                    borderColor: theme => theme.palette.primary.main
+                  }}
+                  href={`/patient/${uid}/linked-records`}
+                >
+                  LINKED RECORDS
+                </Button>
+              ]
+            : []
+        }
       />
       <Grid container spacing={4}>
         <Grid item xs={4}>
