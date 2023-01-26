@@ -9,6 +9,7 @@ import {
 import { AxiosError } from 'axios'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useRef } from 'react'
+import LoadingSpinner from '../components/common/LoadingSpinner'
 
 import ApiErrorMessage from '../components/error/ApiErrorMessage'
 import ApiClient from '../services/ApiClient'
@@ -43,9 +44,11 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const oauthRef = useRef<OAuthParams | null>(null)
   const key = 'auth-user'
   const currentUrl = window.location.href
+  const isLoginPage = location.current.pathname === '/login'
 
   const {
     data: user,
+    isLoading,
     error,
     refetch
   } = useQuery<User, AxiosError<unknown, any>>({
@@ -99,16 +102,26 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
 
   useEffect(() => {
     const currentLocation = location.current
-    if (
-      !oauthRef.current &&
-      currentLocation.pathname === '/login' &&
-      currentLocation.hash
-    ) {
+    if (!oauthRef.current && isLoginPage && currentLocation.hash) {
       const params = parseQuery(currentLocation.hash) as OAuthParams
       oauthRef.current = params
       validateOAuth(params)
     }
   }, [validateOAuth])
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user && !isLoginPage) {
+        navigate({ to: '/login' })
+      } else if (user && isLoginPage) {
+        navigate({ to: '/' })
+      }
+    }
+  }, [isLoading])
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <AuthContext.Provider

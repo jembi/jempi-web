@@ -57,6 +57,7 @@ export const setCookie = <T>(
 }
 
 export const getCookie = <T>(name: string, initialValue: T) => {
+  console.log(document.cookie, '======')
   return (
     (isBrowser &&
       document.cookie.split('; ').reduce((r, v) => {
@@ -72,9 +73,7 @@ export const useCookie = <T>(
   initialValue: T,
   options: CookieOptions
 ) => {
-  const [cookieItem, setItem] = useState(() => {
-    return getCookie<T>(key, initialValue)
-  })
+  const [cookieItem, setItem] = useState(getCookie<T>(key, initialValue))
   const updateCookieItem = (value: T) => {
     setItem(value)
     setCookie<T>(key, value, options)
