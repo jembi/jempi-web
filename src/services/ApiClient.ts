@@ -158,7 +158,7 @@ class ApiClient {
     return await client.get(ROUTES.LOGOUT)
   }
 
-  async updatedPatientRecord(request: PatientRecord) {
+  async updatedPatientRecord(request: PatientRecord | GoldenRecord) {
     return await client
       .post(ROUTES.UPDATE_PATIENT_RECORD, request)
       .then(res => res)

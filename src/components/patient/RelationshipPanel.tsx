@@ -2,14 +2,14 @@ import { Paper, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import { AnyRecord } from '../../types/PatientRecord'
+import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import { isInputValid } from '../../utils/helpers'
 import DataGridCutomInput from './DataGridCutomInput'
 
 const RelationshipPanel: FC<{
-  data: AnyRecord
+  data: PatientRecord | GoldenRecord
   isDataEditable: boolean
-  onChange: (newRow: AnyRecord) => any
+  onChange: (newRow: PatientRecord | GoldenRecord) => any
 }> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('relationships').map(
