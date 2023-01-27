@@ -28,6 +28,7 @@ export interface Field {
 
 export interface DisplayField extends Field {
   formatValue: (v: ValueOf<AnyRecord>) => string | undefined
+  isValid: (value: any) => boolean
 }
 
 export type Fields = Field[]

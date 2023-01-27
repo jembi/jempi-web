@@ -3,17 +3,16 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
-import { isInputValid } from '../../utils/helpers'
 import DataGridCutomInput from './DataGridCutomInput'
 
 const IdentifiersPanel: FC<{
   data: PatientRecord | GoldenRecord
-  isDataEditable: boolean
+  isEditable: boolean
   onChange: (newRow: PatientRecord | GoldenRecord) => void
-}> = ({ data, isDataEditable, onChange }) => {
+}> = ({ data, isEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('identifiers').map(
-    ({ fieldName, fieldLabel, readOnly, rules, formatValue }) => {
+    ({ fieldName, fieldLabel, readOnly, isValid, formatValue }) => {
       return {
         field: fieldName,
         headerName: fieldLabel,
@@ -21,12 +20,12 @@ const IdentifiersPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: readOnly ? false : isDataEditable,
+        editable: readOnly ? false : isEditable,
         // a Callback used to validate the user's input
         preProcessEditCellProps: ({ props }) => {
           return {
             ...props,
-            error: isInputValid(props.value, rules)
+            error: !isValid(props.value)
           }
         },
         renderEditCell: props => <DataGridCutomInput {...props} />

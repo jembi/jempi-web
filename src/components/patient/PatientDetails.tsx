@@ -38,7 +38,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const [patientRecord, setPatientRecord] = useState<
     PatientRecord | GoldenRecord | undefined
   >(undefined)
-  const [isEditable, setIsEditable] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [updatedFields, setUpdatedFields] = useState<UpdatedFields>({})
   const { data, error, isLoading, isError } = useQuery<
@@ -71,6 +71,8 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
       console.log(`Oops! Error persisting data: ${error.message}`)
     }
   })
+
+  const isEditable = isGoldenRecord && isEditMode
 
   const onDataChange = (newRow: PatientRecord | GoldenRecord) => {
     const newlyUpdatedFields: UpdatedFields = Object.keys(data || {}).reduce(
@@ -112,11 +114,11 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const onConfirm = () => {
     updatePatientRecord.mutate(patientRecord)
     setIsModalVisible(false)
-    setIsEditable(false)
+    setIsEditMode(false)
   }
   const onCancelEditing = () => {
     setPatientRecord(data)
-    setIsEditable(false)
+    setIsEditMode(false)
   }
 
   const onCancelConfirmation = () => {
@@ -179,82 +181,84 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         <Grid item xs={4}>
           <IdentifiersPanel
             data={patientRecord}
-            isDataEditable={isEditable}
+            isEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={3}>
           <RegisteringFacilityPanel
             data={patientRecord}
-            isDataEditable={isEditable}
+            isEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={5}>
           <AddressPanel
             data={patientRecord}
-            isDataEditable={isEditable}
+            isEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={8}>
           <DemographicsPanel
             data={patientRecord}
-            isDataEditable={isEditable}
+            isEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
         <Grid item xs={4}>
           <RelationshipPanel
             data={patientRecord}
-            isDataEditable={isEditable}
+            isEditable={isEditable}
             onChange={onDataChange}
           />
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          py: 4,
-          display: 'flex',
-          gap: '4px'
-        }}
-      >
-        {isEditable ? (
-          <ButtonGroup>
+      {isGoldenRecord && (
+        <Box
+          sx={{
+            py: 4,
+            display: 'flex',
+            gap: '4px'
+          }}
+        >
+          {isEditMode ? (
+            <ButtonGroup>
+              <Button
+                onClick={() => onCancelEditing()}
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => onDataSave()}
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+              >
+                Save
+              </Button>
+            </ButtonGroup>
+          ) : (
             <Button
-              onClick={() => onCancelEditing()}
+              onClick={() => setIsEditMode(true)}
               variant="outlined"
               sx={{
                 height: '42px',
                 borderColor: theme => theme.palette.primary.main
               }}
             >
-              Cancel
+              Edit Golden Record
             </Button>
-            <Button
-              onClick={() => onDataSave()}
-              variant="outlined"
-              sx={{
-                height: '42px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-            >
-              Save
-            </Button>
-          </ButtonGroup>
-        ) : (
-          <Button
-            onClick={() => setIsEditable(true)}
-            variant="outlined"
-            sx={{
-              height: '42px',
-              borderColor: theme => theme.palette.primary.main
-            }}
-          >
-            Edit Golden Record
-          </Button>
-        )}
-      </Box>
+          )}
+        </Box>
+      )}
     </Container>
   )
 }
