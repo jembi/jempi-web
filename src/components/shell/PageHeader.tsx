@@ -22,64 +22,64 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   description
 }) => {
   return (
-    <>
-      <Grid container justifyContent="space-between">
-        <Grid item container direction="column" xs="auto">
-          <Grid item>
-            <Breadcrumbs>
-              <IconButton href="/">
-                <HomeIcon />
-              </IconButton>
-              {breadcrumbs.map(({ icon, title, link }, idx) => {
-                return (
-                  <Link
-                    underline="hover"
-                    color="inherit"
-                    href={link || '#'}
-                    key={idx}
-                  >
-                    <Stack direction={'row'} spacing={1}>
-                      {icon}
-                      <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
-                    </Stack>
-                  </Link>
-                )
-              })}
-            </Breadcrumbs>
-          </Grid>
-          <Grid item>
+    <Grid container justifyContent="space-between">
+      <Grid item container direction="column" xs="auto">
+        <Grid item>
+          <Breadcrumbs>
+            <IconButton href="/">
+              <HomeIcon />
+            </IconButton>
+            {breadcrumbs.map(({ icon, title, link }, idx) => {
+              return (
+                <Link
+                  underline="hover"
+                  color="inherit"
+                  href={link || '#'}
+                  key={idx}
+                >
+                  <Stack direction={'row'} spacing={1}>
+                    {icon}
+                    <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
+                  </Stack>
+                </Link>
+              )
+            })}
+          </Breadcrumbs>
+        </Grid>
+        <Grid item>
+          <Typography
+            variant="h5"
+            sx={{
+              fontSize: '34px',
+              fontWeight: 400,
+              color: 'rgba(0, 0, 0, 0.87)'
+            }}
+          >
+            {title}
+          </Typography>
+          {typeof description === 'string' ? (
             <Typography
-              variant="h5"
               sx={{
-                fontSize: '34px',
+                fontSize: '16px',
                 fontWeight: 400,
-                color: 'rgba(0, 0, 0, 0.87)'
+                color: 'rgba(0, 0, 0, 0.6)'
               }}
             >
-              {title}
+              {description}
             </Typography>
-            {typeof description === 'string' ? (
-              <Typography
-                sx={{
-                  fontSize: '16px',
-                  fontWeight: 400,
-                  color: 'rgba(0, 0, 0, 0.6)'
-                }}
-              >
-                {description}
-              </Typography>
-            ) : (
-              description
-            )}
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} xs="auto">
-          {buttons?.map(button => (
-            <Grid item>{button}</Grid>
-          ))}
+          ) : (
+            description
+          )}
         </Grid>
       </Grid>
-    </>
+      <Grid item container spacing={2} xs="auto">
+        {buttons?.map((button, idx) => (
+          <Grid key={idx} item>
+            {button}
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   )
 }
 

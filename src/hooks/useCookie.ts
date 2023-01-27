@@ -72,9 +72,7 @@ export const useCookie = <T>(
   initialValue: T,
   options: CookieOptions
 ) => {
-  const [cookieItem, setItem] = useState(() => {
-    return getCookie<T>(key, initialValue)
-  })
+  const [cookieItem, setItem] = useState(getCookie<T>(key, initialValue))
   const updateCookieItem = (value: T) => {
     setItem(value)
     setCookie<T>(key, value, options)

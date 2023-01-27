@@ -1,6 +1,6 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
-import PatientRecord from '../types/PatientRecord'
+import { GoldenRecord, PatientRecord } from '../types/PatientRecord'
 import { User } from '../types/User'
 
 const notifications: Notification[] = [
@@ -53,7 +53,6 @@ const auditTrail: AuditTrailRecord[] = [
 
 const patientRecord: PatientRecord = {
   auxId: '0x66',
-  type: 'Current',
   score: 0,
   uid: 'G543',
   nationalId: '123456',
@@ -63,7 +62,12 @@ const patientRecord: PatientRecord = {
   dob: new Date(1605522215666),
   phoneNumber: '085145855',
   city: 'Welkom',
-  updatedBy: undefined
+  updatedBy: undefined,
+  sourceId: {
+    facility: 'Facility One',
+    uid: '0x3289',
+    patient: 'xxx'
+  }
 }
 
 const linkedRecords: PatientRecord[] = [
@@ -80,7 +84,12 @@ const linkedRecords: PatientRecord[] = [
     dob: new Date(1605522215666),
     phoneNumber: '085145855',
     city: 'Welkom',
-    updatedBy: 'Dr Anthony Soprano'
+    updatedBy: 'Dr Anthony Soprano',
+    sourceId: {
+      facility: 'Facility One',
+      uid: '0x3289',
+      patient: 'xxx'
+    }
   },
   {
     auxId: '0x66',
@@ -94,13 +103,17 @@ const linkedRecords: PatientRecord[] = [
     dob: new Date(1605522215666),
     phoneNumber: '085145855',
     city: 'Jersey',
-    updatedBy: 'Dr Carmela DeAngelis'
+    updatedBy: 'Dr Carmela DeAngelis',
+    sourceId: {
+      facility: 'Facility Two',
+      uid: '0x3288',
+      patient: 'xxx'
+    }
   }
 ]
 
-const goldenRecord: PatientRecord = {
+const goldenRecord: GoldenRecord = {
   auxId: '0x77',
-  type: 'Golden',
   score: 0,
   uid: '0x9833',
   nationalId: '123456',
@@ -110,7 +123,19 @@ const goldenRecord: PatientRecord = {
   dob: new Date(1605522215666),
   phoneNumber: '085145855',
   city: 'Welkom',
-  updatedBy: undefined
+  updatedBy: undefined,
+  sourceId: [
+    {
+      facility: 'Facility One',
+      uid: '0x3289',
+      patient: 'xxx'
+    },
+    {
+      facility: 'Facility Two',
+      uid: '0x3288',
+      patient: 'xxx'
+    }
+  ]
 }
 
 const patientRecords = [patientRecord, goldenRecord]
@@ -121,8 +146,8 @@ const currentUser: User = {
   id: 1,
   username: 'john',
   email: 'john.doe@jembi.org',
-  firstName: 'John',
-  lastName: 'Doe',
+  familyName: 'John',
+  givenName: 'Doe',
   provider: 'keycloak'
 }
 
@@ -130,6 +155,7 @@ const mockData = {
   auditTrail,
   notifications,
   patientRecord,
+  goldenRecord,
   goldenRecords,
   patientRecords,
   currentUser,

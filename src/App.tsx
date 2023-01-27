@@ -21,7 +21,6 @@ import Login from './components/user/Login'
 import { config } from './config'
 import { AppConfigProvider } from './hooks/useAppConfig'
 import { AuthProvider } from './hooks/useAuth'
-import ApiClient from './services/ApiClient'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -40,39 +39,70 @@ const ReactLocationDevtools = !config.isDev
     )
 
 const routes: Route[] = [
+  { path: 'login', element: <Login /> },
   {
-    path: '/',
-    element: <HomePage />
-  },
-  { path: '/login', element: <Login /> },
-  {
-    path: '/review-matches',
-    element: <ReviewMatches />
-  },
-  {
-    path: '/patient/:uid/linked-records',
-    element: <LinkedRecords />
-  },
-  {
-    path: '/patient/:uid/audit-trail',
-    element: <AuditTrail />,
-    loader: async ({ params }) => ({
-      uid: params.uid
-    })
-  },
-  {
-    path: '/match-details',
-    element: <MatchDetails />
-  },
-  { path: '/search', element: <SimpleSearch /> },
-  { path: '/import', element: <Import /> },
-  {
-    path: '/patient/:uid',
-    element: <PatientDetails />,
-    loader: async ({ params }) => ({
-      uid: params.uid,
-      patient: await ApiClient.getPatient(params.uid)
-    })
+    path: '',
+    children: [
+      {
+        path: '/',
+        element: <HomePage />
+      },
+      {
+        path: 'review-matches',
+        element: <ReviewMatches />
+      },
+      {
+        path: 'match-details',
+        element: <MatchDetails />
+      },
+      { path: 'search', element: <SimpleSearch /> },
+      { path: 'import', element: <Import /> },
+      {
+        path: 'golden-record',
+        children: [
+          {
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails isGoldenRecord={true} />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              },
+              {
+                path: 'audit-trail',
+                element: <AuditTrail />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              },
+              {
+                path: 'linked-records',
+                element: <LinkedRecords />
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'patient-record',
+        children: [
+          {
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails isGoldenRecord={false} />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   { element: <NotFound /> }
 ]

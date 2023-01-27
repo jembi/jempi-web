@@ -26,7 +26,7 @@ import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import { DisplayField } from '../../types/Fields'
 import { NotificationState } from '../../types/Notification'
-import PatientRecord from '../../types/PatientRecord'
+import { AnyRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
@@ -56,10 +56,10 @@ interface DialogParams {
 
 //TODO Move horrible function to the backend
 const mapDataToScores = (
-  data?: PatientRecord[],
+  data?: AnyRecord[],
   score?: number,
   candidates?: { golden_id: string; score: number }[]
-): PatientRecord[] => {
+): AnyRecord[] => {
   if (!data?.length) {
     return []
   }
@@ -74,15 +74,9 @@ const mapDataToScores = (
 const getCellClassName = (
   params: GridCellParams<string>,
   field: DisplayField,
-  data: PatientRecord
+  data: AnyRecord
 ) => {
-  if (field.fieldName === 'type') {
-    return params.value === 'Current'
-      ? 'current-patient-cell'
-      : params.value === 'Golden'
-      ? 'golden-patient-cell'
-      : ''
-  } else if (field.groups.includes('demographics')) {
+  if (field.groups.includes('demographics')) {
     return params.value === data[params.field] ? 'matching-cell' : ''
   } else return ''
 }
@@ -102,20 +96,19 @@ const MatchDetails = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data, error, isLoading, isError } = useQuery<
-    PatientRecord[],
-    AxiosError
-  >({
-    queryKey: ['matchDetails', searchParams],
-    queryFn: () => {
-      return ApiClient.getMatchDetails(
-        searchParams.patient_id!,
-        searchParams.golden_id!,
-        searchParams.candidates?.map(c => c.golden_id) || []
-      )
-    },
-    refetchOnWindowFocus: false
-  })
+  const { data, error, isLoading, isError } = useQuery<AnyRecord[], AxiosError>(
+    {
+      queryKey: ['matchDetails', searchParams],
+      queryFn: () => {
+        return ApiClient.getMatchDetails(
+          searchParams.patient_id!,
+          searchParams.golden_id!,
+          searchParams.candidates?.map(c => c.golden_id) || []
+        )
+      },
+      refetchOnWindowFocus: false
+    }
+  )
 
   //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
 

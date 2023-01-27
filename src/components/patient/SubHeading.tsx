@@ -9,7 +9,7 @@ import { FC } from 'react'
 
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { FieldType } from '../../types/Fields'
-import PatientRecord from '../../types/PatientRecord'
+import { AnyRecord } from '../../types/PatientRecord'
 
 const getIconByFieldType = (type: FieldType) => {
   switch (type) {
@@ -21,7 +21,9 @@ const getIconByFieldType = (type: FieldType) => {
   }
 }
 
-const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
+type SubHeadingProps = { data: AnyRecord; isGoldenRecord: boolean }
+
+const SubHeading: FC<SubHeadingProps> = ({ data, isGoldenRecord }) => {
   const { getFieldsByGroup } = useAppConfig()
   const chips = getFieldsByGroup('sub_heading')
     .filter(({ fieldName }) => fieldName in data)
@@ -32,8 +34,6 @@ const SubHeading: FC<{ data: PatientRecord }> = ({ data }) => {
         Icon: getIconByFieldType(fieldType)
       }
     })
-
-  const isGoldenRecord = data.type === 'Golden'
 
   return (
     <Stack direction="row" spacing={1} sx={{ my: 3 }}>

@@ -2,14 +2,14 @@ import { Paper, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import PatientRecord from '../../types/PatientRecord'
+import { AnyRecord } from '../../types/PatientRecord'
 import { isInputValid } from '../../utils/helpers'
 import DataGridCutomInput from './DataGridCutomInput'
 
 const IdentifiersPanel: FC<{
-  data: PatientRecord
+  data: AnyRecord
   isDataEditable: boolean
-  onChange: (newRow: PatientRecord) => void
+  onChange: (newRow: AnyRecord) => void
 }> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('identifiers').map(
