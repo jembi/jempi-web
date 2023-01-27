@@ -34,6 +34,11 @@ const RelationshipPanel: FC<{
     }
   )
 
+  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
+    onChange(newRow)
+    return newRow
+  }
+
   return (
     <Paper sx={{ p: 1 }}>
       <Typography variant="h6">Relationship Contacts</Typography>
