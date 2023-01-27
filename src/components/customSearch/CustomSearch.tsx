@@ -7,14 +7,11 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import ApiClient from '../../services/ApiClient'
-import {
-  $or,
-  FlagLabel,
-  SearchParameter
-} from '../../types/SimpleSearch'
+import { $or, FlagLabel, SearchParameter } from '../../types/SimpleSearch'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import FieldGroup from './FieldGroup'
+import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 
 const CustomSearch: React.FC = () => {
   //TODO: find a better way of handling error while posting the search request
@@ -97,12 +94,7 @@ const CustomSearch: React.FC = () => {
             </Grid>
           </Grid>
           <Divider />
-          <Formik
-            initialValues={initialValues}
-            onSubmit={values => {
-              handleOnFormSubmit(values)
-            }}
-          >
+          <Formik initialValues={initialValues} onSubmit={handleOnFormSubmit}>
             {({ values, handleChange, setFieldValue }) => (
               <Form>
                 <Box
@@ -149,6 +141,7 @@ const CustomSearch: React.FC = () => {
                                 removeFieldGroup={remove}
                                 key={index}
                                 setFieldValue={setFieldValue}
+                                push={push}
                               />
                             )
                           })}
@@ -168,7 +161,7 @@ const CustomSearch: React.FC = () => {
                               width="756px"
                               justifyContent={'flex-end'}
                             >
-                              <Button
+                              {/* <Button
                                 variant="text"
                                 startIcon={<AddIcon />}
                                 onClick={() => {
@@ -179,7 +172,14 @@ const CustomSearch: React.FC = () => {
                                 sx={{ fontSize: '13px' }}
                               >
                                 Add Group
-                              </Button>
+                              </Button> */}
+                              <AddFieldOrGroupButton
+                                push={push}
+                                initialCustomSearchValues={
+                                  initialCustomSearchValues
+                                }
+                                label="Add group"
+                              />
                             </Grid>
                           </Grid>
                         </>

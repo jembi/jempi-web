@@ -1,8 +1,8 @@
-import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Button, Grid, Typography } from '@mui/material'
 import { FieldArray } from 'formik'
 import { CustomSearchQuery, SearchParameter } from '../../types/SimpleSearch'
+import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import CustomSearchRow from './CustomSearchRow'
 interface FieldGroupProps {
   values: CustomSearchQuery
@@ -10,7 +10,12 @@ interface FieldGroupProps {
   initialCustomSearchValues: SearchParameter
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+  setFieldValue: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) => void
+  push: (obj: any) => void
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = ({
@@ -19,7 +24,8 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
   initialCustomSearchValues,
   fieldGroupIndex,
   removeFieldGroup,
-  setFieldValue
+  setFieldValue,
+  push
 }) => {
   return (
     <Grid item container direction="column" width="100%" alignItems={'center'}>
@@ -91,16 +97,11 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
                 justifyContent={'center'}
                 width="100%"
               >
-                <Button
-                  variant="text"
-                  startIcon={<AddIcon />}
-                  onClick={() => {
-                    push(initialCustomSearchValues)
-                  }}
-                  sx={{ fontSize: '13px' }}
-                >
-                  Add Search Rule
-                </Button>
+                <AddFieldOrGroupButton
+                  push={push}
+                  initialCustomSearchValues={initialCustomSearchValues}
+                  label="Add Search Rule"
+                />
               </Grid>
             </>
           )}

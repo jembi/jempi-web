@@ -38,8 +38,8 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
   ]
 
   const [fieldName, setFieldName] = useState<string>('')
-  const [fieldLabel, setFieldLabel] = useState<string | undefined>(
-    '' || undefined
+  const [fieldLabel, setFieldLabel] = useState<string>(
+    ''
   )
   const [matchType, setMatchType] = useState<string>('')
 
@@ -47,7 +47,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
     const field = availableFields.find(
       obj => obj.fieldName === event.target.value
     )
-    setFieldLabel(field?.fieldLabel)
+    setFieldLabel(field!.fieldLabel)
     setFieldName(event.target.value)
     onChange && onChange(event as React.ChangeEvent<any>)
   }
@@ -92,7 +92,7 @@ const CustomSearchRow: React.FC<CustomSearchRowProps> = ({
         <Grid item>
           {fieldName === 'dob' ? (
             <SearchDateInput
-              label={fieldLabel || 'Select a field type'}
+              label={fieldLabel}
               value={parameter?.value}
               onChange={onChange}
               name={`$or[${fieldGroupIndex}].parameters[${index}].value`}
