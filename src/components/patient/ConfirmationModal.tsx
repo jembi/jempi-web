@@ -14,17 +14,17 @@ const style = {
 
 const columns = [
   {
-    field: 'field',
+    field: 'fieldName',
     headerName: 'Field',
     flex: 1
   },
   {
-    field: 'original',
+    field: 'originalFieldValue',
     headerName: 'Original',
     flex: 1
   },
   {
-    field: 'new',
+    field: 'newFieldValue',
     headerName: 'New',
     flex: 1
   }
@@ -34,8 +34,17 @@ const ConfirmationModal: React.FC<{
   isVisible: boolean
   handleClose: () => void
   onConfirm: () => void
-  updatedFields: UpdatedFields[]
+  updatedFields: UpdatedFields
 }> = ({ isVisible, handleClose, updatedFields, onConfirm }) => {
+  const rows = Object.keys(updatedFields).map(key => {
+    return {
+      id: key,
+      fieldName: key,
+      originalFieldValue: updatedFields[key].oldValue,
+      newFieldValue: updatedFields[key].newValue
+    }
+  })
+
   return (
     <Modal
       open={isVisible}
@@ -69,10 +78,12 @@ const ConfirmationModal: React.FC<{
         <DataGrid
           getRowId={({ id }) => id}
           columns={columns}
-          rows={updatedFields}
+          rows={rows}
           autoHeight={true}
           hideFooter={true}
-          getCellClassName={params => (params.field === 'new' ? 'new' : '')}
+          getCellClassName={params =>
+            params.field === 'newFieldValue' ? 'new' : ''
+          }
         />
         <Box
           sx={{

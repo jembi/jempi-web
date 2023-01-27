@@ -3,22 +3,17 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import PatientRecord from '../../types/PatientRecord'
+import { isInputValid } from '../../utils/helpers'
+import DataGridCutomInput from './DataGridCutomInput'
 
 const DemographicsPanel: FC<{
   data: PatientRecord
   isDataEditable: boolean
-  onChange: (newRow: PatientRecord) => void
+  onChange: (newRow: PatientRecord) => any
 }> = ({ data, isDataEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('demographics').map(
-    ({
-      fieldName,
-      fieldLabel,
-      readOnly,
-      rules: { required, regex },
-      formatValue
-    }) => {
-      const regexp = new RegExp(regex)
+    ({ fieldName, fieldLabel, readOnly, rules, formatValue }) => {
       return {
         field: fieldName,
         headerName: fieldLabel,
@@ -31,19 +26,13 @@ const DemographicsPanel: FC<{
         preProcessEditCellProps: ({ props }) => {
           return {
             ...props,
-            error:
-              !regexp.test(props.value) ||
-              (required && props.value.length === 0)
+            error: isInputValid(props.value, rules)
           }
-        }
+        },
+        renderEditCell: props => <DataGridCutomInput {...props} />
       }
     }
   )
-
-  const onRowUpdate = (newRow: PatientRecord, _oldRow: PatientRecord) => {
-    onChange(newRow)
-    return newRow
-  }
 
   return (
     <Paper sx={{ p: 1 }}>
@@ -55,8 +44,7 @@ const DemographicsPanel: FC<{
         autoHeight={true}
         hideFooter={true}
         experimentalFeatures={{ newEditingApi: true }}
-        processRowUpdate={(newRow, oldRow) => onRowUpdate(newRow, oldRow)}
-        // TO-DO: handle errors
+        processRowUpdate={newRow => onChange(newRow)}
         disableSelectionOnClick
       />
     </Paper>

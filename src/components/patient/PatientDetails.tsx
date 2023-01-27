@@ -1,9 +1,10 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Container, Grid } from '@mui/material'
+import { Box, Button, ButtonGroup, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
@@ -21,10 +22,7 @@ import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
 
 export interface UpdatedFields {
-  id: number
-  field: string
-  original: any
-  new: any
+  [fieldName: string]: { oldValue: any; newValue: any }
 }
 
 const PatientDetails = () => {
@@ -33,10 +31,11 @@ const PatientDetails = () => {
   )
   const [isEditable, setIsEditable] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [updatedFields, setUpdatedFields] = useState<UpdatedFields[]>([])
+  const [updatedFields, setUpdatedFields] = useState<UpdatedFields>({})
   const {
     data: { uid }
   } = useMatch()
+  const { enqueueSnackbar } = useSnackbar()
   const { getPatientName } = useAppConfig()
   const { data, error, isLoading, isError } = useQuery<
     PatientRecord,
@@ -48,48 +47,34 @@ const PatientDetails = () => {
   })
 
   const updatePatientRecord = useMutation({
+    mutationKey: ['patient', uid],
     mutationFn: ApiClient.updatedPatientRecord,
+    onSuccess: () => {
+      enqueueSnackbar(`Successfully saved patient records`, {
+        variant: 'success'
+      })
+    },
     onError: (error: AxiosError) => {
+      enqueueSnackbar(`Could not save record changes`, {
+        variant: 'error'
+      })
       console.log(`Oops! Error persisting data: ${error.message}`)
     }
   })
-  const filterOlderUpdates = (
-    currentUpdate: UpdatedFields[],
-    newUpdate: UpdatedFields[]
-  ) => {
-    newUpdate.forEach(element => {
-      let update: UpdatedFields[] = []
-      const oldField = currentUpdate.find(elem => elem.field === element.field)
-      if (!oldField) {
-        update.push(
-          ...currentUpdate.filter(elem => elem.field !== element.field),
-          element
-        )
-      } else {
-        update.push(element)
-      }
-
-      setUpdatedFields([...update])
-    })
-  }
 
   const onDataChange = (newRow: PatientRecord) => {
-    const newlyUpdatedFields: UpdatedFields[] = Object.keys(data || {}).reduce(
-      (acc: UpdatedFields[], curr, idx: number) => {
+    const newlyUpdatedFields: UpdatedFields = Object.keys(data || {}).reduce(
+      (acc: UpdatedFields, curr, idx: number) => {
         if (data && data[curr] !== newRow[curr]) {
-          acc.push({
-            id: idx,
-            field: curr,
-            original: data[curr],
-            new: newRow[curr]
-          })
+          acc[curr] = { oldValue: data[curr], newValue: newRow[curr] }
         }
         return acc
       },
-      []
+      {}
     )
-    filterOlderUpdates(updatedFields, newlyUpdatedFields)
+    setUpdatedFields({ ...newlyUpdatedFields })
     setPatientRecord(newRow)
+    return newRow
   }
 
   const onDataSave = () => {
@@ -119,18 +104,22 @@ const PatientDetails = () => {
     setIsModalVisible(false)
     setIsEditable(false)
   }
-  const onCancel = () => {
+  const onCancelEditing = () => {
     setPatientRecord(data)
-    setUpdatedFields([])
+    setIsEditable(false)
+  }
+
+  const onCancelConfirmation = () => {
     setIsModalVisible(false)
   }
+
   const patientName = getPatientName(data)
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth={false}>
       <ConfirmationModal
         isVisible={isModalVisible}
-        handleClose={onCancel}
+        handleClose={onCancelConfirmation}
         updatedFields={updatedFields}
         onConfirm={onConfirm}
       />
@@ -184,7 +173,7 @@ const PatientDetails = () => {
         </Grid>
         <Grid item xs={3}>
           <RegisteringFacilityPanel
-            data={data}
+            data={patientRecord}
             isDataEditable={isEditable}
             onChange={onDataChange}
           />
@@ -219,16 +208,28 @@ const PatientDetails = () => {
         }}
       >
         {isEditable ? (
-          <Button
-            onClick={() => onDataSave()}
-            variant="outlined"
-            sx={{
-              height: '42px',
-              borderColor: theme => theme.palette.primary.main
-            }}
-          >
-            {isEditable ? 'Save' : 'Edit Golden Record'}
-          </Button>
+          <ButtonGroup>
+            <Button
+              onClick={() => onCancelEditing()}
+              variant="outlined"
+              sx={{
+                height: '42px',
+                borderColor: theme => theme.palette.primary.main
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => onDataSave()}
+              variant="outlined"
+              sx={{
+                height: '42px',
+                borderColor: theme => theme.palette.primary.main
+              }}
+            >
+              Save
+            </Button>
+          </ButtonGroup>
         ) : (
           <Button
             onClick={() => setIsEditable(true)}
