@@ -57,7 +57,6 @@ export const setCookie = <T>(
 }
 
 export const getCookie = <T>(name: string, initialValue: T) => {
-  console.log(document.cookie, '======')
   return (
     (isBrowser &&
       document.cookie.split('; ').reduce((r, v) => {
