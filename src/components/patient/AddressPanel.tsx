@@ -20,7 +20,7 @@ const AddressPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: readOnly ? false : isEditable,
+        editable: !readOnly && isEditable,
         preProcessEditCellProps: ({ props }) => {
           return {
             ...props,

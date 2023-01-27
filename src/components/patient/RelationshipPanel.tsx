@@ -20,7 +20,7 @@ const RelationshipPanel: FC<{
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
         disableColumnMenu: true,
-        editable: readOnly ? false : isEditable,
+        editable: !readOnly && isEditable,
         // a Callback used to validate the user's input
         preProcessEditCellProps: ({ props }) => {
           return {
