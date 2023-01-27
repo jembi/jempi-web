@@ -23,6 +23,10 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
     logout()
   }
 
+  if (!user) {
+    return null
+  }
+
   return (
     <>
       <IconButton
@@ -46,32 +50,17 @@ const NavigationMenu: React.FC<NavigationMenuProp> = () => {
       >
         <MenuItem>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography
-              fontWeight={400}
-              fontSize={'16px'}
-              lineHeight="150%"
-              letterSpacing={'0.15px'}
-            >
-              {`${user?.familyName} ${user?.givenName}`}
+            <Typography fontWeight={400} fontSize={'16px'}>
+              {`${user?.givenName} ${user?.familyName}`}
             </Typography>
-            <Typography
-              fontWeight={400}
-              fontSize={'14px'}
-              lineHeight="143%"
-              letterSpacing={'0.17px'}
-            >
+            <Typography fontWeight={400} fontSize={'14px'}>
               {user?.email}
             </Typography>
           </Box>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleLogout}>
-          <Typography
-            fontWeight={500}
-            fontSize={'13px'}
-            lineHeight="22px"
-            letterSpacing={'0.17px'}
-          >
+          <Typography fontWeight={500} fontSize={'13px'}>
             LOGOUT
           </Typography>
         </MenuItem>

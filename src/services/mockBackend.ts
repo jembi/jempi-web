@@ -23,9 +23,9 @@ const {
 
 axiosMockAdapterInstance
   .onPost(ROUTES.VALIDATE_OAUTH)
-  .reply(200, { user: currentUser })
+  .reply(200, currentUser)
   .onGet(ROUTES.CURRENT_USER)
-  .reply(200, { user: currentUser })
+  .reply(200, currentUser)
   .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
   .onGet(new RegExp(`^${ROUTES.PATIENT_RECORD_ROUTE}/[A-z0-9]+$`))
