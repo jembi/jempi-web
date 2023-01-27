@@ -2,9 +2,9 @@ import { Paper, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import PatientRecord from '../../types/PatientRecord'
+import { AnyRecord } from '../../types/PatientRecord'
 
-const DemographicsPanel: FC<{ data: PatientRecord }> = ({ data }) => {
+const DemographicsPanel: FC<{ data: AnyRecord }> = ({ data }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('demographics').map(
     ({ fieldName, fieldLabel, formatValue }) => {

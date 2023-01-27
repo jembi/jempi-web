@@ -58,14 +58,14 @@ const routes: Route[] = [
       { path: 'search', element: <SimpleSearch /> },
       { path: 'import', element: <Import /> },
       {
-        path: 'patient',
+        path: 'golden-record',
         children: [
           {
             path: ':uid',
             children: [
               {
                 path: '/',
-                element: <PatientDetails />,
+                element: <PatientDetails isGoldenRecord={true} />,
                 loader: async ({ params }) => ({
                   uid: params.uid
                 })
@@ -80,6 +80,23 @@ const routes: Route[] = [
               {
                 path: 'linked-records',
                 element: <LinkedRecords />
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'patient-record',
+        children: [
+          {
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails isGoldenRecord={false} />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
               }
             ]
           }

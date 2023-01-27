@@ -3,7 +3,7 @@ import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
-import PatientRecord from '../types/PatientRecord'
+import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
 import { SearchQuery } from '../types/SimpleSearch'
 import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
@@ -27,16 +27,8 @@ interface NotificationResponse {
   records: Notification[]
 }
 
-interface PatientRecordResponse {
-  document: PatientRecord
-}
-
-interface CustomGoldenRecord {
-  customGoldenRecord: PatientRecord
-}
-
 interface GoldenRecordResponse {
-  goldenRecords: CustomGoldenRecord[]
+  goldenRecords: GoldenRecord[]
 }
 
 class ApiClient {
@@ -58,12 +50,16 @@ class ApiClient {
       .then(res => res.data)
   }
 
-  async getPatient(uid: string) {
+  async getPatientRecord(uid: string) {
     return await client
-      .get<PatientRecordResponse>(ROUTES.GET_PATIENT_DOCUMENT, {
-        params: { uid }
-      })
-      .then(res => res.data.document)
+      .get<PatientRecord>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
+      .then(res => res.data)
+  }
+
+  async getGoldenRecord(uid: string) {
+    return await client
+      .get<GoldenRecord>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
+      .then(res => res.data)
   }
 
   async getGoldenRecords(uid: string[]) {
@@ -77,7 +73,7 @@ class ApiClient {
           indexes: null
         }
       })
-      .then(res => res.data.goldenRecords.map(gr => gr.customGoldenRecord))
+      .then(res => res.data.goldenRecords)
   }
 
   async getLinkedRecords(uid: string) {
@@ -95,7 +91,7 @@ class ApiClient {
 
   //TODO Move this logic to the backend and just get match details by notification ID
   async getMatchDetails(uid: string, goldenId: string, candidates: string[]) {
-    const patientRecord = this.getPatient(uid)
+    const patientRecord = this.getPatientRecord(uid)
     const goldenRecord = this.getGoldenRecords([goldenId])
     const candidateRecords = this.getGoldenRecords(candidates)
     return (await axios
@@ -103,18 +99,18 @@ class ApiClient {
       .then(response => {
         return [{ type: 'Current', ...response[0] }]
           .concat(
-            response[1].map((r: PatientRecord) => {
+            response[1].map((r: AnyRecord) => {
               r.type = 'Golden'
               return r
             })
           )
           .concat(
-            response[2].map((r: PatientRecord) => {
+            response[2].map((r: AnyRecord) => {
               r.type = 'Candidate'
               return r
             })
           )
-      })) as PatientRecord[]
+      })) as AnyRecord[]
   }
 
   async updateNotification(request: NotificationRequest) {

@@ -6,13 +6,13 @@ import Loading from '../components/common/Loading'
 import ApiErrorMessage from '../components/error/ApiErrorMessage'
 import ApiClient from '../services/ApiClient'
 import { DisplayField, FieldGroup, Fields } from '../types/Fields'
-import PatientRecord from '../types/PatientRecord'
+import { AnyRecord } from '../types/PatientRecord'
 import { getFieldValueFormatter } from '../utils/formatters'
 
 export interface AppConfigContextValue {
   availableFields: DisplayField[]
   getFieldsByGroup: (group: FieldGroup) => DisplayField[]
-  getPatientName: (patient: PatientRecord) => string
+  getPatientName: (patient: AnyRecord) => string
 }
 
 const AppConfigContext = React.createContext<AppConfigContextValue | null>(null)
@@ -36,7 +36,6 @@ export const AppConfigProvider = ({
     queryFn: () => ApiClient.getFields(),
     refetchOnWindowFocus: false
   })
-
   const availableFields: DisplayField[] = useMemo(() => {
     return (fields || [])
       .filter(({ scope }) =>
@@ -60,7 +59,7 @@ export const AppConfigProvider = ({
   )
 
   const getPatientName = useCallback(
-    (patient: PatientRecord) => {
+    (patient: AnyRecord) => {
       return getFieldsByGroup('name')
         .map(({ fieldName }) => {
           return fieldName in patient ? patient[fieldName] : null
