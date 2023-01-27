@@ -8,10 +8,10 @@ import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { SearchQuery, FlagLabel } from '../../types/SimpleSearch'
+import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchRow from './SimpleSearchRow'
+import SimpleSearchRow from './SearchRow'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()

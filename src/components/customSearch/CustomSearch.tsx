@@ -161,23 +161,11 @@ const CustomSearch: React.FC = () => {
                               width="756px"
                               justifyContent={'flex-end'}
                             >
-                              {/* <Button
-                                variant="text"
-                                startIcon={<AddIcon />}
-                                onClick={() => {
-                                  push({
-                                    parameters: [initialCustomSearchValues]
-                                  })
-                                }}
-                                sx={{ fontSize: '13px' }}
-                              >
-                                Add Group
-                              </Button> */}
                               <AddFieldOrGroupButton
                                 push={push}
-                                initialCustomSearchValues={
-                                  initialCustomSearchValues
-                                }
+                                initialCustomSearchValues={{
+                                  parameters: [initialCustomSearchValues]
+                                }}
                                 label="Add group"
                               />
                             </Grid>

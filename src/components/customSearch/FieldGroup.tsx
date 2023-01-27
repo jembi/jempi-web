@@ -3,7 +3,7 @@ import { Button, Grid, Typography } from '@mui/material'
 import { FieldArray } from 'formik'
 import { CustomSearchQuery, SearchParameter } from '../../types/SimpleSearch'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
-import CustomSearchRow from './CustomSearchRow'
+import SearchRow from '../search/SearchRow'
 interface FieldGroupProps {
   values: CustomSearchQuery
   handleChange: (e: React.ChangeEvent<any>) => void
@@ -70,22 +70,22 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
           </Grid>
         ) : null}
 
-        <FieldArray name={`$or[${fieldGroupIndex}]parameters`}>
+        <FieldArray name={`$or[${fieldGroupIndex}].parameters`}>
           {({ push, remove }) => (
             <>
               {values.parameters.map((p: SearchParameter, index: number) => {
                 const parameter = values.parameters[index]
                 return (
-                  <CustomSearchRow
+                  <SearchRow
                     parameter={parameter}
                     index={index}
-                    fieldGroupIndex={fieldGroupIndex}
                     onChange={handleChange}
-                    remove={remove}
-                    enableCondition={index > 0}
-                    enableDelete={index > 0}
                     key={index}
                     setFieldValue={setFieldValue}
+                    fieldGroupIndex={fieldGroupIndex}
+                    remove={remove}
+                    enableDelete={index > 0}
+                    isCustomRow={true}
                   />
                 )
               })}

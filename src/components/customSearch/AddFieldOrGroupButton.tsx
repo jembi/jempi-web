@@ -18,9 +18,7 @@ const AddFieldOrGroupButton: React.FC<any> = ({
         variant="text"
         startIcon={<AddIcon />}
         onClick={() => {
-          push({
-            parameters: [initialCustomSearchValues]
-          })
+          push(initialCustomSearchValues)
         }}
         sx={{ fontSize: '13px' }}
       >
