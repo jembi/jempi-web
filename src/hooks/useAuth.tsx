@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
       enqueueSnackbar(`Successfully logged in using KeyCloak`, {
         variant: 'success'
       })
-      setUser(response.user)
+      setUser(response)
       navigate({ to: '/' })
     },
     onError(err) {
