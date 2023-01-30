@@ -13,7 +13,8 @@ const axiosMockAdapterInstance = new AxiosMockAdapter(moxios, {
 
 const {
   notifications,
-  patientRecords,
+  patientRecord,
+  goldenRecord,
   goldenRecords,
   auditTrail,
   currentUser,
@@ -22,16 +23,24 @@ const {
 
 axiosMockAdapterInstance
   .onPost(ROUTES.VALIDATE_OAUTH)
-  .reply(200, { user: currentUser })
+  .reply(200, currentUser)
   .onGet(ROUTES.CURRENT_USER)
-  .reply(200, { user: currentUser })
+  .reply(200, currentUser)
   .onGet(ROUTES.GET_NOTIFICATIONS)
   .reply(200, { records: notifications })
-  .onGet(ROUTES.GET_PATIENT_DOCUMENT)
+  .onGet(new RegExp(`^${ROUTES.PATIENT_RECORD_ROUTE}/[A-z0-9]+$`))
   .reply(config => {
-    const patient = patientRecords.find(({ uid }) => uid === config.params.uid)
-    if (patient) {
-      return [200, { document: patient }]
+    const id = config.url?.split('/').pop()
+    if (patientRecord.uid === id) {
+      return [200, patientRecord]
+    }
+    return [404, {}]
+  })
+  .onGet(new RegExp(`^${ROUTES.GOLDEN_RECORD_ROUTE}/[A-z0-9]+$`))
+  .reply(config => {
+    const id = config.url?.split('/').pop()
+    if (goldenRecord.uid === id) {
+      return [200, goldenRecord]
     }
     return [404, {}]
   })

@@ -13,7 +13,7 @@ const colorGradient =
 const NavigationBar = () => {
   return (
     <AppBar position="fixed">
-      <Toolbar sx={{ order: 0 }}>
+      <Toolbar>
         <JembiLogo />
         <Box sx={{ flexGrow: 1 }}>
           <Button
@@ -45,7 +45,7 @@ const NavigationBar = () => {
           background: colorGradient,
           height: 12
         }}
-      ></Box>
+      />
     </AppBar>
   )
 }
