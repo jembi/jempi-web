@@ -5,13 +5,15 @@ interface SearchTextInputProps {
   onChange?: (e: React.ChangeEvent<any>) => void
   name: string
   label: string
+  disabled?: boolean
 }
 
 const SearchTextInput: React.FC<SearchTextInputProps> = ({
   value,
   onChange,
   name,
-  label
+  label,
+  disabled = false
 }) => {
   return (
     <TextField
@@ -23,6 +25,7 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
       onChange={onChange}
       name={name}
       sx={{ width: 400 }}
+      disabled={disabled}
     />
   )
 }

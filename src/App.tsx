@@ -7,9 +7,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import AuditTrail from './components/auditTrail/AuditTrail'
-import Dashboard from './components/dashboard/Dashboard'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
+import HomePage from './components/home/HomePage'
 import Import from './components/import/Import'
 import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
@@ -18,8 +18,10 @@ import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
 import SearchResult from './components/searchResult/SearchResult'
 import Shell from './components/shell/Shell'
+import Login from './components/user/Login'
+import { config } from './config'
 import { AppConfigProvider } from './hooks/useAppConfig'
-import ApiClient from './services/ApiClient'
+import { AuthProvider } from './hooks/useAuth'
 import theme from './theme'
 
 const location = new ReactLocation()
@@ -29,50 +31,79 @@ const queryClient = new QueryClient({
   }
 })
 
-const ReactLocationDevtools =
-  process.env.NODE_ENV === 'production'
-    ? () => null
-    : lazy(() =>
-        import('@tanstack/react-location-devtools').then(res => ({
-          default: res.ReactLocationDevtools
-        }))
-      )
+const ReactLocationDevtools = !config.isDev
+  ? () => null
+  : lazy(() =>
+      import('@tanstack/react-location-devtools').then(res => ({
+        default: res.ReactLocationDevtools
+      }))
+    )
 
 const routes: Route[] = [
+  { path: 'login', element: <Login /> },
   {
-    path: '/',
-    element: <Dashboard />
-  },
-  {
-    path: '/review-matches',
-    element: <ReviewMatches />
-  },
-  {
-    path: '/patient/:uid/linked-records',
-    element: <LinkedRecords />
-  },
-  {
-    path: '/patient/:uid/audit-trail',
-    element: <AuditTrail />,
-    loader: async ({ params }) => ({
-      uid: params.uid
-    })
-  },
-  {
-    path: '/match-details',
-    element: <MatchDetails />
-  },
-  { path: '/search', element: <SimpleSearch /> },
-  { path: '/search-results', element: <SearchResult /> },
-
-  { path: '/import', element: <Import /> },
-  {
-    path: '/patient/:uid',
-    element: <PatientDetails />,
-    loader: async ({ params }) => ({
-      uid: params.uid,
-      patient: await ApiClient.getPatient(params.uid)
-    })
+    path: '',
+    children: [
+      {
+        path: '/',
+        element: <HomePage />
+      },
+      {
+        path: 'review-matches',
+        element: <ReviewMatches />
+      },
+      {
+        path: 'match-details',
+        element: <MatchDetails />
+      },
+      { path: 'search', element: <SimpleSearch /> },
+      { path: 'import', element: <Import /> },
+      {
+        path: 'golden-record',
+        children: [
+          {
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails isGoldenRecord={true} />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              },
+              {
+                path: 'audit-trail',
+                element: <AuditTrail />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              },
+              {
+                path: 'linked-records',
+                element: <LinkedRecords />
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'patient-record',
+        children: [
+          {
+            path: ':uid',
+            children: [
+              {
+                path: '/',
+                element: <PatientDetails isGoldenRecord={false} />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   { element: <NotFound /> }
 ]
@@ -86,15 +117,17 @@ const App = () => {
           <SnackbarProvider
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            <ErrorBoundary>
-              <AppConfigProvider>
-                <Shell />
-              </AppConfigProvider>
-            </ErrorBoundary>
+            <AuthProvider>
+              <ErrorBoundary>
+                <AppConfigProvider>
+                  <Shell />
+                </AppConfigProvider>
+              </ErrorBoundary>
+            </AuthProvider>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
+          <ReactQueryDevtools />
         </Router>
-        <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>
   )
