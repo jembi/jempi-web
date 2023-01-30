@@ -1,4 +1,5 @@
-import { Grid, IconButton, SelectChangeEvent, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Grid, IconButton, SelectChangeEvent, SxProps, Theme, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { DisplayField } from '../../types/Fields'
@@ -6,7 +7,6 @@ import { SearchParameter } from '../../types/SimpleSearch'
 import SearchDateInput from './SearchDateInput'
 import SearchSelectField from './SearchSelectField'
 import SearchTextInput from './SearchTextInput'
-import DeleteIcon from '@mui/icons-material/Delete'
 
 interface SimpleSearchRowProps {
   field?: DisplayField
@@ -23,6 +23,14 @@ interface SimpleSearchRowProps {
   ) => void
   isCustomRow?: boolean
 }
+
+interface fieldStyleProp{
+  sx: SxProps<Theme>
+  size: "small" | "medium" | undefined
+  name: string
+
+}
+
 
 const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
   field,
