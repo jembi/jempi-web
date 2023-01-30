@@ -1,10 +1,11 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Container, Grid } from '@mui/material'
+import { Box, Button, ButtonGroup, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { FC } from 'react'
+import { useSnackbar } from 'notistack'
+import { FC, useEffect, useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
@@ -13,11 +14,16 @@ import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
+import ConfirmationModal from './ConfirmationModal'
 import DemographicsPanel from './DemographicsPanel'
 import IdentifiersPanel from './IdentifiersPanel'
 import RegisteringFacilityPanel from './RegisteringFacilityPanel'
 import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
+
+export interface UpdatedFields {
+  [fieldName: string]: { oldValue: any; newValue: any }
+}
 
 type PatientDetailsProps = {
   isGoldenRecord: boolean
@@ -27,7 +33,14 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const {
     data: { uid }
   } = useMatch()
+  const { enqueueSnackbar } = useSnackbar()
   const { getPatientName } = useAppConfig()
+  const [patientRecord, setPatientRecord] = useState<
+    PatientRecord | GoldenRecord | undefined
+  >(undefined)
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [updatedFields, setUpdatedFields] = useState<UpdatedFields>({})
   const { data, error, isLoading, isError } = useQuery<
     PatientRecord | GoldenRecord,
     AxiosError
@@ -43,6 +56,49 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
     refetchOnWindowFocus: false
   })
 
+  const updatePatientRecord = useMutation({
+    mutationKey: [isGoldenRecord ? 'golden-record' : 'patient-record', uid],
+    mutationFn: ApiClient.updatedPatientRecord,
+    onSuccess: () => {
+      enqueueSnackbar(`Successfully saved patient records`, {
+        variant: 'success'
+      })
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Could not save record changes`, {
+        variant: 'error'
+      })
+      console.log(`Oops! Error persisting data: ${error.message}`)
+    }
+  })
+
+  const isEditable = isGoldenRecord && isEditMode
+
+  const onDataChange = (newRow: PatientRecord | GoldenRecord) => {
+    const newlyUpdatedFields: UpdatedFields = Object.keys(data || {}).reduce(
+      (acc: UpdatedFields, curr: string, idx: number) => {
+        if (data && data[curr] !== newRow[curr]) {
+          acc[curr] = { oldValue: data[curr], newValue: newRow[curr] }
+        }
+        return acc
+      },
+      {}
+    )
+    setUpdatedFields({ ...newlyUpdatedFields })
+    setPatientRecord(newRow)
+    return newRow
+  }
+
+  const onDataSave = () => {
+    setIsModalVisible(true)
+  }
+
+  useEffect(() => {
+    if (patientRecord === undefined) {
+      setPatientRecord(data)
+    }
+  }, [data, patientRecord])
+
   if (isLoading) {
     return <Loading />
   }
@@ -51,14 +107,34 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data) {
+  if (!data || !patientRecord) {
     return <NotFound />
+  }
+
+  const onConfirm = () => {
+    updatePatientRecord.mutate(patientRecord)
+    setIsModalVisible(false)
+    setIsEditMode(false)
+  }
+  const onCancelEditing = () => {
+    setPatientRecord(data)
+    setIsEditMode(false)
+  }
+
+  const onCancelConfirmation = () => {
+    setIsModalVisible(false)
   }
 
   const patientName = getPatientName(data)
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth={false}>
+      <ConfirmationModal
+        isVisible={isModalVisible}
+        handleClose={onCancelConfirmation}
+        updatedFields={updatedFields}
+        onConfirm={onConfirm}
+      />
       <PageHeader
         description={<SubHeading data={data} isGoldenRecord={isGoldenRecord} />}
         title={patientName}
@@ -103,21 +179,86 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
       />
       <Grid container spacing={4}>
         <Grid item xs={4}>
-          <IdentifiersPanel data={data} />
+          <IdentifiersPanel
+            data={patientRecord}
+            isEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={3}>
-          <RegisteringFacilityPanel data={data} />
+          <RegisteringFacilityPanel
+            data={patientRecord}
+            isEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={5}>
-          <AddressPanel data={data} />
+          <AddressPanel
+            data={patientRecord}
+            isEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={8}>
-          <DemographicsPanel data={data} />
+          <DemographicsPanel
+            data={patientRecord}
+            isEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
         <Grid item xs={4}>
-          <RelationshipPanel data={data} />
+          <RelationshipPanel
+            data={patientRecord}
+            isEditable={isEditable}
+            onChange={onDataChange}
+          />
         </Grid>
       </Grid>
+      {isGoldenRecord && (
+        <Box
+          sx={{
+            py: 4,
+            display: 'flex',
+            gap: '4px'
+          }}
+        >
+          {isEditMode ? (
+            <ButtonGroup>
+              <Button
+                onClick={() => onCancelEditing()}
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => onDataSave()}
+                variant="outlined"
+                sx={{
+                  height: '42px',
+                  borderColor: theme => theme.palette.primary.main
+                }}
+              >
+                Save
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <Button
+              onClick={() => setIsEditMode(true)}
+              variant="outlined"
+              sx={{
+                height: '42px',
+                borderColor: theme => theme.palette.primary.main
+              }}
+            >
+              Edit Golden Record
+            </Button>
+          )}
+        </Box>
+      )}
     </Container>
   )
 }

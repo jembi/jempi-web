@@ -2,19 +2,33 @@ import { Paper, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import { AnyRecord } from '../../types/PatientRecord'
+import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
+import DataGridCutomInput from './DataGridCutomInput'
 
-const RelationshipPanel: FC<{ data: AnyRecord }> = ({ data }) => {
+const RelationshipPanel: FC<{
+  data: PatientRecord | GoldenRecord
+  isEditable: boolean
+  onChange: (newRow: PatientRecord | GoldenRecord) => any
+}> = ({ data, isEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('relationships').map(
-    ({ fieldName, fieldLabel, formatValue }) => {
+    ({ fieldName, fieldLabel, readOnly, isValid, formatValue }) => {
       return {
         field: fieldName,
         headerName: fieldLabel,
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
-        disableColumnMenu: true
+        disableColumnMenu: true,
+        editable: !readOnly && isEditable,
+        // a Callback used to validate the user's input
+        preProcessEditCellProps: ({ props }) => {
+          return {
+            ...props,
+            error: !isValid(props.value)
+          }
+        },
+        renderEditCell: props => <DataGridCutomInput {...props} />
       }
     }
   )
@@ -28,6 +42,9 @@ const RelationshipPanel: FC<{ data: AnyRecord }> = ({ data }) => {
         rows={[data]}
         autoHeight={true}
         hideFooter={true}
+        experimentalFeatures={{ newEditingApi: true }}
+        processRowUpdate={newRow => onChange(newRow)}
+        disableSelectionOnClick
       />
     </Paper>
   )

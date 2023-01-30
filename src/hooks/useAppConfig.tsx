@@ -8,6 +8,7 @@ import ApiClient from '../services/ApiClient'
 import { DisplayField, FieldGroup, Fields } from '../types/Fields'
 import { AnyRecord } from '../types/PatientRecord'
 import { getFieldValueFormatter } from '../utils/formatters'
+import { isInputValid } from '../utils/helpers'
 
 export interface AppConfigContextValue {
   availableFields: DisplayField[]
@@ -46,7 +47,8 @@ export const AppConfigProvider = ({
       .map(field => {
         return {
           ...field,
-          formatValue: getFieldValueFormatter(field.fieldType)
+          formatValue: getFieldValueFormatter(field.fieldType),
+          isValid: (value: any) => isInputValid(value, field.rules)
         }
       })
   }, [fields, location.current])

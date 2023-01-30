@@ -22,10 +22,13 @@ export interface Field {
   groups: FieldGroup[]
   scope: string[]
   accessLevel: string[]
+  readOnly: boolean
+  rules: { required: boolean; regex: string }
 }
 
 export interface DisplayField extends Field {
   formatValue: (v: ValueOf<AnyRecord>) => string | undefined
+  isValid: (value: any) => boolean
 }
 
 export type Fields = Field[]

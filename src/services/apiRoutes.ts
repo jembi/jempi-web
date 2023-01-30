@@ -13,7 +13,8 @@ const ROUTES = {
   VALIDATE_OAUTH: '/authenticate',
   LOGOUT: '/logout',
   AUDIT_TRAIL: '/Audit-trail',
-  UPLOAD: '/Upload'
+  UPLOAD: '/Upload',
+  UPDATE_PATIENT_RECORD: '/Patient'
 }
 
 export default ROUTES
