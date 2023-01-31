@@ -1,30 +1,28 @@
+import AddIcon from '@mui/icons-material/Add'
 import { Button } from '@mui/material'
 import { SearchParameter } from '../../types/SimpleSearch'
-import AddIcon from '@mui/icons-material/Add'
 
 interface AddFieldOrGroupButtonProps {
-  push: (obj: any) => void
+  onClick: (obj: any) => void
   initialCustomSearchValues: SearchParameter
   label: string
 }
 const AddFieldOrGroupButton: React.FC<any> = ({
-  push,
+  onClick,
   initialCustomSearchValues,
   label
 }) => {
   return (
-    <>
       <Button
         variant="text"
         startIcon={<AddIcon />}
         onClick={() => {
-          push(initialCustomSearchValues)
+          onClick(initialCustomSearchValues)
         }}
         sx={{ fontSize: '13px' }}
       >
         {label}
       </Button>
-    </>
   )
 }
 

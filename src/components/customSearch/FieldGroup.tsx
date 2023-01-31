@@ -98,7 +98,7 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
                 width="100%"
               >
                 <AddFieldOrGroupButton
-                  push={push}
+                  onClick={push}
                   initialCustomSearchValues={initialCustomSearchValues}
                   label="Add Search Rule"
                 />

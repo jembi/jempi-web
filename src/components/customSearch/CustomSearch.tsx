@@ -45,7 +45,6 @@ const CustomSearch: React.FC = () => {
     <>
       <Container maxWidth={false}>
         <Grid container direction={'column'}>
-          <Grid item container direction={'row'}>
             <Grid item lg={6}>
               <PageHeader
                 description="You can customize your search below."
@@ -59,40 +58,29 @@ const CustomSearch: React.FC = () => {
                     title: 'Search'
                   }
                 ]}
+                buttons={[
+                  <SearchFlags
+                    options={[
+                      FlagLabel.ALL_RECORDS,
+                      FlagLabel.GOLDEN_ONLY,
+                      FlagLabel.PATIENT_ONLY
+                    ]}
+                  />,
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      height: '42px',
+                      width: '172px',
+                      borderColor: theme => theme.palette.primary.main
+                    }}
+                    href={'/search'}
+                  >
+                    <Typography variant="button">SIMPLE SEARCH</Typography>
+                  </Button>
+                ]}
               />
             </Grid>
-            <Grid
-              item
-              container
-              direction="row"
-              spacing={2}
-              justifyContent="right"
-              lg={6}
-            >
-              <Grid item>
-                <SearchFlags
-                  options={[
-                    FlagLabel.ALL_RECORDS,
-                    FlagLabel.GOLDEN_ONLY,
-                    FlagLabel.PATIENT_ONLY
-                  ]}
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    height: '42px',
-                    width: '172px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
-                  href={'/search'}
-                >
-                  <Typography variant="button">SIMPLE SEARCH</Typography>
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
+         
           <Divider />
           <Formik initialValues={initialValues} onSubmit={handleOnFormSubmit}>
             {({ values, handleChange, setFieldValue }) => (
@@ -162,7 +150,7 @@ const CustomSearch: React.FC = () => {
                               justifyContent={'flex-end'}
                             >
                               <AddFieldOrGroupButton
-                                push={push}
+                                onClick={push}
                                 initialCustomSearchValues={{
                                   parameters: [initialCustomSearchValues]
                                 }}

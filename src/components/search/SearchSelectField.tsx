@@ -46,8 +46,8 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
 
         {options.map((item, index) => {
           return (
-            <MenuItem value={item.fieldName || item.value} key={index}>
-              {item.fieldLabel || item.label}
+            <MenuItem value={item.value} key={index}>
+              {item.label}
             </MenuItem>
           )
         })}

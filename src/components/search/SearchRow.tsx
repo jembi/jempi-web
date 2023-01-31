@@ -1,5 +1,12 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Grid, IconButton, SelectChangeEvent, SxProps, Theme, Typography } from '@mui/material'
+import {
+  Grid,
+  IconButton,
+  SelectChangeEvent,
+  SxProps,
+  Theme,
+  Typography
+} from '@mui/material'
 import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { DisplayField } from '../../types/Fields'
@@ -8,7 +15,7 @@ import SearchDateInput from './SearchDateInput'
 import SearchSelectField from './SearchSelectField'
 import SearchTextInput from './SearchTextInput'
 
-interface SimpleSearchRowProps {
+interface SearchRowProps {
   field?: DisplayField
   parameter: SearchParameter
   index: number
@@ -24,15 +31,7 @@ interface SimpleSearchRowProps {
   isCustomRow?: boolean
 }
 
-interface fieldStyleProp{
-  sx: SxProps<Theme>
-  size: "small" | "medium" | undefined
-  name: string
-
-}
-
-
-const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
+const SearchRow: React.FC<SearchRowProps> = ({
   field,
   parameter,
   index,
@@ -52,19 +51,18 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
     { value: 3, label: 'High Fuzziness' }
   ]
 
-  const [fieldName, setFieldName] = useState<string>('')
-  const [fieldLabel, setFieldLabel] = useState<string>('')
-
+  const [newField, setNewField] = useState<DisplayField | undefined>(undefined)
   const [matchType, setMatchType] = useState<string>('')
 
   const handleFieldNameChange = (event: SelectChangeEvent) => {
-    const field = availableFields.find(
-      obj => obj.fieldName === event.target.value
-    )
 
-    setFieldLabel(field!.fieldLabel)
-    setFieldName(event.target.value)
+    const field = availableFields.find(obj => obj.fieldName === event.target.value)
+
+    console.log(field)
+
+    setNewField(field)
     onChange && onChange(event as React.ChangeEvent<any>)
+
   }
 
   const handleStrictLevelChange = (event: React.ChangeEvent<any>) => {
@@ -92,10 +90,13 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
         {isCustomRow && (
           <Grid item>
             <SearchSelectField
-              fieldName={fieldName}
+              fieldName={newField ? newField!.fieldName : ''}
               onChange={handleFieldNameChange}
               index={index}
-              options={availableFields}
+              options={availableFields.map(value => ({
+                value: value.fieldName,
+                label: value.fieldLabel
+              }))}
               title={'Select Type'}
               description={'Select Field Type'}
               sx={{ width: 220, mt: 0.4 }}
@@ -104,11 +105,11 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
           </Grid>
         )}
         <Grid item>
-          {fieldName === 'dob' || (field && field!.fieldType === 'Date') ? (
+          {newField && newField?.fieldType === 'Date' ? (
             <SearchDateInput
               label={
                 isCustomRow
-                  ? fieldLabel || 'Select a field type'
+                  ? newField?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
@@ -125,8 +126,8 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
           ) : (
             <SearchTextInput
               label={
-                isCustomRow
-                  ? fieldLabel || 'Select a field type'
+                isCustomRow 
+                  ? newField?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
@@ -173,4 +174,4 @@ const SimpleSearchRow: React.FC<SimpleSearchRowProps> = ({
   )
 }
 
-export default SimpleSearchRow
+export default SearchRow

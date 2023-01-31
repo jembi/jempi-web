@@ -11,7 +11,7 @@ import ApiClient from '../../services/ApiClient'
 import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchRow from './SearchRow'
+import SearchRow from './SearchRow'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
@@ -115,7 +115,7 @@ const SimpleSearch: React.FC = () => {
                       {availableFields.map((field, index) => {
                         const parameter = values.parameters[index]
                         return (
-                          <SimpleSearchRow
+                          <SearchRow
                             field={field}
                             parameter={parameter}
                             index={index}
