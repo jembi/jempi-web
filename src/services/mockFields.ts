@@ -12,7 +12,9 @@ const FIELDS_CONFIG: Fields = [
       '/match-details',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'nationalId',
@@ -27,7 +29,9 @@ const FIELDS_CONFIG: Fields = [
       '/custom-search',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: true, regex: '.*' }
   },
   {
     fieldName: 'auxId',
@@ -35,7 +39,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'AUX ID',
     groups: ['identifiers'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: true, regex: '.*' }
   },
   {
     fieldName: 'givenName',
@@ -51,7 +57,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: true, regex: '.*' }
   },
   {
     fieldName: 'familyName',
@@ -67,7 +75,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: true, regex: '.*' }
   },
   {
     fieldName: 'gender',
@@ -80,7 +90,9 @@ const FIELDS_CONFIG: Fields = [
       '/match-details',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'dob',
@@ -95,7 +107,9 @@ const FIELDS_CONFIG: Fields = [
       '/patient/:uid/linked-records',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: true, regex: '.*' }
   },
   {
     fieldName: 'phoneNumber',
@@ -109,7 +123,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid/linked-records',
       '/custom-search'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'city',
@@ -123,7 +139,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid/linked-records',
       '/custom-search'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'score',
@@ -131,7 +149,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Match',
     groups: ['none'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   //TODO Add back when we have user information
   // {
@@ -143,6 +163,7 @@ const FIELDS_CONFIG: Fields = [
   //     '/patient/:uid',
   //   ],
   //   accessLevel: []
+
   // }
   {
     fieldName: 'siteCode',
@@ -154,7 +175,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'facilityName',
@@ -166,7 +189,9 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid',
       '/golden-record/:uid/linked-records'
     ],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'village',
@@ -174,7 +199,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Village',
     groups: ['address'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'ward',
@@ -182,7 +209,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Ward',
     groups: ['address'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'province',
@@ -190,7 +219,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Province',
     groups: ['address'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'district',
@@ -198,7 +229,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'District',
     groups: ['address'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'country',
@@ -206,7 +239,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Country',
     groups: ['address'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'guardianName',
@@ -214,7 +249,9 @@ const FIELDS_CONFIG: Fields = [
     fieldLabel: 'Guardian Name',
     groups: ['relationships'],
     scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: []
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   }
 ]
 
