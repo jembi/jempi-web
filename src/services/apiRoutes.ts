@@ -8,7 +8,8 @@ const ROUTES = {
   UPDATE_NOTIFICATION: '/NotificationRequest',
   CREATE_GOLDEN_RECORD: '/Unlink',
   LINK_RECORD: '/Link',
-  POST_SIMPLE_SEARCH: '/SimpleSearchRequest', //TODO: replace with the correct route.
+  POST_SIMPLE_SEARCH: '/SimpleSearchRequest',
+  POST_SEARCH_REQUEST: '/SearchRequest',
   CURRENT_USER: '/current-user',
   VALIDATE_OAUTH: '/authenticate',
   LOGOUT: '/logout',

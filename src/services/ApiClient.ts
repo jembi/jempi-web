@@ -141,6 +141,12 @@ class ApiClient {
       .then(res => res.data)
   }
 
+  async getLinkedRecord(request: SearchQuery) {
+    return await client
+      .post(ROUTES.POST_SEARCH_REQUEST, request)
+      .then(res => res.data)
+  }
+
   async validateOAuth(oauthParams: OAuthParams) {
     return await client
       .post(ROUTES.VALIDATE_OAUTH, oauthParams)

@@ -1,6 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import { GoldenRecord, PatientRecord } from '../types/PatientRecord'
+import { SearchResultProps, SearchResultsLinkedRecordsProps } from '../types/SearchResults'
 import { User } from '../types/User'
 
 const notifications: Notification[] = [
@@ -16,117 +17,112 @@ const notifications: Notification[] = [
   }
 ]
 
-const searchResult: SearchResultsWithLinkedRecordsProps[] = [
+const searchResult: SearchResultProps[] = [
   {
     id: 'G1001',
     firstName: 'Joe',
     lastName: 'Bernard',
-    gender: 'Male',
-    linkedRecord: [
-      {
-        id: 'G1010',
-        firstName: 'Bob',
-        lastName: 'Shallow',
-        gender: 'Male',
-      },
-      {
-        id: 'G1011',
-        firstName: 'Kondo',
-        lastName: 'Mandanda',
-        gender: 'Male',
-      },
-      {
-        id: 'G1012',
-        firstName: 'Asir',
-        lastName: 'Ahle',
-        gender: 'Male',
-      }
-    ]
+    gender: 'Male'
   },
   {
     id: 'G1002',
     firstName: 'Louis',
     lastName: 'Muluer',
-    gender: 'Male',
-    linkedRecord: [
-      {
-        id: 'N5056',
-        firstName: 'Ndoyi',
-        lastName: 'Kerk',
-        gender: 'Male',
-      },
-      {
-        id: 'J3250',
-        firstName: 'Fab',
-        lastName: 'Lucious',
-        gender: 'Male',
-      },
-      {
-        id: 'J3250',
-        firstName: 'Mongando',
-        lastName: 'Sibole',
-        gender: 'Male',
-      }
-    ]
+    gender: 'Male'
   },
   {
     id: 'G1003',
     firstName: 'Hope',
     lastName: 'Krood',
-    gender: 'Female',
-    linkedRecord: [
-      {
-        id: 'G1001',
-        firstName: 'Barton',
-        lastName: 'Manjde',
-        gender: 'Male',
-      },
-      {
-        id: 'J3250',
-        firstName: 'Filo',
-        lastName: 'Lodi',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Mais',
-        lastName: 'Cependant',
-        gender: 'Male',
-      }
-    ]
+    gender: 'Female'
   },
   {
     id: 'G1004',
     firstName: 'Francine',
     lastName: 'Melechon',
-    gender: 'Female',
-    linkedRecord: [
-      {
-        id: 'G1001',
-        firstName: 'Yango',
-        lastName: 'Ndoyi',
-        gender: 'Male',
-      },
-      {
-        id: 'J3250',
-        firstName: 'Mukondo',
-        lastName: 'David',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Okay',
-        lastName: 'Demain',
-        gender: 'Male',
-      }
-    ]
+    gender: 'Female'
   },
   {
     id: 'G1005',
     firstName: 'Morris',
     lastName: 'Van Der Sarr',
-    gender: 'Male',
-    linkedRecord: [
+    gender: 'Male'
+  }
+]
+
+const linkedRecord: SearchResultsLinkedRecordsProps[] = [
+  {
+    patient: 'G1005', 
+    linkedRecords: [
+      {
+        id: 'G1001',
+        firstName: 'Surpris',
+        lastName: 'Beacoup',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Titche',
+        lastName: 'Efula',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Maintenant',
+        lastName: 'Jamais',
+        gender: 'Male',
+      }
+    ]
+  },
+  {
+    patient: 'G1004', 
+    linkedRecords: [
+      {
+        id: 'G1001',
+        firstName: 'Surpris',
+        lastName: 'Beacoup',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Titche',
+        lastName: 'Efula',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Maintenant',
+        lastName: 'Jamais',
+        gender: 'Male',
+      }
+    ]
+  },  
+  {
+    patient: 'G1003', 
+    linkedRecords: [
+      {
+        id: 'G1001',
+        firstName: 'Surpris',
+        lastName: 'Beacoup',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Titche',
+        lastName: 'Efula',
+        gender: 'Male',
+      },
+      {
+        id: 'G1001',
+        firstName: 'Maintenant',
+        lastName: 'Jamais',
+        gender: 'Male',
+      }
+    ]
+  },
+  {
+    patient: 'G1002', 
+    linkedRecords: [
       {
         id: 'G1001',
         firstName: 'Surpris',
@@ -148,7 +144,6 @@ const searchResult: SearchResultsWithLinkedRecordsProps[] = [
     ]
   }
 ]
-
 const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Create user',

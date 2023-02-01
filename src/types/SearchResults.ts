@@ -1,11 +1,12 @@
 
-export default interface SearchResultProps {
+export interface SearchResultProps {
   id: string
   firstName: string
   lastName: string
   gender: string
 }
 
-export interface SearchResultsWithLinkedRecordsProps extends SearchResultProps {
-  linkedRecord: SearchResultProps[]
+export interface SearchResultsLinkedRecordsProps{
+  patient: string
+  linkedRecords: SearchResultProps[]
 }
