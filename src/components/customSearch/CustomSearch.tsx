@@ -1,5 +1,4 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
-import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
@@ -7,11 +6,11 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import ApiClient from '../../services/ApiClient'
-import { $or, FlagLabel, SearchParameter } from '../../types/SimpleSearch'
+import { CustomSearchQuery, FlagLabel, SearchParameter, SimpleSearchQuery } from '../../types/SimpleSearch'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
-import FieldGroup from './FieldGroup'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
+import FieldGroup from './FieldGroup'
 
 const CustomSearch: React.FC = () => {
   //TODO: find a better way of handling error while posting the search request
@@ -22,21 +21,21 @@ const CustomSearch: React.FC = () => {
     }
   })
 
-  const initialCustomSearchValues: SearchParameter = {
+  const initialSearchParameter: SearchParameter = {
     fieldName: '',
     value: '',
     distance: 0
   }
 
-  function handleOnFormSubmit(value: $or) {
+  function handleOnFormSubmit(value: CustomSearchQuery) {
     mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
-  const initialValues: $or = {
+  const initialValues: CustomSearchQuery = {
     $or: [
       {
-        parameters: [initialCustomSearchValues]
+        parameters: [initialSearchParameter]
       }
     ]
   }
@@ -117,13 +116,13 @@ const CustomSearch: React.FC = () => {
                     <FieldArray name="$or">
                       {({ push, remove }) => (
                         <>
-                          {values.$or.map((parameters, index) => {
+                          {values.$or.map((parameters: SimpleSearchQuery, index: number) => {
                             return (
                               <FieldGroup
                                 values={parameters}
                                 handleChange={handleChange}
                                 initialCustomSearchValues={
-                                  initialCustomSearchValues
+                                  initialSearchParameter
                                 }
                                 fieldGroupIndex={index}
                                 removeFieldGroup={remove}
@@ -152,7 +151,7 @@ const CustomSearch: React.FC = () => {
                               <AddFieldOrGroupButton
                                 onClick={push}
                                 initialCustomSearchValues={{
-                                  parameters: [initialCustomSearchValues]
+                                  parameters: [initialSearchParameter]
                                 }}
                                 label="Add group"
                               />

@@ -4,11 +4,11 @@ export interface SearchParameter {
   distance: number
 }
 
-export interface CustomSearchQuery {
+export interface SimpleSearchQuery {
   parameters: SearchParameter[]
 }
-export interface $or {
-  $or: CustomSearchQuery[]
+export interface CustomSearchQuery {
+  $or: SimpleSearchQuery[]
 }
 export interface SearchQuery {
   parameters: SearchParameter[]

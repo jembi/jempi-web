@@ -17,6 +17,9 @@ export interface SearchDateInputProps {
     value: any,
     shouldValidate?: boolean | undefined
   ) => void
+  fieldGroupIndex?: number
+  index: number
+  isCustomRow?: boolean
 }
 
 const SearchDateInput: React.FC<SearchDateInputProps> = ({
@@ -26,15 +29,21 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
   onChange,
   sx = { width: 220 },
   size = 'small',
-  setFieldValue
+  setFieldValue,
+  index,
+  fieldGroupIndex,
+  isCustomRow
 }) => {
   const [dateValue, setDateValue] = useState<Moment | null>(
     value ? moment(value, 'DD/MM/YYYY') : moment()
   )
   const handleChange = (value: Moment | null) => {
+
+    const fieldIdentifier = isCustomRow ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`: `parameters[${index}].${name}`
+
     setDateValue(moment(value, 'DD/MM/YYYY'))
     let newDate = moment(value).format('DD/MM/YYYY')
-    setFieldValue && setFieldValue(name, newDate)
+    setFieldValue && setFieldValue(fieldIdentifier, newDate)
   }
 
   return (

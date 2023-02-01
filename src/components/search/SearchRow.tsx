@@ -1,9 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import {
-  Grid,
-  IconButton,
-  SelectChangeEvent, Typography
-} from '@mui/material'
+import { Grid, IconButton, SelectChangeEvent, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { DisplayField } from '../../types/Fields'
@@ -48,16 +44,18 @@ const SearchRow: React.FC<SearchRowProps> = ({
     { value: 3, label: 'High Fuzziness' }
   ]
 
-  const [fieldToSelect, setFieldToSelect] = useState<DisplayField | undefined>(undefined)
+  const [fieldToSelect, setFieldToSelect] = useState<DisplayField | undefined>(
+    undefined
+  )
   const [matchType, setMatchType] = useState<string>('')
 
   const handleFieldNameChange = (event: SelectChangeEvent) => {
-
-    const field = availableFields.find(obj => obj.fieldName === event.target.value)
+    const field = availableFields.find(
+      obj => obj.fieldName === event.target.value
+    )
 
     setFieldToSelect(field)
     onChange && onChange(event as React.ChangeEvent<any>)
-
   }
 
   const handleStrictLevelChange = (event: React.ChangeEvent<any>) => {
@@ -95,12 +93,16 @@ const SearchRow: React.FC<SearchRowProps> = ({
               title={'Select Type'}
               description={'Select Field Type'}
               sx={{ width: 220, mt: 0.4 }}
-              name={`$or[${fieldGroupIndex}].parameters[${index}].fieldName`}
+              name={`fieldName`}
+              isCustomRow={isCustomRow}
+              fieldGroupIndex={fieldGroupIndex}
+
             />
           </Grid>
         )}
         <Grid item>
-          {fieldToSelect && fieldToSelect?.fieldType === 'Date' ? (
+          {(fieldToSelect && fieldToSelect?.fieldType === 'Date') ||
+          field?.fieldType === 'Date' ? (
             <SearchDateInput
               label={
                 isCustomRow
@@ -109,31 +111,30 @@ const SearchRow: React.FC<SearchRowProps> = ({
               }
               value={parameter.value}
               onChange={onChange}
-              name={
-                isCustomRow
-                  ? `$or[${fieldGroupIndex}].parameters[${index}].value`
-                  : `parameters[${index}].value`
-              }
+              name={'value'}
               sx={{ width: isCustomRow ? 220 : 400 }}
               size={isCustomRow ? 'medium' : 'small'}
               setFieldValue={setFieldValue}
+              isCustomRow={isCustomRow}
+              index={index}
+              fieldGroupIndex={fieldGroupIndex}
             />
           ) : (
             <SearchTextInput
               label={
-                isCustomRow 
+                isCustomRow
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
               onChange={onChange}
-              name={
-                isCustomRow
-                  ? `$or[${fieldGroupIndex}].parameters[${index}].value`
-                  : `parameters[${index}].value`
-              }
+              name={'value'}
               sx={{ width: isCustomRow ? 220 : 400 }}
               size={isCustomRow ? 'medium' : 'small'}
+              isCustomRow={isCustomRow}
+              index={index}
+              fieldGroupIndex={fieldGroupIndex}
+              disabled={fieldToSelect?.fieldName ? false : true}
             />
           )}
         </Grid>
@@ -145,14 +146,12 @@ const SearchRow: React.FC<SearchRowProps> = ({
             title={'Match Type'}
             description={'Select Match Type'}
             sx={{ width: 220, ml: isCustomRow ? 0 : 2, mt: 3 }}
-            name={
-              isCustomRow
-                ? `$or[${fieldGroupIndex}].parameters[${index}].distance`
-                : `parameters[${index}].distance`
-            }
+            name={'distance'}
             helperText={'Sets distance parameter 0-3'}
             fieldName={matchType}
             size={isCustomRow ? 'medium' : 'small'}
+            isCustomRow={isCustomRow}
+            fieldGroupIndex={fieldGroupIndex}
           />
         </Grid>
         {isCustomRow && (

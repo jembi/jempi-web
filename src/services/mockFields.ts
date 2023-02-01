@@ -163,7 +163,6 @@ const FIELDS_CONFIG: Fields = [
   //     '/patient/:uid',
   //   ],
   //   accessLevel: []
-
   // }
   {
     fieldName: 'siteCode',

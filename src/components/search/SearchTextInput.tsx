@@ -9,6 +9,9 @@ interface SearchTextInputProps {
   disabled?: boolean
   sx: SxProps<Theme>
   size: 'small' | 'medium' | undefined
+  fieldGroupIndex?: number
+  index: number
+  isCustomRow?: boolean
 }
 
 const SearchTextInput: React.FC<SearchTextInputProps> = ({
@@ -18,8 +21,14 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
   label,
   disabled = false,
   sx = { width: 220 },
-  size = 'small'
+  size = 'small',
+  index,
+  fieldGroupIndex,
+  isCustomRow
 }) => {
+  
+  const fieldIdentifier = isCustomRow ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`: `parameters[${index}].${name}`
+  
   return (
     <TextField
       id="outlined-basic"
@@ -28,7 +37,7 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
       size={size}
       value={value}
       onChange={onChange}
-      name={name}
+      name={fieldIdentifier}
       sx={sx}
       disabled={disabled}
     />
