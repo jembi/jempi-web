@@ -8,16 +8,10 @@ import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { SearchQuery } from '../../types/SimpleSearch'
+import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
-import SimpleSearchRow from './SimpleSearchRow'
-
-enum FlagLabel {
-  ALL_RECORDS = 'ALL RECORDS',
-  GOLDEN_ONLY = 'GOLDEN ONLY',
-  PATIENT_ONLY = 'PATIENT ONLY'
-}
+import SearchRow from './SearchRow'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
@@ -121,7 +115,7 @@ const SimpleSearch: React.FC = () => {
                       {availableFields.map((field, index) => {
                         const parameter = values.parameters[index]
                         return (
-                          <SimpleSearchRow
+                          <SearchRow
                             field={field}
                             parameter={parameter}
                             index={index}

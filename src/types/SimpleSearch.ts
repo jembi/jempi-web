@@ -4,13 +4,18 @@ export interface SearchParameter {
   distance: number
 }
 
-export interface CustomSearchParameters extends SearchParameter {
-  operator: string
+export interface SimpleSearchQuery {
+  parameters: SearchParameter[]
 }
-
 export interface CustomSearchQuery {
-  parameters: CustomSearchParameters[]
+  $or: SimpleSearchQuery[]
 }
 export interface SearchQuery {
   parameters: SearchParameter[]
+}
+
+export enum FlagLabel {
+  ALL_RECORDS = 'ALL RECORDS',
+  GOLDEN_ONLY = 'GOLDEN ONLY',
+  PATIENT_ONLY = 'PATIENT ONLY'
 }

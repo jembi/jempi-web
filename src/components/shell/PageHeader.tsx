@@ -22,7 +22,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   description
 }) => {
   return (
-    <Grid container justifyContent="space-between">
+    <Grid container justifyContent="space-between" >
       <Grid item container direction="column" xs="auto">
         <Grid item>
           <Breadcrumbs>
@@ -72,7 +72,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           )}
         </Grid>
       </Grid>
-      <Grid item container spacing={2} xs="auto">
+      <Grid item container spacing={1} xs="auto">
         {buttons?.map((button, idx) => (
           <Grid key={idx} item>
             {button}
