@@ -2,10 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Grid,
   IconButton,
-  SelectChangeEvent,
-  SxProps,
-  Theme,
-  Typography
+  SelectChangeEvent, Typography
 } from '@mui/material'
 import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
@@ -51,16 +48,14 @@ const SearchRow: React.FC<SearchRowProps> = ({
     { value: 3, label: 'High Fuzziness' }
   ]
 
-  const [newField, setNewField] = useState<DisplayField | undefined>(undefined)
+  const [fieldToSelect, setFieldToSelect] = useState<DisplayField | undefined>(undefined)
   const [matchType, setMatchType] = useState<string>('')
 
   const handleFieldNameChange = (event: SelectChangeEvent) => {
 
     const field = availableFields.find(obj => obj.fieldName === event.target.value)
 
-    console.log(field)
-
-    setNewField(field)
+    setFieldToSelect(field)
     onChange && onChange(event as React.ChangeEvent<any>)
 
   }
@@ -90,7 +85,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
         {isCustomRow && (
           <Grid item>
             <SearchSelectField
-              fieldName={newField ? newField!.fieldName : ''}
+              fieldName={fieldToSelect ? fieldToSelect!.fieldName : ''}
               onChange={handleFieldNameChange}
               index={index}
               options={availableFields.map(value => ({
@@ -105,11 +100,11 @@ const SearchRow: React.FC<SearchRowProps> = ({
           </Grid>
         )}
         <Grid item>
-          {newField && newField?.fieldType === 'Date' ? (
+          {fieldToSelect && fieldToSelect?.fieldType === 'Date' ? (
             <SearchDateInput
               label={
                 isCustomRow
-                  ? newField?.fieldLabel || 'Select a field type'
+                  ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
@@ -127,7 +122,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
             <SearchTextInput
               label={
                 isCustomRow 
-                  ? newField?.fieldLabel || 'Select a field type'
+                  ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
