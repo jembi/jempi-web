@@ -59,7 +59,7 @@ const routes: Route[] = [
       },
       { path: 'search', element: <SimpleSearch /> },
       { path: 'custom-search', element: <CustomSearch/>},
-      {path: 'search-results/golden', element: <GoldenSearchResult/>},
+      { path: 'search-results/golden', element: <GoldenSearchResult/>},
       { path: 'import', element: <Import /> },
       {
         path: 'golden-record',

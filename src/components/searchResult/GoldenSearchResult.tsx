@@ -18,6 +18,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import { visuallyHidden } from '@mui/utils'
@@ -25,7 +26,9 @@ import { MakeGenerics, useSearch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React from 'react'
+import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
+import { DisplayField } from '../../types/Fields'
 import {
   CustomGoldenRecord,
   Data,
@@ -34,23 +37,21 @@ import {
 import { SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
-import TablePagination from '@mui/material/TablePagination'
 
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof CustomGoldenRecord
   ) => void
-  order: Order
-  orderBy: string
+  sortAsc: boolean
+  sortBy: string
   rowCount: number
+  availableFields: DisplayField[]
 }
 
 interface HeadCell {
-  disablePadding: boolean
   id: keyof CustomGoldenRecord
   label: string
-  numeric: boolean
 }
 
 type ResultProps = MakeGenerics<{
@@ -64,32 +65,28 @@ type Order = 'asc' | 'desc'
 const headCells: readonly HeadCell[] = [
   {
     id: 'uid',
-    numeric: false,
-    disablePadding: true,
     label: 'Golden ID'
   },
   {
     id: 'givenName',
-    numeric: false,
-    disablePadding: false,
     label: 'First Name'
   },
   {
     id: 'familyName',
-    numeric: false,
-    disablePadding: false,
     label: 'Last Name'
   },
   {
     id: 'gender',
-    numeric: false,
-    disablePadding: false,
     label: 'Genre'
   }
 ]
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props
+  const { sortAsc, sortBy, onRequestSort, availableFields } = props
+
+  let order: 'asc' | 'desc' = sortAsc ? 'asc' : 'desc'
+
+  console.log(sortBy)
   const createSortHandler =
     (property: keyof CustomGoldenRecord) =>
     (event: React.MouseEvent<unknown>) => {
@@ -100,21 +97,24 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         <TableCell align="center"></TableCell>
-        {headCells.map(headCell => (
+        {availableFields.map(headCell => (
           <TableCell
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
+            key={headCell.fieldName}
+            sortDirection={sortBy === headCell.fieldName ? order : false}
             align="left"
             padding="none"
             width={'295px'}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              active={sortBy === headCell.fieldName}
+              direction={sortBy === headCell.fieldName ? order : 'asc'}
+              onClick={createSortHandler(
+                headCell.fieldName as keyof CustomGoldenRecord
+              )}
             >
-              {headCell.label}
-              {orderBy === headCell.id ? (
+              {headCell.fieldName === 'uid' ? 'Golden ID' : headCell.fieldLabel}
+
+              {sortBy === headCell.fieldName ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
@@ -206,10 +206,12 @@ function Row(props: { row: patientRecord }) {
 }
 
 const SearchResult: React.FC = () => {
+  const { availableFields } = useAppConfig()
+
+  console.log(availableFields)
+
   const searchParams = useSearch<ResultProps>()
 
-  const [order, setOrder] = React.useState<Order>('asc')
-  const [orderBy, setOrderBy] = React.useState<keyof CustomGoldenRecord>('uid')
   const [payload, setPayLoad] = React.useState<SearchQuery>(
     searchParams.payload!
   )
@@ -227,10 +229,7 @@ const SearchResult: React.FC = () => {
     event: React.MouseEvent<unknown>,
     property: keyof CustomGoldenRecord
   ) => {
-    const isAsc = orderBy === property && order === 'asc'
-
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
+    const isAsc = payload.sortBy === property && payload.sortAsc
 
     const updatedPayload: SearchQuery = {
       ...payload!,
@@ -269,18 +268,15 @@ const SearchResult: React.FC = () => {
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <EnhancedTableHead
-            order={order}
-            orderBy={orderBy}
+            sortAsc={payload.sortAsc}
+            sortBy={payload.sortBy}
             onRequestSort={HandleRequestSort}
             rowCount={patientRecord!.records!.data!.length}
+            availableFields={availableFields}
           />
           <TableBody>
             {patientRecord!.records!.data!.map((row, index) => {
-              return (
-                <>
-                  <Row key={index} row={row} />
-                </>
-              )
+              return <Row key={index} row={row} />
             })}
           </TableBody>
         </Table>

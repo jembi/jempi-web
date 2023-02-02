@@ -9,7 +9,6 @@ const ROUTES = {
   CREATE_GOLDEN_RECORD: '/Unlink',
   LINK_RECORD: '/Link',
   POST_SIMPLE_SEARCH: '/search/golden',
-  POST_SEARCH_REQUEST: '/SearchRequest',
   CURRENT_USER: '/current-user',
   VALIDATE_OAUTH: '/authenticate',
   LOGOUT: '/logout',

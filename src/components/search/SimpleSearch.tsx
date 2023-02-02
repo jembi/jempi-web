@@ -16,18 +16,6 @@ import { Link as LocationLink } from '@tanstack/react-location'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
-  //TODO: find a better way of handling error while posting the search request
-  const postSearchQuery = useMutation({
-    mutationFn: ApiClient.postSimpleSearchQuery,
-    onError: (error: AxiosError) => {
-      console.log(`Oops! Error getting search result: ${error.message}`)
-    }
-  })
-
-  function handleOnFormSubmit(value: SearchQuery) {
-    postSearchQuery.mutate(value)
-    console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
-  }
 
   const initialValues: SearchQuery = {
     parameters: availableFields.map(({ fieldType, fieldName }) => {
@@ -81,9 +69,7 @@ const SimpleSearch: React.FC = () => {
       <Divider />
       <Formik
         initialValues={initialValues}
-        onSubmit={values => {
-          handleOnFormSubmit(values)
-        }}
+        onSubmit={() => console.log('Submited')}
       >
         {({ values, handleChange }) => (
           <Form>
@@ -142,7 +128,6 @@ const SimpleSearch: React.FC = () => {
                         color: 'white',
                         '&:hover': { backgroundColor: '#375982' }
                       }}
-                      type="submit"
                     >
                       Search
                     </Button>
