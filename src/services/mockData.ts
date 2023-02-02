@@ -1,7 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import { GoldenRecord, PatientRecord } from '../types/PatientRecord'
-import { SearchResultProps, SearchResultsLinkedRecordsProps } from '../types/SearchResults'
+import { Data } from '../types/SearchResults'
 import { User } from '../types/User'
 
 const notifications: Notification[] = [
@@ -17,133 +17,105 @@ const notifications: Notification[] = [
   }
 ]
 
-const searchResult: SearchResultProps[] = [
+const searchResult: Data =
   {
-    id: 'G1001',
-    firstName: 'Joe',
-    lastName: 'Bernard',
-    gender: 'Male'
-  },
-  {
-    id: 'G1002',
-    firstName: 'Louis',
-    lastName: 'Muluer',
-    gender: 'Male'
-  },
-  {
-    id: 'G1003',
-    firstName: 'Hope',
-    lastName: 'Krood',
-    gender: 'Female'
-  },
-  {
-    id: 'G1004',
-    firstName: 'Francine',
-    lastName: 'Melechon',
-    gender: 'Female'
-  },
-  {
-    id: 'G1005',
-    firstName: 'Morris',
-    lastName: 'Van Der Sarr',
-    gender: 'Male'
-  }
-]
+  records:{
+       data:[
+          {
+             customGoldenRecord:{
+                auxId:"rec-00000000-aaa-0",
+                city:"Nairobi",
+                dob:"20171114",
+                familyName:"Onyango",
+                gender:"male",
+                givenName:"Endalekachew",
+                nationalId:"198804042874913",
+                phoneNumber:"091-749-4674",
+                sourceId:[
+                   
+                ],
+                uid:"0x5"
+             },
+             mpiEntityList:[
+                {
+                   entity:{
+                      auxId:"rec-00000000-aaa-0",
+                      city:"Nairobi",
+                      dob:"20171114",
+                      familyName:"Onyango",
+                      gender:"male",
+                      givenName:"Endalekachew",
+                      nationalId:"198804042874913",
+                      phoneNumber:"091-749-4674",
+                      uid:"0x4"
+                   }
+                },
+                {
+                   entity:{
+                      auxId:"rec-00000000-bbb-0",
+                      city:"Nairobi",
+                      dob:"20171114",
+                      familyName:"Onyango",
+                      gender:"male",
+                      givenName:"Endalekachew",
+                      nationalId:"198804042874913",
+                      phoneNumber:"091-749-4674",
+                      uid:"0x6"
+                   }
+                }
+             ]
+          },
+          {
+            customGoldenRecord:{
+               auxId:"rec-00000000-aaa-1",
+               city:"Nairobi",
+               dob:"20171114",
+               familyName:"Onyango",
+               gender:"male",
+               givenName:"Endalekachew",
+               nationalId:"198804042874913",
+               phoneNumber:"091-749-4674",
+               sourceId:[
+                  
+               ],
+               uid:"0x9"
+            },
+            mpiEntityList:[
+               {
+                  entity:{
+                     auxId:"rec-00000000-aaa-5",
+                     city:"Nairobi",
+                     dob:"20171114",
+                     familyName:"Onyango",
+                     gender:"male",
+                     givenName:"Endalekachew",
+                     nationalId:"198804042874913",
+                     phoneNumber:"091-749-4674",
+                     uid:"0x10"
+                  }
+               },
+               {
+                  entity:{
+                     auxId:"rec-00000000-bbb-0",
+                     city:"Nairobi",
+                     dob:"20171114",
+                     familyName:"Onyango",
+                     gender:"male",
+                     givenName:"Endalekachew",
+                     nationalId:"198804042874913",
+                     phoneNumber:"091-749-4674",
+                     uid:"0x20"
+                  }
+               }
+            ]
+         }
+       ],
+       pagination:{
+          total: 100
+       }
+    }
+ }
 
-const linkedRecord: SearchResultsLinkedRecordsProps[] = [
-  {
-    patient: 'G1005', 
-    linkedRecords: [
-      {
-        id: 'G1001',
-        firstName: 'Surpris',
-        lastName: 'Beacoup',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Titche',
-        lastName: 'Efula',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Maintenant',
-        lastName: 'Jamais',
-        gender: 'Male',
-      }
-    ]
-  },
-  {
-    patient: 'G1004', 
-    linkedRecords: [
-      {
-        id: 'G1001',
-        firstName: 'Surpris',
-        lastName: 'Beacoup',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Titche',
-        lastName: 'Efula',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Maintenant',
-        lastName: 'Jamais',
-        gender: 'Male',
-      }
-    ]
-  },  
-  {
-    patient: 'G1003', 
-    linkedRecords: [
-      {
-        id: 'G1001',
-        firstName: 'Surpris',
-        lastName: 'Beacoup',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Titche',
-        lastName: 'Efula',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Maintenant',
-        lastName: 'Jamais',
-        gender: 'Male',
-      }
-    ]
-  },
-  {
-    patient: 'G1002', 
-    linkedRecords: [
-      {
-        id: 'G1001',
-        firstName: 'Surpris',
-        lastName: 'Beacoup',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Titche',
-        lastName: 'Efula',
-        gender: 'Male',
-      },
-      {
-        id: 'G1001',
-        firstName: 'Maintenant',
-        lastName: 'Jamais',
-        gender: 'Male',
-      }
-    ]
-  }
-]
 const auditTrail: AuditTrailRecord[] = [
   {
     process: 'Create user',
@@ -288,7 +260,7 @@ const mockData = {
   patientRecords,
   currentUser,
   linkedRecords,
-  searchResult
+  searchResult,
 }
 
 export default mockData

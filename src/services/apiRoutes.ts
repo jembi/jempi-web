@@ -8,14 +8,14 @@ const ROUTES = {
   UPDATE_NOTIFICATION: '/NotificationRequest',
   CREATE_GOLDEN_RECORD: '/Unlink',
   LINK_RECORD: '/Link',
-  POST_SIMPLE_SEARCH: '/SimpleSearchRequest',
+  POST_SIMPLE_SEARCH: '/search/golden',
   POST_SEARCH_REQUEST: '/SearchRequest',
   CURRENT_USER: '/current-user',
   VALIDATE_OAUTH: '/authenticate',
   LOGOUT: '/logout',
   AUDIT_TRAIL: '/Audit-trail',
   UPLOAD: '/Upload',
-  UPDATE_PATIENT_RECORD: '/Patient'
+  UPDATE_PATIENT_RECORD: '/Patient',
 }
 
 export default ROUTES

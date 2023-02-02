@@ -26,15 +26,20 @@ import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React from 'react'
 import ApiClient from '../../services/ApiClient'
-import { SearchResultProps, SearchResultsLinkedRecordsProps } from '../../types/SearchResults'
+import {
+  CustomGoldenRecord,
+  Data,
+  patientRecord
+} from '../../types/SearchResults'
 import { SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
+import TablePagination from '@mui/material/TablePagination'
+
 interface EnhancedTableProps {
-  numSelected: number
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof SearchResultProps
+    property: keyof CustomGoldenRecord
   ) => void
   order: Order
   orderBy: string
@@ -43,14 +48,14 @@ interface EnhancedTableProps {
 
 interface HeadCell {
   disablePadding: boolean
-  id: keyof SearchResultProps
+  id: keyof CustomGoldenRecord
   label: string
   numeric: boolean
 }
 
 type ResultProps = MakeGenerics<{
   Search: {
-    parameters: SearchQuery
+    payload: SearchQuery
   }
 }>
 
@@ -58,19 +63,19 @@ type Order = 'asc' | 'desc'
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'uid',
     numeric: false,
     disablePadding: true,
     label: 'Golden ID'
   },
   {
-    id: 'firstName',
+    id: 'givenName',
     numeric: false,
     disablePadding: false,
     label: 'First Name'
   },
   {
-    id: 'lastName',
+    id: 'familyName',
     numeric: false,
     disablePadding: false,
     label: 'Last Name'
@@ -83,34 +88,11 @@ const headCells: readonly HeadCell[] = [
   }
 ]
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1
-  }
-  return 0
-}
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props
   const createSortHandler =
-    (property: keyof SearchResultProps) =>
+    (property: keyof CustomGoldenRecord) =>
     (event: React.MouseEvent<unknown>) => {
-      console.log(property)
       onRequestSort(event, property)
     }
 
@@ -145,7 +127,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   )
 }
 
-function Row(props: { row: SearchResultProps }) {
+function Row(props: { row: patientRecord }) {
   const { row } = props
   const [open, setOpen] = React.useState(false)
 
@@ -162,22 +144,24 @@ function Row(props: { row: SearchResultProps }) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row" align="left" padding="none">
-          <Link key={row.id}>{row.id}</Link>
+          <Link key={row.customGoldenRecord.uid}>
+            {row.customGoldenRecord.uid}
+          </Link>
         </TableCell>
         <TableCell align="left" padding="none" width={'295px'}>
-          {row.firstName}
+          {row.customGoldenRecord.givenName}
         </TableCell>
         <TableCell align="left" padding="none" width={'295px'}>
-          {row.lastName}
+          {row.customGoldenRecord.familyName}
         </TableCell>
         <TableCell align="left" padding="none" width={'295px'}>
-          {row.gender}
+          {row.customGoldenRecord.gender}
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ padding: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box>
+            <Box sx={{ mb: 1 }}>
               <Grid container direction={'row'}>
                 <Grid item minWidth={'66px'}></Grid>
                 <Typography variant="h6" gutterBottom component="div">
@@ -186,7 +170,7 @@ function Row(props: { row: SearchResultProps }) {
               </Grid>
               <Table size="small" aria-label="purchases">
                 <TableBody>
-                  {rows.map((linkedRecord, index) => (
+                  {row.mpiEntityList.map((linkedRecord, index) => (
                     <TableRow key={index} sx={{ mt: 2 }}>
                       <TableCell align="center" width={'70px'} />
                       <TableCell
@@ -196,18 +180,18 @@ function Row(props: { row: SearchResultProps }) {
                         padding="none"
                         width={'295px'}
                       >
-                        <Link key={linkedRecord.goldenID}>
-                          {'linkedRecord.id'}
+                        <Link key={linkedRecord.entity.uid}>
+                          {linkedRecord.entity.uid}
                         </Link>
                       </TableCell>
                       <TableCell align="left" padding="none" width={'295px'}>
-                        {'linkedRecord.firstName'}
+                        {linkedRecord.entity.givenName}
                       </TableCell>
                       <TableCell align="left" padding="none" width={'295px'}>
-                        {'linkedRecord.lastName'}
+                        {linkedRecord.entity.familyName}
                       </TableCell>
                       <TableCell align="left" padding="none" width={'295px'}>
-                        {'linkedRecord.gender'}
+                        {linkedRecord.entity.gender}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -222,49 +206,44 @@ function Row(props: { row: SearchResultProps }) {
 }
 
 const SearchResult: React.FC = () => {
-  const [order, setOrder] = React.useState<Order>('asc')
-  const [orderBy, setOrderBy] = React.useState<keyof SearchResultProps>('id')
-
-  //WILL BE USED FOR PAGINATION
-  const [selected, setSelected] = React.useState<readonly string[]>([])
-  const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
   const searchParams = useSearch<ResultProps>()
-  const { data, isLoading } = useQuery<
-    SearchResultProps[],
-    AxiosError
-  >({
-    queryKey: ['searchResult', searchParams],
+
+  const [order, setOrder] = React.useState<Order>('asc')
+  const [orderBy, setOrderBy] = React.useState<keyof CustomGoldenRecord>('uid')
+  const [payload, setPayLoad] = React.useState<SearchQuery>(
+    searchParams.payload!
+  )
+  const [page, setPage] = React.useState(0)
+
+  const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
+    queryKey: ['searchResult', payload],
     queryFn: () => {
-      return ApiClient.postSimpleSearchQuery(searchParams.parameters!)
+      return ApiClient.postSimpleSearchQuery(payload)
     },
     refetchOnWindowFocus: false
   })
 
-  const { data: LinkedRecord } = useQuery<
-    SearchResultsLinkedRecordsProps[],
-    AxiosError
-  >({
-    queryKey: ['linkedRecord'],
-    queryFn: () => {
-      return ApiClient.postSimpleSearchQuery(searchParams.parameters!)
-    },
-    refetchOnWindowFocus: false
-  })
-
-  const handleRequestSort = (
+  const HandleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof SearchResultProps
+    property: keyof CustomGoldenRecord
   ) => {
     const isAsc = orderBy === property && order === 'asc'
+
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
+
+    const updatedPayload: SearchQuery = {
+      ...payload!,
+      sortAsc: isAsc ? false : true,
+      sortBy: property
+    }
+
+    setPayLoad(updatedPayload)
   }
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data!.length) : 0
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage)
+  }
 
   if (isLoading) {
     return <Loading />
@@ -290,35 +269,29 @@ const SearchResult: React.FC = () => {
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <EnhancedTableHead
-            numSelected={selected.length}
             order={order}
             orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            rowCount={data!.length}
+            onRequestSort={HandleRequestSort}
+            rowCount={patientRecord!.records!.data!.length}
           />
           <TableBody>
-            {data
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .sort(getComparator(order, orderBy))
-              .map((row, index) => {
-                return (
-                  <>
-                    <Row key={index} row={row} />
-                  </>
-                )
-              })}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: (dense ? 33 : 53) * emptyRows
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
+            {patientRecord!.records!.data!.map((row, index) => {
+              return (
+                <>
+                  <Row key={index} row={row} />
+                </>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        count={patientRecord!.records!.pagination.total}
+        rowsPerPage={10}
+        page={page}
+        onPageChange={handleChangePage}
+      />
     </Container>
   )
 }

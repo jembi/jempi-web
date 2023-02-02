@@ -42,7 +42,11 @@ const SimpleSearch: React.FC = () => {
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
         distance: 0
       }
-    })
+    }),
+    sortBy: '',
+    sortAsc: true,
+    offset: 0,
+    limit: 10
   }
 
   return (
@@ -136,7 +140,7 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <LocationLink to="/search-results" search={{parameters: values.parameters}} style={{ textDecoration: 'none' }}>
+                  <LocationLink to="/search-results" search={{payload: values}} style={{ textDecoration: 'none' }}>
                     <Button
                       variant="contained"
                       sx={{

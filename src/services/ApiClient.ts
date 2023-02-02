@@ -135,9 +135,9 @@ class ApiClient {
       .then(res => res.data)
   }
 
-  async postSimpleSearchQuery(request: SearchQuery) {
+  async postSimpleSearchQuery(request: SearchQuery) {    
     return await client
-      .post(ROUTES.POST_SEARCH_REQUEST, request)
+      .post(ROUTES.POST_SIMPLE_SEARCH, request)
       .then(res => res.data)
   }
 
