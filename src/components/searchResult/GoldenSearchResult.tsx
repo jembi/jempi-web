@@ -86,7 +86,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
   let order: 'asc' | 'desc' = sortAsc ? 'asc' : 'desc'
 
-  console.log(sortBy)
   const createSortHandler =
     (property: keyof CustomGoldenRecord) =>
     (event: React.MouseEvent<unknown>) => {
@@ -128,13 +127,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 function Row(props: { row: patientRecord }) {
+  const { availableFields } = useAppConfig()
+
   const { row } = props
   const [open, setOpen] = React.useState(false)
 
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell width={'8px'}>
+        <TableCell width={'8px'} key={'arrow'}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -143,20 +144,35 @@ function Row(props: { row: patientRecord }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row" align="left" padding="none">
-          <Link key={row.customGoldenRecord.uid}>
-            {row.customGoldenRecord.uid}
-          </Link>
-        </TableCell>
-        <TableCell align="left" padding="none" width={'295px'}>
-          {row.customGoldenRecord.givenName}
-        </TableCell>
-        <TableCell align="left" padding="none" width={'295px'}>
-          {row.customGoldenRecord.familyName}
-        </TableCell>
-        <TableCell align="left" padding="none" width={'295px'}>
-          {row.customGoldenRecord.gender}
-        </TableCell>
+
+        {availableFields.map((field, index) => (
+          <>
+            {index < 1 ? (
+              <TableCell component="th" scope="row" align="left" padding="none">
+                <Link key={index}>
+                  {
+                    row.customGoldenRecord[
+                      field.fieldName as keyof CustomGoldenRecord
+                    ]
+                  }
+                </Link>
+              </TableCell>
+            ) : (
+              <TableCell
+                align="left"
+                padding="none"
+                width={'295px'}
+                key={index}
+              >
+                {
+                  row.customGoldenRecord[
+                    field.fieldName as keyof CustomGoldenRecord
+                  ]
+                }
+              </TableCell>
+            )}
+          </>
+        ))}
       </TableRow>
       <TableRow>
         <TableCell style={{ padding: 0 }} colSpan={12}>
@@ -173,26 +189,40 @@ function Row(props: { row: patientRecord }) {
                   {row.mpiEntityList.map((linkedRecord, index) => (
                     <TableRow key={index} sx={{ mt: 2 }}>
                       <TableCell align="center" width={'70px'} />
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align="left"
-                        padding="none"
-                        width={'295px'}
-                      >
-                        <Link key={linkedRecord.entity.uid}>
-                          {linkedRecord.entity.uid}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left" padding="none" width={'295px'}>
-                        {linkedRecord.entity.givenName}
-                      </TableCell>
-                      <TableCell align="left" padding="none" width={'295px'}>
-                        {linkedRecord.entity.familyName}
-                      </TableCell>
-                      <TableCell align="left" padding="none" width={'295px'}>
-                        {linkedRecord.entity.gender}
-                      </TableCell>
+                      {availableFields.map((field, index) => (
+                        <>
+                          {index < 1 ? (
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              align="left"
+                              padding="none"
+                              width={'295px'}
+                            >
+                              <Link key={index}>
+                                {
+                                  linkedRecord.entity[
+                                    field.fieldName as keyof CustomGoldenRecord
+                                  ]
+                                }
+                              </Link>
+                            </TableCell>
+                          ) : (
+                            <TableCell
+                              align="left"
+                              padding="none"
+                              width={'295px'}
+                              key={index}
+                            >
+                              {
+                                linkedRecord.entity[
+                                  field.fieldName as keyof CustomGoldenRecord
+                                ]
+                              }
+                            </TableCell>
+                          )}
+                        </>
+                      ))}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -207,8 +237,6 @@ function Row(props: { row: patientRecord }) {
 
 const SearchResult: React.FC = () => {
   const { availableFields } = useAppConfig()
-
-  console.log(availableFields)
 
   const searchParams = useSearch<ResultProps>()
 
