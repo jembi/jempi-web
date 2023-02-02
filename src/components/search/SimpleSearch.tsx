@@ -140,7 +140,7 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <LocationLink to="/search-results" search={{payload: values}} style={{ textDecoration: 'none' }}>
+                  <LocationLink to="/search-results/golden" search={{payload: values}} style={{ textDecoration: 'none' }}>
                     <Button
                       variant="contained"
                       sx={{
