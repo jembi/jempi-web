@@ -16,6 +16,7 @@ const ROUTES = {
   AUDIT_TRAIL: '/Audit-trail',
   UPLOAD: '/Upload',
   UPDATE_PATIENT_RECORD: '/Patient',
+  POST_CUSTOM_SEARCH: '/CustomSearchRequest',
 }
 
 export default ROUTES

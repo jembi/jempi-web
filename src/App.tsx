@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
 import AuditTrail from './components/auditTrail/AuditTrail'
+import CustomSearch from './components/customSearch/CustomSearch'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import NotFound from './components/error/NotFound'
 import HomePage from './components/home/HomePage'
@@ -57,6 +58,7 @@ const routes: Route[] = [
         element: <MatchDetails />
       },
       { path: 'search', element: <SimpleSearch /> },
+      { path: 'custom-search', element: <CustomSearch/>},
       {path: 'search-results/golden', element: <GoldenSearchResult/>},
       { path: 'import', element: <Import /> },
       {

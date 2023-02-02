@@ -4,7 +4,7 @@ import AuditTrailRecord from '../types/AuditTrail'
 import { Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
-import { SearchQuery } from '../types/SimpleSearch'
+import { CustomSearchQuery, SearchQuery } from '../types/SimpleSearch'
 import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
 import axiosInstance from './axios'
@@ -173,6 +173,11 @@ class ApiClient {
   uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
     await client
       .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
+      .then(res => res.data)
+  }
+  async postCustomSearchQuery(request: CustomSearchQuery) {
+    return await client
+      .post(ROUTES.POST_CUSTOM_SEARCH, request)
       .then(res => res.data)
   }
 }
