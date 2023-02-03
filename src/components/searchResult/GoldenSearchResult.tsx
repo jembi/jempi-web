@@ -32,7 +32,7 @@ import { DisplayField } from '../../types/Fields'
 import {
   CustomGoldenRecord,
   Data,
-  patientRecord
+  PatientRecord
 } from '../../types/SearchResults'
 import { SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
@@ -59,27 +59,6 @@ type ResultProps = MakeGenerics<{
     payload: SearchQuery
   }
 }>
-
-type Order = 'asc' | 'desc'
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'uid',
-    label: 'Golden ID'
-  },
-  {
-    id: 'givenName',
-    label: 'First Name'
-  },
-  {
-    id: 'familyName',
-    label: 'Last Name'
-  },
-  {
-    id: 'gender',
-    label: 'Genre'
-  }
-]
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { sortAsc, sortBy, onRequestSort, availableFields } = props
@@ -126,7 +105,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   )
 }
 
-function Row(props: { row: patientRecord }) {
+function Row(props: { row: PatientRecord }) {
   const { availableFields } = useAppConfig()
 
   const { row } = props

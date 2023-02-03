@@ -1,4 +1,3 @@
-
 export interface CustomGoldenRecord {
   auxId: string
   city: string
@@ -17,8 +16,8 @@ export interface MpiEntityList {
   entity: CustomGoldenRecord
 }
 
-export interface patientRecord {
-  
+export interface PatientRecord {
+
     customGoldenRecord: CustomGoldenRecord
     mpiEntityList: MpiEntityList[]
 
@@ -26,7 +25,7 @@ export interface patientRecord {
 
 export interface Data {
   records: {
-    data: patientRecord[],
+    data: PatientRecord[],
     pagination: {
       total: number
     }
