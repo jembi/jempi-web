@@ -58,8 +58,16 @@ const routes: Route[] = [
         element: <MatchDetails />
       },
       { path: 'search', element: <SimpleSearch /> },
-      { path: 'custom-search', element: <CustomSearch/>},
-      { path: 'search-results/golden', element: <GoldenSearchResult/>},
+      { path: 'custom-search', element: <CustomSearch /> },
+      {
+        path: 'search-results',
+        children: [
+          {
+            path: 'golden',
+            element: <GoldenSearchResult />
+          }
+        ]
+      },
       { path: 'import', element: <Import /> },
       {
         path: 'golden-record',

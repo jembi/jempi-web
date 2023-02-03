@@ -1,53 +1,25 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import SearchIcon from '@mui/icons-material/Search'
-import {
-  Box,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  TableSortLabel
-} from '@mui/material'
-import Collapse from '@mui/material/Collapse'
+import { Container, Link } from '@mui/material'
 import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TablePagination from '@mui/material/TablePagination'
-import TableRow from '@mui/material/TableRow'
-import Typography from '@mui/material/Typography'
-import { visuallyHidden } from '@mui/utils'
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridSortDirection,
+  GridSortModel
+} from '@mui/x-data-grid'
 import { MakeGenerics, useSearch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { DisplayField } from '../../types/Fields'
-import {
-  CustomGoldenRecord,
-  Data,
-  PatientRecord
-} from '../../types/SearchResults'
+import { Data } from '../../types/SearchResults'
 import { SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
-
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof CustomGoldenRecord
-  ) => void
-  sortAsc: boolean
-  sortBy: string
-  rowCount: number
-  availableFields: DisplayField[]
-}
+import { Link as LocationLink } from '@tanstack/react-location'
 
 type ResultProps = MakeGenerics<{
   Search: {
@@ -55,169 +27,33 @@ type ResultProps = MakeGenerics<{
   }
 }>
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { sortAsc, sortBy, onRequestSort, availableFields } = props
-
-  let order: 'asc' | 'desc' = sortAsc ? 'asc' : 'desc'
-
-  const createSortHandler =
-    (property: keyof CustomGoldenRecord) =>
-    (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property)
-    }
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell align="center"></TableCell>
-        {availableFields.map(headCell => (
-          <TableCell
-            key={headCell.fieldName}
-            sortDirection={sortBy === headCell.fieldName ? order : false}
-            align="left"
-            padding="none"
-            width={'295px'}
-          >
-            <TableSortLabel
-              active={sortBy === headCell.fieldName}
-              direction={sortBy === headCell.fieldName ? order : 'asc'}
-              onClick={createSortHandler(
-                headCell.fieldName as keyof CustomGoldenRecord
-              )}
-            >
-              {headCell.fieldName === 'uid' ? 'Golden ID' : headCell.fieldLabel}
-
-              {sortBy === headCell.fieldName ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  )
-}
-
-function Row(props: { row: PatientRecord }) {
-  const { availableFields } = useAppConfig()
-
-  const { row } = props
-  const [open, setOpen] = React.useState(false)
-
-  return (
-    <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell width={'8px'} key={'arrow'}>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-
-        {availableFields.map((field, index) => (
-          <>
-            {index < 1 ? (
-              <TableCell component="th" scope="row" align="left" padding="none">
-                <Link key={index}>
-                  {
-                    row.customGoldenRecord[
-                      field.fieldName as keyof CustomGoldenRecord
-                    ]
-                  }
-                </Link>
-              </TableCell>
-            ) : (
-              <TableCell
-                align="left"
-                padding="none"
-                width={'295px'}
-                key={index}
-              >
-                {
-                  row.customGoldenRecord[
-                    field.fieldName as keyof CustomGoldenRecord
-                  ]
-                }
-              </TableCell>
-            )}
-          </>
-        ))}
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ padding: 0 }} colSpan={12}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ mb: 1 }}>
-              <Grid container direction={'row'}>
-                <Grid item minWidth={'66px'}></Grid>
-                <Typography variant="h6" gutterBottom component="div">
-                  Linked Records
-                </Typography>
-              </Grid>
-              <Table size="small" aria-label="purchases">
-                <TableBody>
-                  {row.mpiEntityList.map((linkedRecord, index) => (
-                    <TableRow key={index} sx={{ mt: 2 }}>
-                      <TableCell align="center" width={'70px'} />
-                      {availableFields.map((field, index) => (
-                        <>
-                          {index < 1 ? (
-                            <TableCell
-                              component="th"
-                              scope="row"
-                              align="left"
-                              padding="none"
-                              width={'295px'}
-                            >
-                              <Link key={index}>
-                                {
-                                  linkedRecord.entity[
-                                    field.fieldName as keyof CustomGoldenRecord
-                                  ]
-                                }
-                              </Link>
-                            </TableCell>
-                          ) : (
-                            <TableCell
-                              align="left"
-                              padding="none"
-                              width={'295px'}
-                              key={index}
-                            >
-                              {
-                                linkedRecord.entity[
-                                  field.fieldName as keyof CustomGoldenRecord
-                                ]
-                              }
-                            </TableCell>
-                          )}
-                        </>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  )
+interface sortingPropertiesProps {
+  sortBy: string
+  order: GridSortDirection
 }
 
 const SearchResult: React.FC = () => {
+  const searchParams = useSearch<ResultProps>()
   const { availableFields } = useAppConfig()
 
-  const searchParams = useSearch<ResultProps>()
+  const columns: GridColDef[] = availableFields.map(({ fieldName, fieldLabel }) => {
+    return {
+      field: fieldName,
+      headerName: fieldName === 'uid' ? 'Golden ID' : fieldLabel,
+      minWidth: 150,
+      flex: 2,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: fieldName === 'uid' ? (params: GridRenderCellParams<string>) => {
+        return <Link href={`/golden-record/${params.row.uid}`}  key={params.row.uid}>{params.row.uid}</Link>
+      }: undefined,
+      filterable: false
+    }
+  })
 
   const [payload, setPayLoad] = React.useState<SearchQuery>(
     searchParams.payload!
   )
-  const [page, setPage] = React.useState(0)
 
   const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
     queryKey: ['searchResult', payload],
@@ -227,68 +63,60 @@ const SearchResult: React.FC = () => {
     refetchOnWindowFocus: false
   })
 
-  const HandleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof CustomGoldenRecord
-  ) => {
-    const isAsc = payload.sortBy === property && payload.sortAsc
+  if (isLoading) {
+    return <Loading />
+  }
+
+  const initialSortingValues: sortingPropertiesProps = {
+    sortBy: '',
+    order: 'asc'
+  }
+  const handleRequestToSort = (model: GridSortModel) => {
+    const sortingProperties = model?.reduce(
+      (acc, curr) => ({
+        sortBy: curr.field,
+        order: curr.sort
+      }),
+      initialSortingValues
+    )
 
     const updatedPayload: SearchQuery = {
       ...payload!,
-      sortAsc: isAsc ? false : true,
-      sortBy: property
+      sortAsc: sortingProperties?.order === 'asc' ? true : false,
+      sortBy: sortingProperties?.sortBy
     }
 
     setPayLoad(updatedPayload)
   }
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
-  }
-
-  if (isLoading) {
-    return <Loading />
-  }
-
   return (
     <Container>
       <PageHeader
-        description="All Records."
-        title="Patient Search Results"
+        description="Golden Records Only"
+        title="Search Results"
         breadcrumbs={[
           {
             icon: <MoreHorizOutlined />
           },
           {
             icon: <SearchIcon />,
-            title: 'Search',
-            link: '/search'
+            title: 'Search'
           }
         ]}
       />
-      <Divider sx={{ mb: 3, mt: 1 }} />
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <EnhancedTableHead
-            sortAsc={payload.sortAsc}
-            sortBy={payload.sortBy}
-            onRequestSort={HandleRequestSort}
-            rowCount={patientRecord!.records!.data!.length}
-            availableFields={availableFields}
-          />
-          <TableBody>
-            {patientRecord!.records!.data!.map((row, index) => {
-              return <Row key={index} row={row} />
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={patientRecord!.records!.pagination.total}
-        rowsPerPage={10}
-        page={page}
-        onPageChange={handleChangePage}
+      <Divider />
+
+      <DataGrid
+        columns={columns}
+        rows={patientRecord!.records!.data!.map((row, index) => {
+          return row.customGoldenRecord
+        })}
+        pageSize={10}
+        sx={{ maxWidth: 1400, mt: 4 }}
+        autoHeight={true}
+        getRowId={row => row.uid}
+        onSortModelChange={handleRequestToSort}
+        rowsPerPageOptions={[5, 10, 20]}
       />
     </Container>
   )
