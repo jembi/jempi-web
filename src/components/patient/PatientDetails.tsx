@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack'
 import { FC, useEffect, useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
+import { DisplayField, FieldChangeReq } from '../../types/Fields'
 import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
@@ -33,6 +34,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const {
     data: { uid }
   } = useMatch()
+  const { availableFields } = useAppConfig()
   const { enqueueSnackbar } = useSnackbar()
   const { getPatientName } = useAppConfig()
   const [patientRecord, setPatientRecord] = useState<
@@ -58,7 +60,13 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
 
   const updatePatientRecord = useMutation({
     mutationKey: [isGoldenRecord ? 'golden-record' : 'patient-record', uid],
-    mutationFn: ApiClient.updatedPatientRecord,
+    mutationFn: async (req: FieldChangeReq) => {
+      if (isGoldenRecord) {
+        return await ApiClient.updatedGoldenRecord(uid as string, req)
+      } else {
+        return await ApiClient.updatedPatientRecord(uid as string, req)
+      }
+    },
     onSuccess: () => {
       enqueueSnackbar(`Successfully saved patient records`, {
         variant: 'success'
@@ -75,10 +83,13 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const isEditable = isGoldenRecord && isEditMode
 
   const onDataChange = (newRow: PatientRecord | GoldenRecord) => {
-    const newlyUpdatedFields: UpdatedFields = Object.keys(data || {}).reduce(
-      (acc: UpdatedFields, curr: string, idx: number) => {
-        if (data && data[curr] !== newRow[curr]) {
-          acc[curr] = { oldValue: data[curr], newValue: newRow[curr] }
+    const newlyUpdatedFields: UpdatedFields = availableFields.reduce(
+      (acc: UpdatedFields, curr: DisplayField, idx: number) => {
+        if (data && data[curr.fieldName] !== newRow[curr.fieldName]) {
+          acc[curr.fieldLabel] = {
+            oldValue: data[curr.fieldName],
+            newValue: newRow[curr.fieldName]
+          }
         }
         return acc
       },
@@ -112,7 +123,14 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   }
 
   const onConfirm = () => {
-    updatePatientRecord.mutate(patientRecord)
+    const fields = Object.keys(patientRecord).reduce(
+      (acc: { name: string; value: any }[], curr: string) => {
+        acc.push({ name: curr, value: patientRecord[curr] })
+        return acc
+      },
+      []
+    )
+    updatePatientRecord.mutate({ fields })
     setIsModalVisible(false)
     setIsEditMode(false)
   }
