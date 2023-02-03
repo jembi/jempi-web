@@ -49,11 +49,6 @@ interface EnhancedTableProps {
   availableFields: DisplayField[]
 }
 
-interface HeadCell {
-  id: keyof CustomGoldenRecord
-  label: string
-}
-
 type ResultProps = MakeGenerics<{
   Search: {
     payload: SearchQuery
