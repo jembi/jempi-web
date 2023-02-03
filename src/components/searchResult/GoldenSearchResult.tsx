@@ -19,7 +19,6 @@ import { Data } from '../../types/SearchResults'
 import { SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
-import { Link as LocationLink } from '@tanstack/react-location'
 
 type ResultProps = MakeGenerics<{
   Search: {
