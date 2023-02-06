@@ -12,6 +12,10 @@ export interface CustomSearchQuery {
 }
 export interface SearchQuery {
   parameters: SearchParameter[]
+  sortBy: string,
+  sortAsc: boolean
+  offset?: number
+  limit?: number
 }
 
 export enum FlagLabel {

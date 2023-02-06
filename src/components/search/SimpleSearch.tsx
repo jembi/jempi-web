@@ -2,31 +2,17 @@ import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import ApiClient from '../../services/ApiClient'
 import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
+import { Link as LocationLink } from '@tanstack/react-location'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
-  //TODO: find a better way of handling error while posting the search request
-  const postSearchQuery = useMutation({
-    mutationFn: ApiClient.postSimpleSearchQuery,
-    onError: (error: AxiosError) => {
-      console.log(`Oops! Error getting search result: ${error.message}`)
-    }
-  })
-
-  function handleOnFormSubmit(value: SearchQuery) {
-    postSearchQuery.mutate(value)
-    console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
-  }
 
   const initialValues: SearchQuery = {
     parameters: availableFields.map(({ fieldType, fieldName }) => {
@@ -35,7 +21,11 @@ const SimpleSearch: React.FC = () => {
         value: fieldType === 'Date' ? moment().format('DD/MM/YYYY') : '',
         distance: 0
       }
-    })
+    }),
+    sortBy: '',
+    sortAsc: true,
+    offset: 0,
+    limit: 10
   }
 
   return (
@@ -76,9 +66,7 @@ const SimpleSearch: React.FC = () => {
       <Divider />
       <Formik
         initialValues={initialValues}
-        onSubmit={values => {
-          handleOnFormSubmit(values)
-        }}
+        onSubmit={() => console.log('Submited')}
       >
         {({ values, handleChange }) => (
           <Form>
@@ -129,17 +117,18 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: '#274263',
-                      color: 'white',
-                      '&:hover': { backgroundColor: '#375982' }
-                    }}
-                    type="submit"
-                  >
-                    Search
-                  </Button>
+                  <LocationLink to="/search-results/golden" search={{payload: values}} style={{ textDecoration: 'none' }}>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: '#274263',
+                        color: 'white',
+                        '&:hover': { backgroundColor: '#375982' }
+                      }}
+                    >
+                      Search
+                    </Button>
+                  </LocationLink>
                 </Grid>
               </Grid>
             </Box>

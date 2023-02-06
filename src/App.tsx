@@ -17,6 +17,7 @@ import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
+import GoldenSearchResult from './components/searchResult/GoldenSearchResult'
 import Shell from './components/shell/Shell'
 import Login from './components/user/Login'
 import { config } from './config'
@@ -57,7 +58,16 @@ const routes: Route[] = [
         element: <MatchDetails />
       },
       { path: 'search', element: <SimpleSearch /> },
-      { path: 'custom-search', element: <CustomSearch/>},
+      { path: 'custom-search', element: <CustomSearch /> },
+      {
+        path: 'search-results',
+        children: [
+          {
+            path: 'golden',
+            element: <GoldenSearchResult />
+          }
+        ]
+      },
       { path: 'import', element: <Import /> },
       {
         path: 'golden-record',

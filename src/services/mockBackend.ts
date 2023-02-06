@@ -18,7 +18,8 @@ const {
   goldenRecords,
   auditTrail,
   currentUser,
-  linkedRecords
+  linkedRecords,
+  searchResult,
 } = mockData
 
 axiosMockAdapterInstance
@@ -62,6 +63,8 @@ axiosMockAdapterInstance
 
 const sleep = (value: number) =>
   new Promise(resolve => setTimeout(resolve, value))
+
+axiosMockAdapterInstance.onPost(ROUTES.POST_SIMPLE_SEARCH).reply(200, searchResult)
 
 //Successful upload
 axiosMockAdapterInstance.onPost(ROUTES.UPLOAD).reply(async config => {
