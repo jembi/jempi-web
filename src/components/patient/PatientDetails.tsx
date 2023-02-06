@@ -131,6 +131,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
     updatePatientRecord.mutate({ fields })
     setIsModalVisible(false)
     setIsEditMode(false)
+    setUpdatedFields({})
   }
   const onCancelEditing = () => {
     setPatientRecord(data)
