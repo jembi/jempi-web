@@ -57,8 +57,8 @@ const routes: Route[] = [
         path: 'match-details',
         element: <MatchDetails />
       },
-      { path: 'simple-search', element: <SimpleSearch /> },
-      { path: 'custom-search', element: <CustomSearch /> },
+      { path: 'simple-search-screen', element: <SimpleSearch /> },
+      { path: 'custom-search-screen', element: <CustomSearch /> },
       {
         path: 'search',
         children: [

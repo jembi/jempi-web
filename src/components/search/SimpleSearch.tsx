@@ -65,7 +65,7 @@ const SimpleSearch: React.FC = () => {
               width: '172px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={'/custom-search'}
+            href={'/custom-search-screen'}
           >
             <Typography variant="button">CUSTOM SEARCH</Typography>
           </Button>
