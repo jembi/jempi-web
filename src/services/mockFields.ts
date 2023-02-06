@@ -10,7 +10,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/golden-record/:uid/linked-records'
+      '/golden-record/:uid/linked-records',
+      '/search-results/golden'
     ],
     accessLevel: [],
     readOnly: true,
@@ -55,7 +56,8 @@ const FIELDS_CONFIG: Fields = [
       '/search',
       '/custom-search',
       '/golden-record/:uid/linked-records',
-      '/golden-record/:uid/audit-trail'
+      '/golden-record/:uid/audit-trail',
+      '/search-results/golden'
     ],
     accessLevel: [],
     readOnly: false,
@@ -73,7 +75,8 @@ const FIELDS_CONFIG: Fields = [
       '/search',
       '/custom-search',
       '/golden-record/:uid/linked-records',
-      '/golden-record/:uid/audit-trail'
+      '/golden-record/:uid/audit-trail',
+      '/search-results/golden'
     ],
     accessLevel: [],
     readOnly: false,
@@ -88,7 +91,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/golden-record/:uid/linked-records'
+      '/golden-record/:uid/linked-records',
+      '/search-results/golden'
     ],
     accessLevel: [],
     readOnly: false,

@@ -1,6 +1,7 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
 import { GoldenRecord, PatientRecord } from '../types/PatientRecord'
+import { Data } from '../types/SearchResults'
 import { User } from '../types/User'
 
 const notifications: Notification[] = [
@@ -15,6 +16,105 @@ const notifications: Notification[] = [
     score: 0.5
   }
 ]
+
+const searchResult: Data =
+  {
+  records:{
+       data:[
+          {
+             customGoldenRecord:{
+                auxId:"rec-00000000-aaa-0",
+                city:"Nairobi",
+                dob:"20171114",
+                familyName:"Onyango",
+                gender:"male",
+                givenName:"Endalekachew",
+                nationalId:"198804042874913",
+                phoneNumber:"091-749-4674",
+                sourceId:[
+                   
+                ],
+                uid:"0x5"
+             },
+             mpiEntityList:[
+                {
+                   entity:{
+                      auxId:"rec-00000000-aaa-0",
+                      city:"Nairobi",
+                      dob:"20171114",
+                      familyName:"Onyango",
+                      gender:"male",
+                      givenName:"Endalekachew",
+                      nationalId:"198804042874913",
+                      phoneNumber:"091-749-4674",
+                      uid:"0x4"
+                   }
+                },
+                {
+                   entity:{
+                      auxId:"rec-00000000-bbb-0",
+                      city:"Nairobi",
+                      dob:"20171114",
+                      familyName:"Onyango",
+                      gender:"male",
+                      givenName:"Endalekachew",
+                      nationalId:"198804042874913",
+                      phoneNumber:"091-749-4674",
+                      uid:"0x6"
+                   }
+                }
+             ]
+          },
+          {
+            customGoldenRecord:{
+               auxId:"rec-00000000-aaa-1",
+               city:"Nairobi",
+               dob:"20171114",
+               familyName:"Onyango",
+               gender:"male",
+               givenName:"Endalekachew",
+               nationalId:"198804042874913",
+               phoneNumber:"091-749-4674",
+               sourceId:[
+                  
+               ],
+               uid:"0x9"
+            },
+            mpiEntityList:[
+               {
+                  entity:{
+                     auxId:"rec-00000000-aaa-5",
+                     city:"Nairobi",
+                     dob:"20171114",
+                     familyName:"Onyango",
+                     gender:"male",
+                     givenName:"Endalekachew",
+                     nationalId:"198804042874913",
+                     phoneNumber:"091-749-4674",
+                     uid:"0x10"
+                  }
+               },
+               {
+                  entity:{
+                     auxId:"rec-00000000-bbb-0",
+                     city:"Nairobi",
+                     dob:"20171114",
+                     familyName:"Onyango",
+                     gender:"male",
+                     givenName:"Endalekachew",
+                     nationalId:"198804042874913",
+                     phoneNumber:"091-749-4674",
+                     uid:"0x20"
+                  }
+               }
+            ]
+         }
+       ],
+       pagination:{
+          total: 100
+       }
+    }
+ }
 
 const auditTrail: AuditTrailRecord[] = [
   {
@@ -159,7 +259,8 @@ const mockData = {
   goldenRecords,
   patientRecords,
   currentUser,
-  linkedRecords
+  linkedRecords,
+  searchResult,
 }
 
 export default mockData
