@@ -120,7 +120,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title }) =>
           return row
         })}
         pageSize={10}
-        sx={{mt: 4 }}
+        sx={{ mt: 4 }}
         autoHeight={true}
         getRowId={row => row.uid}
         onSortModelChange={handleRequestToSort}
