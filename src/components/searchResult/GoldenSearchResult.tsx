@@ -111,7 +111,7 @@ const SearchResult: React.FC = () => {
           return row.customGoldenRecord
         })}
         pageSize={10}
-        sx={{ maxWidth: 1400, mt: 4 }}
+        sx={{ mt: 4 }}
         autoHeight={true}
         getRowId={row => row.uid}
         onSortModelChange={handleRequestToSort}
