@@ -24,7 +24,7 @@ const NavigationBar = () => {
             Dashboard
           </Button>
           <Button
-            href="/search"
+            href="/simple-search"
             startIcon={<SearchIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
           >

@@ -141,6 +141,18 @@ class ApiClient {
       .then(res => res.data)
   }
 
+  async postCustomSearchGoldenRecordQuery(request: SearchQuery) {       
+    return await client
+      .post(ROUTES.POST_SIMPLE_SEARCH_GOLDEN_RECORD, request)
+      .then(res => res.data)
+  }
+
+  async postCustomCustomGoldenRecordQuery(request: SearchQuery) {       
+    return await client
+      .post(ROUTES.POST_SIMPLE_SEARCH_GOLDEN_RECORD, request)
+      .then(res => res.data)
+  }
+
   async postSimpleSearchPatientRecordQuery(request: SearchQuery) {       
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH_PATIENT_RECORD, request)
