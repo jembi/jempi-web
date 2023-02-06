@@ -7,16 +7,22 @@ import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import { useState } from 'react'
 import ApiClient from '../../services/ApiClient'
-import { CustomSearchQuery, FlagLabel, SearchFlagsOptionsProps, SearchParameter, SimpleSearchQuery } from '../../types/SimpleSearch'
+import {
+  CustomSearchQuery,
+  FlagLabel,
+  SearchFlagsOptionsProps,
+  SearchParameter,
+  SimpleSearchQuery
+} from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
 import SearchFlags from '../search/SearchFlags'
+import { Link as LocationLink } from '@tanstack/react-location'
 
 const CustomSearch: React.FC = () => {
   const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
 
-  
   const options: SearchFlagsOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
@@ -52,39 +58,39 @@ const CustomSearch: React.FC = () => {
     <>
       <Container maxWidth={false}>
         <Grid container direction={'column'}>
-            <Grid item lg={6}>
-              <PageHeader
-                description="You can customize your search below."
-                title="Custom Patient Search"
-                breadcrumbs={[
-                  {
-                    icon: <MoreHorizOutlined />
-                  },
-                  {
-                    icon: <SearchIcon />,
-                    title: 'Search'
-                  }
-                ]}
-                buttons={[
-                  <SearchFlags
-                    options={options}
-                    setisGoldenRecord={setisGoldenRecord}
-                  />,
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      height: '42px',
-                      width: '172px',
-                      borderColor: theme => theme.palette.primary.main
-                    }}
-                    href={'/search'}
-                  >
-                    <Typography variant="button">SIMPLE SEARCH</Typography>
-                  </Button>
-                ]}
-              />
-            </Grid>
-         
+          <Grid item lg={6}>
+            <PageHeader
+              description="You can customize your search below."
+              title="Custom Patient Search"
+              breadcrumbs={[
+                {
+                  icon: <MoreHorizOutlined />
+                },
+                {
+                  icon: <SearchIcon />,
+                  title: 'Search'
+                }
+              ]}
+              buttons={[
+                <SearchFlags
+                  options={options}
+                  setisGoldenRecord={setisGoldenRecord}
+                />,
+                <Button
+                  variant="outlined"
+                  sx={{
+                    height: '42px',
+                    width: '172px',
+                    borderColor: theme => theme.palette.primary.main
+                  }}
+                  href={'/search'}
+                >
+                  <Typography variant="button">SIMPLE SEARCH</Typography>
+                </Button>
+              ]}
+            />
+          </Grid>
+
           <Divider />
           <Formik initialValues={initialValues} onSubmit={handleOnFormSubmit}>
             {({ values, handleChange, setFieldValue }) => (
@@ -121,22 +127,24 @@ const CustomSearch: React.FC = () => {
                     <FieldArray name="$or">
                       {({ push, remove }) => (
                         <>
-                          {values.$or.map((parameters: SimpleSearchQuery, index: number) => {
-                            return (
-                              <FieldGroup
-                                values={parameters}
-                                handleChange={handleChange}
-                                initialCustomSearchValues={
-                                  initialSearchParameter
-                                }
-                                fieldGroupIndex={index}
-                                removeFieldGroup={remove}
-                                key={index}
-                                setFieldValue={setFieldValue}
-                                push={push}
-                              />
-                            )
-                          })}
+                          {values.$or.map(
+                            (parameters: SimpleSearchQuery, index: number) => {
+                              return (
+                                <FieldGroup
+                                  values={parameters}
+                                  handleChange={handleChange}
+                                  initialCustomSearchValues={
+                                    initialSearchParameter
+                                  }
+                                  fieldGroupIndex={index}
+                                  removeFieldGroup={remove}
+                                  key={index}
+                                  setFieldValue={setFieldValue}
+                                  push={push}
+                                />
+                              )
+                            }
+                          )}
 
                           <Grid
                             item
@@ -168,17 +176,27 @@ const CustomSearch: React.FC = () => {
                     <Grid item>
                       {/* TODO move colors to theme */}
                       <Stack direction={'row'} spacing={1}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            backgroundColor: '#274263',
-                            color: 'white',
-                            '&:hover': { backgroundColor: '#375982' }
-                          }}
-                          type="submit"
+                        <LocationLink
+                          to={
+                            isGoldenRecord
+                              ? '/custom-search/golden'
+                              : '/custom-search/patient'
+                          }
+                          search={{ payload: values }}
+                          style={{ textDecoration: 'none' }}
                         >
-                          Search
-                        </Button>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              backgroundColor: '#274263',
+                              color: 'white',
+                              '&:hover': { backgroundColor: '#375982' }
+                            }}
+                            type="submit"
+                          >
+                            Search
+                          </Button>
+                        </LocationLink>
                         <Button
                           variant="outlined"
                           sx={{
