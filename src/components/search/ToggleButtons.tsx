@@ -6,6 +6,7 @@ import {
   Typography
 } from '@mui/material'
 import { useRef, useState } from 'react'
+import { SearchFlagsOptionsProps } from '../../types/SimpleSearch'
 
 export const triggerInputChange = (node: HTMLInputElement, value = '') => {
   // only process the change on elements we know have a value setter in their constructor
@@ -18,10 +19,10 @@ export const triggerInputChange = (node: HTMLInputElement, value = '') => {
 }
 
 interface ToggleButtonsProps {
-  selectedButton: number
+  selectedButton: string
   name?: string
   onChange?: (e: React.ChangeEvent<any>) => void
-  options: Array<string | number>
+  options: SearchFlagsOptionsProps[]
   sx: SxProps<Theme>
   disabled?: boolean
 }
@@ -57,16 +58,16 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
         disabled={disabled}
         id={name}
       >
-        {options.map(value => {
+        {options.map((option, index) => {
           return (
             <ToggleButton
-              value={value}
+              value={`${option.value}`}
               aria-label="left aligned"
               sx={sx}
-              key={value}
+              key={option.value}
             >
               <Typography id={name} variant="button">
-                {value}
+                {option.label}
               </Typography>
             </ToggleButton>
           )

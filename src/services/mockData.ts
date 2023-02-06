@@ -17,98 +17,95 @@ const notifications: Notification[] = [
   }
 ]
 
-const searchResult: Data =
+const simpleSearchGoldenRecordResult: Data =
+  {
+    records:{
+      data:[
+         {
+           auxId:"rec-00000000-aaa-0",
+           city:"Nairobi",
+           dob:"20171114",
+           familyName:"Golden",
+           gender:"male",
+           givenName:"Endalekachew",
+           nationalId:"198804042874913",
+           phoneNumber:"091-749-4674",
+           sourceId:[
+                  
+          ],
+           uid:"0x4"
+         },
+         {
+           auxId:"rec-00000000-aaa-0",
+           city:"Nairobi",
+           dob:"20171114",
+           familyName:"Onyango",
+           gender:"male",
+           givenName:"Golden",
+           nationalId:"198804042874913",
+           phoneNumber:"091-749-4674",
+           sourceId:[
+                  
+          ],
+           uid:"0x3"
+         },
+         {
+           auxId:"rec-00000000-aaa-0",
+           city:"Nairobi",
+           dob:"20171114",
+           familyName:"Golden",
+           gender:"male",
+           givenName:"Endalekachew",
+           nationalId:"198804042874913",
+           phoneNumber:"091-749-4674",
+           sourceId:[
+                  
+          ],
+           uid:"0x2"
+         }
+      ],
+      pagination:{
+         total: 100
+      }
+   }
+ }
+ const simpleSearchPatientRecordResult: Data =
   {
   records:{
        data:[
           {
-             customGoldenRecord:{
-                auxId:"rec-00000000-aaa-0",
-                city:"Nairobi",
-                dob:"20171114",
-                familyName:"Onyango",
-                gender:"male",
-                givenName:"Endalekachew",
-                nationalId:"198804042874913",
-                phoneNumber:"091-749-4674",
-                sourceId:[
-                   
-                ],
-                uid:"0x5"
-             },
-             mpiEntityList:[
-                {
-                   entity:{
-                      auxId:"rec-00000000-aaa-0",
-                      city:"Nairobi",
-                      dob:"20171114",
-                      familyName:"Onyango",
-                      gender:"male",
-                      givenName:"Endalekachew",
-                      nationalId:"198804042874913",
-                      phoneNumber:"091-749-4674",
-                      uid:"0x4"
-                   }
-                },
-                {
-                   entity:{
-                      auxId:"rec-00000000-bbb-0",
-                      city:"Nairobi",
-                      dob:"20171114",
-                      familyName:"Onyango",
-                      gender:"male",
-                      givenName:"Endalekachew",
-                      nationalId:"198804042874913",
-                      phoneNumber:"091-749-4674",
-                      uid:"0x6"
-                   }
-                }
-             ]
+            auxId:"rec-00000000-aaa-0",
+            city:"Nairobi",
+            dob:"20171114",
+            familyName:"Patient",
+            gender:"male",
+            givenName:"Endalekachew",
+            nationalId:"198804042874913",
+            phoneNumber:"091-749-4674",
+            uid:"0x9"
           },
           {
-            customGoldenRecord:{
-               auxId:"rec-00000000-aaa-1",
-               city:"Nairobi",
-               dob:"20171114",
-               familyName:"Onyango",
-               gender:"male",
-               givenName:"Endalekachew",
-               nationalId:"198804042874913",
-               phoneNumber:"091-749-4674",
-               sourceId:[
-                  
-               ],
-               uid:"0x9"
-            },
-            mpiEntityList:[
-               {
-                  entity:{
-                     auxId:"rec-00000000-aaa-5",
-                     city:"Nairobi",
-                     dob:"20171114",
-                     familyName:"Onyango",
-                     gender:"male",
-                     givenName:"Endalekachew",
-                     nationalId:"198804042874913",
-                     phoneNumber:"091-749-4674",
-                     uid:"0x10"
-                  }
-               },
-               {
-                  entity:{
-                     auxId:"rec-00000000-bbb-0",
-                     city:"Nairobi",
-                     dob:"20171114",
-                     familyName:"Onyango",
-                     gender:"male",
-                     givenName:"Endalekachew",
-                     nationalId:"198804042874913",
-                     phoneNumber:"091-749-4674",
-                     uid:"0x20"
-                  }
-               }
-            ]
-         }
+            auxId:"rec-00000000-aaa-0",
+            city:"Nairobi",
+            dob:"20171114",
+            familyName:"Onyango",
+            gender:"male",
+            givenName:"Patient",
+            nationalId:"198804042874913",
+            phoneNumber:"091-749-4674",
+            uid:"0x8"
+          },
+          {
+            auxId:"rec-00000000-aaa-0",
+            city:"Nairobi",
+            dob:"20171114",
+            familyName:"Patient",
+            gender:"male",
+            givenName:"Endalekachew",
+            nationalId:"198804042874913",
+            phoneNumber:"091-749-4674",
+            uid:"0x7"
+          }
        ],
        pagination:{
           total: 100
@@ -260,7 +257,8 @@ const mockData = {
   patientRecords,
   currentUser,
   linkedRecords,
-  searchResult,
+  simpleSearchGoldenRecordResult,
+  simpleSearchPatientRecordResult
 }
 
 export default mockData

@@ -17,7 +17,7 @@ import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
 import ReviewMatches from './components/reviewMatches/ReviewMatches'
 import SimpleSearch from './components/search/SimpleSearch'
-import GoldenSearchResult from './components/searchResult/GoldenSearchResult'
+import SearchResult from './components/searchResult/SearchResult'
 import Shell from './components/shell/Shell'
 import Login from './components/user/Login'
 import { config } from './config'
@@ -63,8 +63,12 @@ const routes: Route[] = [
         path: 'search-results',
         children: [
           {
-            path: 'golden',
-            element: <GoldenSearchResult />
+            path: 'golden-record',
+            element: <SearchResult isGoldenRecord={true} title='Golden Records Only'/>
+          },
+          {
+            path: 'patient-record',
+            element: <SearchResult isGoldenRecord={false} title='Patient Records Only '/>
           }
         ]
       },

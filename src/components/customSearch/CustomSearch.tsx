@@ -5,14 +5,22 @@ import Divider from '@mui/material/Divider'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
+import { useState } from 'react'
 import ApiClient from '../../services/ApiClient'
-import { CustomSearchQuery, FlagLabel, SearchParameter, SimpleSearchQuery } from '../../types/SimpleSearch'
-import SearchFlags from '../search/SearchFlags'
+import { CustomSearchQuery, FlagLabel, SearchFlagsOptionsProps, SearchParameter, SimpleSearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
+import SearchFlags from '../search/SearchFlags'
 
 const CustomSearch: React.FC = () => {
+  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
+
+  
+  const options: SearchFlagsOptionsProps[] = [
+    { value: 0, label: FlagLabel.GOLDEN_ONLY },
+    { value: 1, label: FlagLabel.PATIENT_ONLY }
+  ]
   //TODO: find a better way of handling error while posting the search request
   const { mutate } = useMutation({
     mutationFn: ApiClient.postCustomSearchQuery,
@@ -59,11 +67,8 @@ const CustomSearch: React.FC = () => {
                 ]}
                 buttons={[
                   <SearchFlags
-                    options={[
-                      FlagLabel.ALL_RECORDS,
-                      FlagLabel.GOLDEN_ONLY,
-                      FlagLabel.PATIENT_ONLY
-                    ]}
+                    options={options}
+                    setisGoldenRecord={setisGoldenRecord}
                   />,
                   <Button
                     variant="outlined"
