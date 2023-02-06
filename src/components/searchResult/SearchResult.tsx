@@ -29,6 +29,7 @@ type ResultProps = MakeGenerics<{
 type SearchResultProps = {
   isGoldenRecord: boolean
   title: string
+  isCustomSearch: boolean
 }
 
 interface sortingPropertiesProps {
@@ -36,7 +37,7 @@ interface sortingPropertiesProps {
   order: GridSortDirection
 }
 
-const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title }) => {
+const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCustomSearch }) => {
   const searchParams = useSearch<ResultProps>()
   const { availableFields } = useAppConfig()
 
@@ -62,10 +63,20 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title }) =>
   const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
     queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', payload],
     queryFn: () => {
-      if (isGoldenRecord) {
-        return ApiClient.postSimpleSearchGoldenRecordQuery(payload)
-      } else {
-        return ApiClient.postSimpleSearchPatientRecordQuery(payload)
+
+      if(isCustomSearch){
+        if (isGoldenRecord) {
+          return ApiClient.postSimpleSearchGoldenRecordQuery(payload)
+        } else {
+          return ApiClient.postSimpleSearchPatientRecordQuery(payload)
+        }
+      }
+      else{
+        if (isGoldenRecord) {
+          return ApiClient.postCustomSearchGoldenRecordQuery(payload)
+        } else {
+          return ApiClient.postCustomSearchPatientRecordQuery(payload)
+        }
       }
     },
     refetchOnWindowFocus: false

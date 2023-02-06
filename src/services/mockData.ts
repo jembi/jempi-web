@@ -17,7 +17,7 @@ const notifications: Notification[] = [
   }
 ]
 
-const simpleSearchGoldenRecordResult: Data =
+const searchGoldenRecordResult: Data =
   {
     records:{
       data:[
@@ -69,7 +69,7 @@ const simpleSearchGoldenRecordResult: Data =
       }
    }
  }
- const simpleSearchPatientRecordResult: Data =
+ const searchPatientRecordResult: Data =
   {
   records:{
        data:[
@@ -257,8 +257,8 @@ const mockData = {
   patientRecords,
   currentUser,
   linkedRecords,
-  simpleSearchGoldenRecordResult,
-  simpleSearchPatientRecordResult
+  searchGoldenRecordResult,
+  searchPatientRecordResult
 }
 
 export default mockData

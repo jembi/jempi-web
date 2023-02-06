@@ -128,8 +128,8 @@ const SimpleSearch: React.FC = () => {
                   <LocationLink
                     to={
                       isGoldenRecord
-                        ? '/search-results/golden-record'
-                        : '/search-results/patient-record'
+                        ? '/search/golden'
+                        : '/search/patient'
                     }
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}

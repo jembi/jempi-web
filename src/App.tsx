@@ -60,15 +60,28 @@ const routes: Route[] = [
       { path: 'simple-search', element: <SimpleSearch /> },
       { path: 'custom-search', element: <CustomSearch /> },
       {
-        path: 'search-results',
+        path: 'search',
         children: [
           {
-            path: 'golden-record',
-            element: <SearchResult isGoldenRecord={true} title='Golden Records Only'/>
+            path: 'golden',
+            element: <SearchResult isGoldenRecord={true} title='Golden Records Only' isCustomSearch={false} />
           },
           {
-            path: 'patient-record',
-            element: <SearchResult isGoldenRecord={false} title='Patient Records Only '/>
+            path: 'patient',
+            element: <SearchResult isGoldenRecord={false} title='Patient Records Only' isCustomSearch={false} />
+          }
+        ]
+      },
+      {
+        path: 'custom-search',
+        children: [
+          {
+            path: 'golden',
+            element: <SearchResult isGoldenRecord={true} title='Golden Records Only' isCustomSearch={true}/>
+          },
+          {
+            path: 'patient',
+            element: <SearchResult isGoldenRecord={false} title='Patient Records Only' isCustomSearch={true}/>
           }
         ]
       },
