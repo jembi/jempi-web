@@ -52,19 +52,13 @@ const DropZone: FC = () => {
     }
   }
 
-  const {
-    acceptedFiles,
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({
-    accept: { 'text/csv': ['.csv'] },
-    onDrop,
-    maxFiles: 1,
-    multiple: true
-  })
+  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
+    useDropzone({
+      accept: { 'text/csv': ['.csv'] },
+      onDrop,
+      maxFiles: 1,
+      multiple: true
+    })
 
   const uploadFile = async (fileObj: FileObj) => {
     return await ApiClient.uploadFile(createFileUploadAxiosConfig(fileObj))
@@ -74,7 +68,7 @@ const DropZone: FC = () => {
     fileObj: FileObj
   ): AxiosRequestConfig<FormData> => {
     const formData = new FormData()
-    formData.append('file', fileObj.file)
+    formData.set('csv', fileObj.file)
     return {
       headers: {
         'content-type': 'multipart/form-data'
@@ -194,7 +188,7 @@ const DropZone: FC = () => {
             <a>Click to upload</a> or drag and drop
           </Typography>
           <Typography color="#00000099" fontSize="14px">
-            CSV (max. 3MB)
+            CSV (max. 128MB)
           </Typography>
         </div>
       </Box>
