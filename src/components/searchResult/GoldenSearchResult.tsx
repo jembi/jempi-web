@@ -89,7 +89,7 @@ const SearchResult: React.FC = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <PageHeader
         description="Golden Records Only"
         title="Search Results"
