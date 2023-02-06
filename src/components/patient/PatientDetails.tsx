@@ -59,13 +59,9 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   })
 
   const updatePatientRecord = useMutation({
-    mutationKey: [isGoldenRecord ? 'golden-record' : 'patient-record', uid],
+    mutationKey: ['golden-record', uid],
     mutationFn: async (req: FieldChangeReq) => {
-      if (isGoldenRecord) {
-        return await ApiClient.updatedGoldenRecord(uid as string, req)
-      } else {
-        return await ApiClient.updatedPatientRecord(uid as string, req)
-      }
+      return await ApiClient.updatedGoldenRecord(uid as string, req)
     },
     onSuccess: () => {
       enqueueSnackbar(`Successfully saved patient records`, {
@@ -125,7 +121,9 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const onConfirm = () => {
     const fields = Object.keys(patientRecord).reduce(
       (acc: { name: string; value: any }[], curr: string) => {
-        acc.push({ name: curr, value: patientRecord[curr] })
+        if (data[curr] !== patientRecord[curr]) {
+          acc.push({ name: curr, value: patientRecord[curr] })
+        }
         return acc
       },
       []
