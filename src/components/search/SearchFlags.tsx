@@ -1,16 +1,25 @@
 import { Grid } from '@mui/material'
 import { useState } from 'react'
+import { SearchFlagsOptionsProps } from '../../types/SimpleSearch'
 import ToggleButtons from './ToggleButtons'
 
 interface SearchFlagsProps {
-  options: string[]
+  options: SearchFlagsOptionsProps[]
+  setisGoldenRecord: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const SearchFlags: React.FC<SearchFlagsProps> = ({ options }) => {
-  const [selectedButton, setSelectedButton] = useState<number>(1)
+const SearchFlags: React.FC<SearchFlagsProps> = ({ options, setisGoldenRecord }) => {
+  const [selectedButton, setSelectedButton] = useState<string>('0')
 
   const handleChange = (event: React.ChangeEvent<any>) => {
-    setSelectedButton(event?.target.value)
+
+   setSelectedButton(event?.target.value)
+   if(event?.target.value === '0'){
+    setisGoldenRecord(true)
+   }
+   else{
+    setisGoldenRecord(false)
+   }
   }
 
   return (

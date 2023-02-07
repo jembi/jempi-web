@@ -15,7 +15,11 @@ import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
 import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
+import {
+  FlagLabel,
+  SearchFlagsOptionsProps,
+  SearchQuery
+} from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
@@ -24,6 +28,12 @@ const SimpleSearch: React.FC = () => {
   const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(false)
   
   const { availableFields } = useAppConfig()
+  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
+
+  const options: SearchFlagsOptionsProps[] = [
+    { value: 0, label: FlagLabel.GOLDEN_ONLY },
+    { value: 1, label: FlagLabel.PATIENT_ONLY }
+  ]
 
   const initialValues: SearchQuery = {
     parameters: availableFields.map(({ fieldType, fieldName }) => {
@@ -55,11 +65,8 @@ const SimpleSearch: React.FC = () => {
         ]}
         buttons={[
           <SearchFlags
-            options={[
-              FlagLabel.ALL_RECORDS,
-              FlagLabel.GOLDEN_ONLY,
-              FlagLabel.PATIENT_ONLY
-            ]}
+            options={options}
+            setisGoldenRecord={setisGoldenRecord}
           />,
           <Button
             variant="outlined"
@@ -68,7 +75,7 @@ const SimpleSearch: React.FC = () => {
               width: '172px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={'/custom-search'}
+            href={'/custom-search-screen'}
           >
             <Typography variant="button">CUSTOM SEARCH</Typography>
           </Button>
@@ -161,7 +168,11 @@ const SimpleSearch: React.FC = () => {
                 <Grid item>
                   {/* TODO move colors to theme */}
                   <LocationLink
-                    to="/search-results/golden"
+                    to={
+                      isGoldenRecord
+                        ? '/search/golden'
+                        : '/search/patient'
+                    }
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}
                   >

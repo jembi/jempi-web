@@ -11,7 +11,10 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid',
       '/match-details',
       '/golden-record/:uid/linked-records',
-      '/search-results/golden'
+      '/search/golden',
+      '/search/patient',
+      '/custom-search/patient',
+      '/custom-search/golden'
     ],
     accessLevel: [],
     readOnly: true,
@@ -26,8 +29,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/search',
-      '/custom-search',
+      '/simple-search-screen',
+      '/custom-search-screen',
       '/golden-record/:uid/linked-records'
     ],
     accessLevel: [],
@@ -53,11 +56,14 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/search',
-      '/custom-search',
+      '/simple-search-screen',
+      '/custom-search-screen',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
-      '/search-results/golden'
+      '/search/golden',
+      '/search/patient',
+      '/custom-search/patient',
+      '/custom-search/golden'
     ],
     accessLevel: [],
     readOnly: false,
@@ -72,11 +78,14 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/search',
-      '/custom-search',
+      '/simple-search-screen',
+      '/custom-search-screen',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
-      '/search-results/golden'
+      '/search/golden',
+      '/search/patient',
+      '/custom-search/patient',
+      '/custom-search/golden'
     ],
     accessLevel: [],
     readOnly: false,
@@ -92,7 +101,10 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid',
       '/match-details',
       '/golden-record/:uid/linked-records',
-      '/search-results/golden'
+      '/search/golden',
+      '/search/patient',
+      '/custom-search/patient',
+      '/custom-search/golden'
     ],
     accessLevel: [],
     readOnly: false,
@@ -107,7 +119,7 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/search', '/custom-search',
+      '/simple-search-screen', '/custom-search-screen',
       '/patient/:uid/linked-records',
       '/golden-record/:uid/linked-records'
     ],

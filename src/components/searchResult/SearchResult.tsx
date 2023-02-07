@@ -26,12 +26,18 @@ type ResultProps = MakeGenerics<{
   }
 }>
 
+type SearchResultProps = {
+  isGoldenRecord: boolean
+  title: string
+  isCustomSearch: boolean
+}
+
 interface sortingPropertiesProps {
   sortBy: string
   order: GridSortDirection
 }
 
-const SearchResult: React.FC = () => {
+const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCustomSearch }) => {
   const searchParams = useSearch<ResultProps>()
   const { availableFields } = useAppConfig()
 
@@ -55,9 +61,23 @@ const SearchResult: React.FC = () => {
   )
 
   const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
-    queryKey: ['searchResult', payload],
+    queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', payload],
     queryFn: () => {
-      return ApiClient.postSimpleSearchQuery(payload)
+
+      if(isCustomSearch){
+        if (isGoldenRecord) {
+          return ApiClient.postSimpleSearchGoldenRecordQuery(payload)
+        } else {
+          return ApiClient.postSimpleSearchPatientRecordQuery(payload)
+        }
+      }
+      else{
+        if (isGoldenRecord) {
+          return ApiClient.postCustomSearchGoldenRecordQuery(payload)
+        } else {
+          return ApiClient.postCustomSearchPatientRecordQuery(payload)
+        }
+      }
     },
     refetchOnWindowFocus: false
   })
@@ -91,7 +111,7 @@ const SearchResult: React.FC = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        description="Golden Records Only"
+        description={title}
         title="Search Results"
         breadcrumbs={[
           {
@@ -108,7 +128,7 @@ const SearchResult: React.FC = () => {
       <DataGrid
         columns={columns}
         rows={patientRecord!.records!.data!.map((row, index) => {
-          return row.customGoldenRecord
+          return row
         })}
         pageSize={10}
         sx={{ mt: 4 }}

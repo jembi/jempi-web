@@ -23,3 +23,8 @@ export enum FlagLabel {
   GOLDEN_ONLY = 'GOLDEN ONLY',
   PATIENT_ONLY = 'PATIENT ONLY'
 }
+
+export interface SearchFlagsOptionsProps {
+  value: number
+  label: string
+}
