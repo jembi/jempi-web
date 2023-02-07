@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
-import { Fields } from '../types/Fields'
+import { FieldChangeReq, Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
 import { CustomSearchQuery, SearchQuery } from '../types/SimpleSearch'
@@ -158,9 +158,15 @@ class ApiClient {
     return await client.get(ROUTES.LOGOUT)
   }
 
-  async updatedPatientRecord(request: PatientRecord | GoldenRecord) {
+  async updatedPatientRecord(uid: string, request: FieldChangeReq) {
     return await client
-      .post(ROUTES.UPDATE_PATIENT_RECORD, request)
+      .post(`${ROUTES.UPDATE_PATIENT_RECORD}/${uid}`, request)
+      .then(res => res)
+  }
+
+  async updatedGoldenRecord(uid: string, request: FieldChangeReq) {
+    return await client
+      .patch(`${ROUTES.UPDATE_GOLDEN_RECORD}/${uid}`, request)
       .then(res => res)
   }
 

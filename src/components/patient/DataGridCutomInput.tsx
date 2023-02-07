@@ -21,7 +21,6 @@ const DataGridCutomInput = (props: GridEditInputCellProps) => {
           border: 'none',
           padding: '10px'
         }}
-        type="text"
         value={value}
         onChange={handleValueChange}
       />
