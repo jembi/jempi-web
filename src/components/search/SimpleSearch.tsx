@@ -1,6 +1,14 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Container, Grid, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  Stack,
+  Typography
+} from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
 import { FieldArray, Form, Formik } from 'formik'
@@ -42,8 +50,8 @@ const SimpleSearch: React.FC = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        description="Our quick and simple search."
-        title="Simple Patient Search"
+        description="Quickly access the information you need with our powerful search."
+        title="Simple Search"
         breadcrumbs={[
           {
             icon: <MoreHorizOutlined />
@@ -92,17 +100,48 @@ const SimpleSearch: React.FC = () => {
               <Grid container direction="column" width="fit-content">
                 <Grid item container direction="column" width="fit-content">
                   <Grid item>
-                    <Typography variant="h5">Search Records</Typography>
+                    <Stack direction={'row'} spacing={0.5}>
+                      <Typography
+                        variant="h5"
+                      >
+                        Search
+                      </Typography>
+                      {isGoldenRecord ? (
+                        <Typography
+                          variant="h5"
+                          sx={{ color: '#FBC02D', fontWeight: 700 }}
+                        >
+                          Golden
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="h5"
+                          sx={{fontWeight: 700}}
+                        >
+                          Patient
+                        </Typography>
+                      )}
+
+                      <Typography
+                        variant="h5"
+                        sx={{ color: theme => theme.typography.h5 }}
+                      >
+                        Records
+                      </Typography>
+                    </Stack>
                   </Grid>
-                  <Grid item sx={{ mb: 2 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: theme => theme.palette.primary.main
-                      }}
-                    >
-                      Use custom search
-                    </Typography>
+                  <Grid item sx={{ mb: 1 }}>
+                    <Stack direction={'row'} spacing={0.5}>
+                      <Typography variant="body2">
+                        Find info fast with these fixed fields or make your own
+                        search rules with
+                      </Typography>
+                      <Typography variant="body2">
+                        <Link href={'/custom-search-screen'}>
+                          Custom Search
+                        </Link>
+                      </Typography>
+                    </Stack>
                   </Grid>
                 </Grid>
                 <FieldArray name="search">

@@ -1,7 +1,16 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  Stack,
+  Typography
+} from '@mui/material'
 import Divider from '@mui/material/Divider'
+import { Link as LocationLink } from '@tanstack/react-location'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
@@ -14,11 +23,10 @@ import {
   SearchParameter,
   SimpleSearchQuery
 } from '../../types/SimpleSearch'
+import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
-import SearchFlags from '../search/SearchFlags'
-import { Link as LocationLink } from '@tanstack/react-location'
 
 const CustomSearch: React.FC = () => {
   const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
@@ -60,8 +68,8 @@ const CustomSearch: React.FC = () => {
         <Grid container direction={'column'}>
           <Grid item lg={6}>
             <PageHeader
-              description="You can customize your search below."
-              title="Custom Patient Search"
+              description="Tailor your search to quickly find the information you need."
+              title="Custom Search"
               breadcrumbs={[
                 {
                   icon: <MoreHorizOutlined />
@@ -102,7 +110,8 @@ const CustomSearch: React.FC = () => {
                     boxShadow: '0px 0px 0px 1px #E0E0E0',
                     mt: 4,
                     padding: 2,
-                    display: 'flex'
+                    display: 'flex',
+                    justifyContent: 'center'
                   }}
                 >
                   <Grid container direction="column" width="100%">
@@ -110,18 +119,27 @@ const CustomSearch: React.FC = () => {
                       item
                       container
                       direction="row"
-                      justifyContent="flex-start"
-                      width="fit-content"
+                      justifyContent="center"
+                      width="100%"
                     >
-                      <Grid item>
-                        <Typography
-                          variant="h5"
-                          sx={{
-                            color: 'rgba(0, 0, 0, 0.6)'
-                          }}
-                        >
-                          Custom Patient Search
-                        </Typography>
+                      <Grid
+                        item
+                        container
+                        width={'756px'}
+                        direction={'row'}
+                        justifyContent={'flex-start'}
+                        sx={{ mt: 1, mb: 3 }}
+                      >
+                        <Stack direction={'column'} spacing={1}>
+                          <Typography variant="h5">
+                            Custom Your Search Rules
+                          </Typography>
+                          <Typography variant="body2">
+                            <Link href={'/simple-search-screen'}>
+                              Use simple search
+                            </Link>
+                          </Typography>
+                        </Stack>
                       </Grid>
                     </Grid>
                     <FieldArray name="$or">
@@ -173,41 +191,63 @@ const CustomSearch: React.FC = () => {
                         </>
                       )}
                     </FieldArray>
-                    <Grid item>
-                      {/* TODO move colors to theme */}
-                      <Stack direction={'row'} spacing={1}>
-                        <LocationLink
-                          to={
-                            isGoldenRecord
-                              ? '/custom-search/golden'
-                              : '/custom-search/patient'
-                          }
-                          search={{ payload: values }}
-                          style={{ textDecoration: 'none' }}
+                    <Grid
+                      item
+                      container
+                      direction="row"
+                      justifyContent="center"
+                      width="100%"
+                    >
+                      <Grid
+                        item
+                        container
+                        width={'756px'}
+                        direction={'row'}
+                        justifyContent={'flex-start'}
+                        sx={{ mt: 2 }}
+                      >
+                        {/* TODO move colors to theme */}
+                        <Stack
+                          direction={'row'}
+                          spacing={1}
+                          sx={{ flexGrow: 1 }}
                         >
-                          <Button
-                            variant="contained"
-                            sx={{
-                              backgroundColor: '#274263',
-                              color: 'white',
-                              '&:hover': { backgroundColor: '#375982' }
-                            }}
-                            type="submit"
+                          <LocationLink
+                            to={
+                              isGoldenRecord
+                                ? '/custom-search/golden'
+                                : '/custom-search/patient'
+                            }
+                            search={{ payload: values }}
+                            style={{ textDecoration: 'none' }}
                           >
-                            Search
+                            <Button
+                              variant="contained"
+                              sx={{
+                                backgroundColor: '#274263',
+                                color: 'white',
+                                '&:hover': { backgroundColor: '#375982' }
+                              }}
+                              type="submit"
+                            >
+                              Search
+                            </Button>
+                          </LocationLink>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              borderColor: theme => theme.palette.primary.main,
+                              color: theme => theme.palette.primary.main
+                            }}
+                            href="/simple-search-screen"
+                          >
+                            Cancel
                           </Button>
-                        </LocationLink>
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            borderColor: theme => theme.palette.primary.main,
-                            color: theme => theme.palette.primary.main
-                          }}
-                          href="/simple-search-screen"
-                        >
-                          Cancel
-                        </Button>
-                      </Stack>
+                        </Stack>
+                        <Grid item>
+                          <Button variant="outlined">Query Builder</Button>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Box>
