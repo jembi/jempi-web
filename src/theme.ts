@@ -12,6 +12,10 @@ const overrides = createTheme({
   }, 
   typography: {
     fontFamily: 'Roboto',
+    h5: {
+      color:'rgba(0, 0, 0, 0.6)'
+    }
+    
   }
 })
 

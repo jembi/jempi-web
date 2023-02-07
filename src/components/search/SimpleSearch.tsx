@@ -1,17 +1,28 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Container, Grid, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Link,
+  Stack,
+  Typography
+} from '@mui/material'
 import Divider from '@mui/material/Divider'
+import { Link as LocationLink } from '@tanstack/react-location'
 import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
+import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
-import { Link as LocationLink } from '@tanstack/react-location'
 
 const SimpleSearch: React.FC = () => {
+  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(false)
+  
   const { availableFields } = useAppConfig()
 
   const initialValues: SearchQuery = {
@@ -84,17 +95,49 @@ const SimpleSearch: React.FC = () => {
               <Grid container direction="column" width="fit-content">
                 <Grid item container direction="column" width="fit-content">
                   <Grid item>
-                    <Typography variant="h5">Search Records</Typography>
+                    <Stack direction={'row'} spacing={0.5}>
+                      <Typography
+                        variant="h5"
+                        sx={{ color: theme => theme.typography.h5 }}
+                      >
+                        Search
+                      </Typography>
+                      {isGoldenRecord ? (
+                        <Typography
+                          variant="h5"
+                          sx={{ color: '#FBC02D', fontWeight: 700 }}
+                        >
+                          Golden
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="h5"
+                          sx={{ color: 'rgba(0, 0, 0, 0.6)', fontWeight: 700 }}
+                        >
+                          Golden
+                        </Typography>
+                      )}
+
+                      <Typography
+                        variant="h5"
+                        sx={{ color: theme => theme.typography.h5 }}
+                      >
+                        Records
+                      </Typography>
+                    </Stack>
                   </Grid>
                   <Grid item sx={{ mb: 2 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: theme => theme.palette.primary.main
-                      }}
-                    >
-                      Use custom search
-                    </Typography>
+                    <Stack direction={'row'} spacing={0.5}>
+                      <Typography variant="body2">
+                        Find info fast with these fixed fields or make your own
+                        search rules with
+                      </Typography>
+                      <Typography variant="body2">
+                        <Link href={'/custom-search-screen'}>
+                          Custom Search
+                        </Link>
+                      </Typography>
+                    </Stack>
                   </Grid>
                 </Grid>
                 <FieldArray name="search">
@@ -117,7 +160,11 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <LocationLink to="/search-results/golden" search={{payload: values}} style={{ textDecoration: 'none' }}>
+                  <LocationLink
+                    to="/search-results/golden"
+                    search={{ payload: values }}
+                    style={{ textDecoration: 'none' }}
+                  >
                     <Button
                       variant="contained"
                       sx={{
