@@ -203,7 +203,7 @@ const CustomSearch: React.FC = () => {
                             borderColor: theme => theme.palette.primary.main,
                             color: theme => theme.palette.primary.main
                           }}
-                          href="/search"
+                          href="/simple-search-screen"
                         >
                           Cancel
                         </Button>
