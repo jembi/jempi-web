@@ -17,6 +17,7 @@ const ROUTES = {
   LOGOUT: '/logout',
   AUDIT_TRAIL: '/Audit-trail',
   UPLOAD: '/Upload',
+  UPDATE_GOLDEN_RECORD: '/golden-record',
   UPDATE_PATIENT_RECORD: '/Patient',
   POST_CUSTOM_SEARCH: '/CustomSearchRequest',
 }
