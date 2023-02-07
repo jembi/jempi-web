@@ -25,8 +25,6 @@ import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
 
 const SimpleSearch: React.FC = () => {
-  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(false)
-  
   const { availableFields } = useAppConfig()
   const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
 
@@ -52,8 +50,8 @@ const SimpleSearch: React.FC = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        description="Our quick and simple search."
-        title="Simple Patient Search"
+        description="Quickly access the information you need with our powerful search."
+        title="Simple Search"
         breadcrumbs={[
           {
             icon: <MoreHorizOutlined />
@@ -105,7 +103,6 @@ const SimpleSearch: React.FC = () => {
                     <Stack direction={'row'} spacing={0.5}>
                       <Typography
                         variant="h5"
-                        sx={{ color: theme => theme.typography.h5 }}
                       >
                         Search
                       </Typography>
@@ -119,9 +116,9 @@ const SimpleSearch: React.FC = () => {
                       ) : (
                         <Typography
                           variant="h5"
-                          sx={{ color: 'rgba(0, 0, 0, 0.6)', fontWeight: 700 }}
+                          sx={{fontWeight: 700}}
                         >
-                          Golden
+                          Patient
                         </Typography>
                       )}
 
@@ -133,7 +130,7 @@ const SimpleSearch: React.FC = () => {
                       </Typography>
                     </Stack>
                   </Grid>
-                  <Grid item sx={{ mb: 2 }}>
+                  <Grid item sx={{ mb: 1 }}>
                     <Stack direction={'row'} spacing={0.5}>
                       <Typography variant="body2">
                         Find info fast with these fixed fields or make your own
