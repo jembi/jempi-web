@@ -2,17 +2,28 @@ import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
+import { Link as LocationLink } from '@tanstack/react-location'
 import { FieldArray, Form, Formik } from 'formik'
 import moment from 'moment'
+import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import { FlagLabel, SearchQuery } from '../../types/SimpleSearch'
+import {
+  FlagLabel,
+  SearchFlagsOptionsProps,
+  SearchQuery
+} from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
-import { Link as LocationLink } from '@tanstack/react-location'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
+  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
+
+  const options: SearchFlagsOptionsProps[] = [
+    { value: 0, label: FlagLabel.GOLDEN_ONLY },
+    { value: 1, label: FlagLabel.PATIENT_ONLY }
+  ]
 
   const initialValues: SearchQuery = {
     parameters: availableFields.map(({ fieldType, fieldName }) => {
@@ -44,11 +55,8 @@ const SimpleSearch: React.FC = () => {
         ]}
         buttons={[
           <SearchFlags
-            options={[
-              FlagLabel.ALL_RECORDS,
-              FlagLabel.GOLDEN_ONLY,
-              FlagLabel.PATIENT_ONLY
-            ]}
+            options={options}
+            setisGoldenRecord={setisGoldenRecord}
           />,
           <Button
             variant="outlined"
@@ -57,7 +65,7 @@ const SimpleSearch: React.FC = () => {
               width: '172px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={'/custom-search'}
+            href={'/custom-search-screen'}
           >
             <Typography variant="button">CUSTOM SEARCH</Typography>
           </Button>
@@ -117,7 +125,15 @@ const SimpleSearch: React.FC = () => {
                 </FieldArray>
                 <Grid item>
                   {/* TODO move colors to theme */}
-                  <LocationLink to="/search-results/golden" search={{payload: values}} style={{ textDecoration: 'none' }}>
+                  <LocationLink
+                    to={
+                      isGoldenRecord
+                        ? '/search/golden'
+                        : '/search/patient'
+                    }
+                    search={{ payload: values }}
+                    style={{ textDecoration: 'none' }}
+                  >
                     <Button
                       variant="contained"
                       sx={{
