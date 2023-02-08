@@ -12,3 +12,5 @@ export const ACTION_TYPE: { [key: string]: string } = {
   [ACTIONS.grAndPatientRecordLinkApproved]:
     'GR and Patient record link approved'
 }
+
+export const PAGINATION_LIMIT = 10

@@ -57,31 +57,36 @@ const routes: Route[] = [
         path: 'match-details',
         element: <MatchDetails />
       },
-      { path: 'simple-search-screen', element: <SimpleSearch /> },
-      { path: 'custom-search-screen', element: <CustomSearch /> },
       {
         path: 'search',
         children: [
           {
-            path: 'golden',
-            element: <SearchResult isGoldenRecord={true} title='Golden Records Only' isCustomSearch={false} />
+            path: 'simple',
+            element: <SimpleSearch />
           },
           {
-            path: 'patient',
-            element: <SearchResult isGoldenRecord={false} title='Patient Records Only' isCustomSearch={false} />
+            path: 'custom',
+            element: <CustomSearch />
           }
         ]
       },
       {
-        path: 'custom-search',
+        path: 'search-results',
         children: [
           {
             path: 'golden',
-            element: <SearchResult isGoldenRecord={true} title='Golden Records Only' isCustomSearch={true}/>
+            element: (
+              <SearchResult isGoldenRecord={true} title="Golden Records Only" />
+            )
           },
           {
             path: 'patient',
-            element: <SearchResult isGoldenRecord={false} title='Patient Records Only' isCustomSearch={true}/>
+            element: (
+              <SearchResult
+                isGoldenRecord={false}
+                title="Patient Records Only"
+              />
+            )
           }
         ]
       },

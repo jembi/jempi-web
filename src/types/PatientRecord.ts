@@ -7,12 +7,19 @@ export interface SourceId {
 export interface AnyRecord
   extends Record<
     string,
-    SourceId | SourceId[] | string | number | boolean | Date | undefined | null
+    | SourceId
+    | SourceId[]
+    | PatientRecord[]
+    | string
+    | number
+    | boolean
+    | Date
+    | undefined
+    | null
   > {
-  auxId: string
-  score: number
+  score?: number
   uid: string
-  updatedBy: string | undefined
+  updatedBy?: string
 }
 
 export interface PatientRecord extends AnyRecord {
@@ -22,6 +29,7 @@ export interface PatientRecord extends AnyRecord {
 
 export interface GoldenRecord extends AnyRecord {
   sourceId: SourceId[]
+  linkRecords?: PatientRecord[]
   type?: 'Golden'
 }
 
