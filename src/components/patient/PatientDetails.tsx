@@ -175,7 +175,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
                     width: '117px',
                     borderColor: theme => theme.palette.primary.main
                   }}
-                  href={`/patient/${uid}/audit-trail`}
+                  href={`/golden-record/${uid}/audit-trail`}
                 >
                   AUDIT TRAIL
                 </Button>,
@@ -186,7 +186,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
                     width: '152px',
                     borderColor: theme => theme.palette.primary.main
                   }}
-                  href={`/patient/${uid}/linked-records`}
+                  href={`/golden-record/${uid}/linked-records`}
                 >
                   LINKED RECORDS
                 </Button>

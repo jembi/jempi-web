@@ -35,7 +35,7 @@ const LinkedRecords = () => {
     PatientRecord[],
     AxiosError
   >({
-    queryKey: ['linked_patient'],
+    queryKey: ['linked-records', uid],
     queryFn: async () => await ApiClient.getLinkedRecords(uid as string),
     refetchOnWindowFocus: false
   })
@@ -51,6 +51,8 @@ const LinkedRecords = () => {
   if (!data) {
     return <NotFound />
   }
+
+  console.log(uid)
 
   return (
     <>
@@ -75,7 +77,7 @@ const LinkedRecords = () => {
               width: '152px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={`/patient/${uid}`}
+            href={`/golden-record/${uid}`}
           >
             <Typography variant="button">BACK TO RECORD</Typography>
           </Button>

@@ -113,7 +113,10 @@ const routes: Route[] = [
               },
               {
                 path: 'linked-records',
-                element: <LinkedRecords />
+                element: <LinkedRecords />,
+                loader: async ({ params }) => ({
+                  uid: params.uid
+                })
               }
             ]
           }
