@@ -119,7 +119,8 @@ const FIELDS_CONFIG: Fields = [
       '/patient-record/:uid',
       '/golden-record/:uid',
       '/match-details',
-      '/simple-search-screen', '/custom-search-screen',
+      '/simple-search-screen',
+      '/custom-search-screen',
       '/patient/:uid/linked-records',
       '/golden-record/:uid/linked-records'
     ],
@@ -181,8 +182,8 @@ const FIELDS_CONFIG: Fields = [
   //   accessLevel: []
   // }
   {
-    fieldName: 'siteCode',
-    fieldType: 'String',
+    fieldName: 'sourceId',
+    fieldType: 'SourceId',
     fieldLabel: 'Site Code',
     groups: ['registering_facility'],
     scope: [
@@ -191,22 +192,7 @@ const FIELDS_CONFIG: Fields = [
       '/golden-record/:uid/linked-records'
     ],
     accessLevel: [],
-    readOnly: false,
-    rules: { required: false, regex: '.*' }
-  },
-  {
-    fieldName: 'facilityName',
-    fieldType: 'String',
-    fieldLabel: 'Facility Name',
-    groups: ['registering_facility', 'linked_records'],
-    scope: [
-      '/patient-record/:uid',
-      '/golden-record/:uid',
-      '/golden-record/:uid/linked-records'
-    ],
-    accessLevel: [],
-    readOnly: false,
-    rules: { required: false, regex: '.*' }
+    readOnly: true
   },
   {
     fieldName: 'village',
