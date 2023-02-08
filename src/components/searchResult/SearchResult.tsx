@@ -98,13 +98,16 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
   const handleRequestToSort = useCallback(
     (model: GridSortModel) => {
-      setPayLoad({
-        ...payload!,
-        sortAsc: model[0]?.sort === 'asc' ? true : false,
-        sortBy: model[0]?.field
-      })
+      if (model.length > 0) {
+        const [column] = model
+        setPayLoad({
+          ...payload!,
+          sortAsc: column.sort === 'asc',
+          sortBy: column.field
+        })
+      }
     },
-    [payload]
+    [payload, setPayLoad]
   )
 
   const handlePaginate = useCallback(
