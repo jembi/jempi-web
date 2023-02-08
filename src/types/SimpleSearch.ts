@@ -9,10 +9,14 @@ export interface SimpleSearchQuery {
 }
 export interface CustomSearchQuery {
   $or: SimpleSearchQuery[]
+  sortBy: string
+  sortAsc: boolean
+  offset?: number
+  limit?: number
 }
 export interface SearchQuery {
   parameters: SearchParameter[]
-  sortBy: string,
+  sortBy: string
   sortAsc: boolean
   offset?: number
   limit?: number

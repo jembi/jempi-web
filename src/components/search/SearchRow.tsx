@@ -96,7 +96,6 @@ const SearchRow: React.FC<SearchRowProps> = ({
               name={`fieldName`}
               isCustomRow={isCustomRow}
               fieldGroupIndex={fieldGroupIndex}
-
             />
           </Grid>
         )}
@@ -134,7 +133,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
               isCustomRow={isCustomRow}
               index={index}
               fieldGroupIndex={fieldGroupIndex}
-              disabled={fieldToSelect?.fieldName ? false : true}
+              disabled={fieldToSelect?.fieldName || !isCustomRow ? false : true}
             />
           )}
         </Grid>

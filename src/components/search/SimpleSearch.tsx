@@ -41,7 +41,7 @@ const SimpleSearch: React.FC = () => {
         distance: 0
       }
     }),
-    sortBy: '',
+    sortBy: 'uid',
     sortAsc: true,
     offset: 0,
     limit: 10
@@ -101,11 +101,7 @@ const SimpleSearch: React.FC = () => {
                 <Grid item container direction="column" width="fit-content">
                   <Grid item>
                     <Stack direction={'row'} spacing={0.5}>
-                      <Typography
-                        variant="h5"
-                      >
-                        Search
-                      </Typography>
+                      <Typography variant="h5">Search</Typography>
                       {isGoldenRecord ? (
                         <Typography
                           variant="h5"
@@ -114,10 +110,7 @@ const SimpleSearch: React.FC = () => {
                           Golden
                         </Typography>
                       ) : (
-                        <Typography
-                          variant="h5"
-                          sx={{fontWeight: 700}}
-                        >
+                        <Typography variant="h5" sx={{ fontWeight: 700 }}>
                           Patient
                         </Typography>
                       )}
@@ -153,9 +146,9 @@ const SimpleSearch: React.FC = () => {
                           <SearchRow
                             field={field}
                             parameter={parameter}
-                            index={index}
                             onChange={handleChange}
                             key={field.fieldName}
+                            index={index}
                           />
                         )
                       })}
@@ -165,11 +158,7 @@ const SimpleSearch: React.FC = () => {
                 <Grid item>
                   {/* TODO move colors to theme */}
                   <LocationLink
-                    to={
-                      isGoldenRecord
-                        ? '/search/golden'
-                        : '/search/patient'
-                    }
+                    to={isGoldenRecord ? '/search/golden' : '/search/patient'}
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}
                   >

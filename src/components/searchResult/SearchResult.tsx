@@ -16,7 +16,7 @@ import React from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import { Data } from '../../types/SearchResults'
-import { SearchQuery } from '../../types/SimpleSearch'
+import { CustomSearchQuery, SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
 
@@ -32,50 +32,72 @@ type SearchResultProps = {
   isCustomSearch: boolean
 }
 
-interface sortingPropertiesProps {
+interface SortingPropertiesProps {
   sortBy: string
   order: GridSortDirection
 }
 
-const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCustomSearch }) => {
+const SearchResult: React.FC<SearchResultProps> = ({
+  isGoldenRecord,
+  title,
+  isCustomSearch
+}) => {
   const searchParams = useSearch<ResultProps>()
   const { availableFields } = useAppConfig()
 
-  const columns: GridColDef[] = availableFields.map(({ fieldName, fieldLabel }) => {
-    return {
-      field: fieldName,
-      headerName: fieldName === 'uid' ? 'Golden ID' : fieldLabel,
-      minWidth: 150,
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: fieldName === 'uid' ? (params: GridRenderCellParams<string>) => {
-        return <Link href={`/golden-record/${params.row.uid}`}  key={params.row.uid}>{params.row.uid}</Link>
-      }: undefined,
-      filterable: false
+  const columns: GridColDef[] = availableFields.map(
+    ({ fieldName, fieldLabel }) => {
+      return {
+        field: fieldName,
+        headerName: fieldName === 'uid' ? 'Golden ID' : fieldLabel,
+        minWidth: 150,
+        flex: 2,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell:
+          fieldName === 'uid'
+            ? (params: GridRenderCellParams<string>) => {
+                return (
+                  <Link
+                    href={`/golden-record/${params.row.uid}`}
+                    key={params.row.uid}
+                  >
+                    {params.row.uid}
+                  </Link>
+                )
+              }
+            : undefined,
+        filterable: false
+      }
     }
-  })
-
-  const [payload, setPayLoad] = React.useState<SearchQuery>(
-    searchParams.payload!
   )
 
+  const [payload, setPayLoad] = React.useState<SearchQuery | CustomSearchQuery>(
+    searchParams.payload!
+  )
+  console.log(isGoldenRecord)
   const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
     queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', payload],
     queryFn: () => {
-
-      if(isCustomSearch){
+      if (isCustomSearch) {
         if (isGoldenRecord) {
-          return ApiClient.postSimpleSearchGoldenRecordQuery(payload)
+          return ApiClient.postCustomSearchGoldenRecordQuery(
+            payload as CustomSearchQuery
+          )
         } else {
-          return ApiClient.postSimpleSearchPatientRecordQuery(payload)
+          return ApiClient.postCustomSearchPatientRecordQuery(
+            payload as CustomSearchQuery
+          )
         }
-      }
-      else{
+      } else {
         if (isGoldenRecord) {
-          return ApiClient.postCustomSearchGoldenRecordQuery(payload)
+          return ApiClient.postSimpleSearchGoldenRecordQuery(
+            payload as SearchQuery
+          )
         } else {
-          return ApiClient.postCustomSearchPatientRecordQuery(payload)
+          return ApiClient.postSimpleSearchPatientRecordQuery(
+            payload as SearchQuery
+          )
         }
       }
     },
@@ -86,8 +108,10 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCu
     return <Loading />
   }
 
-  const initialSortingValues: sortingPropertiesProps = {
-    sortBy: '',
+  console.log(patientRecord)
+
+  const initialSortingValues: SortingPropertiesProps = {
+    sortBy: 'uid',
     order: 'asc'
   }
   const handleRequestToSort = (model: GridSortModel) => {
@@ -99,7 +123,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCu
       initialSortingValues
     )
 
-    const updatedPayload: SearchQuery = {
+    const updatedPayload = {
       ...payload!,
       sortAsc: sortingProperties?.order === 'asc' ? true : false,
       sortBy: sortingProperties?.sortBy

@@ -135,27 +135,27 @@ class ApiClient {
       .then(res => res.data)
   }
 
-  async postSimpleSearchGoldenRecordQuery(request: SearchQuery) {       
+  async postSimpleSearchGoldenRecordQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH_GOLDEN_RECORD, request)
       .then(res => res.data)
   }
 
-  async postSimpleSearchPatientRecordQuery(request: SearchQuery) {       
+  async postSimpleSearchPatientRecordQuery(request: SearchQuery) {
     return await client
       .post(ROUTES.POST_SIMPLE_SEARCH_PATIENT_RECORD, request)
       .then(res => res.data)
   }
 
-  async postCustomSearchGoldenRecordQuery(request: SearchQuery) {       
+  async postCustomSearchGoldenRecordQuery(request: CustomSearchQuery) {
     return await client
       .post(ROUTES.POST_CUSTOM_SEARCH_GOLDEN_RECORD, request)
       .then(res => res.data)
   }
 
-  async postCustomSearchPatientRecordQuery(request: SearchQuery) {       
+  async postCustomSearchPatientRecordQuery(request: CustomSearchQuery) {
     return await client
-      .post(ROUTES.POST_CUSTOM_SEARCH_GOLDEN_RECORD, request)
+      .post(ROUTES.POST_CUSTOM_SEARCH_PATIENT_RECORD, request)
       .then(res => res.data)
   }
 
@@ -191,11 +191,6 @@ class ApiClient {
   uploadFile = async (requestConfig: AxiosRequestConfig<FormData>) => {
     await client
       .post(ROUTES.UPLOAD, requestConfig.data, requestConfig)
-      .then(res => res.data)
-  }
-  async postCustomSearchQuery(request: CustomSearchQuery) {
-    return await client
-      .post(ROUTES.POST_CUSTOM_SEARCH, request)
       .then(res => res.data)
   }
 }

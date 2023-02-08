@@ -11,11 +11,8 @@ import {
 } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import { useState } from 'react'
-import ApiClient from '../../services/ApiClient'
 import {
   CustomSearchQuery,
   FlagLabel,
@@ -30,18 +27,10 @@ import FieldGroup from './FieldGroup'
 
 const CustomSearch: React.FC = () => {
   const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
-
   const options: SearchFlagsOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
-  //TODO: find a better way of handling error while posting the search request
-  const { mutate } = useMutation({
-    mutationFn: ApiClient.postCustomSearchQuery,
-    onError: (error: AxiosError) => {
-      console.log(`Oops! Error getting search result: ${error.message}`)
-    }
-  })
 
   const initialSearchParameter: SearchParameter = {
     fieldName: '',
@@ -50,7 +39,6 @@ const CustomSearch: React.FC = () => {
   }
 
   function handleOnFormSubmit(value: CustomSearchQuery) {
-    mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
@@ -59,7 +47,11 @@ const CustomSearch: React.FC = () => {
       {
         parameters: [initialSearchParameter]
       }
-    ]
+    ],
+    sortBy: 'uid',
+    sortAsc: true,
+    offset: 0,
+    limit: 10
   }
 
   return (
