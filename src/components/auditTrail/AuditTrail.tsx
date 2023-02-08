@@ -128,7 +128,7 @@ const AuditTrail = () => {
               width: '152px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={`patient/${uid}`}
+            href={`/golden-record/${uid}`}
           >
             <Typography variant="button">BACK TO RECORD</Typography>
           </Button>
