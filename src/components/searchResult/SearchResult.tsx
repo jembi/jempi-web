@@ -15,7 +15,7 @@ import { AxiosError } from 'axios'
 import React from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { Data } from '../../types/SearchResults'
+import { SearchRecord } from '../../types/SearchResults'
 import { CustomSearchQuery, SearchQuery } from '../../types/SimpleSearch'
 import Loading from '../common/Loading'
 import PageHeader from '../shell/PageHeader'
@@ -75,8 +75,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
   const [payload, setPayLoad] = React.useState<SearchQuery | CustomSearchQuery>(
     searchParams.payload!
   )
-  console.log(isGoldenRecord)
-  const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
+l
+  const { data: patientRecord, isLoading } = useQuery<SearchRecord[], AxiosError>({
     queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', payload],
     queryFn: () => {
       if (isCustomSearch) {
@@ -107,8 +107,6 @@ const SearchResult: React.FC<SearchResultProps> = ({
   if (isLoading) {
     return <Loading />
   }
-
-  console.log(patientRecord)
 
   const initialSortingValues: SortingPropertiesProps = {
     sortBy: 'uid',
@@ -151,9 +149,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
 
       <DataGrid
         columns={columns}
-        rows={patientRecord!.records!.data!.map((row, index) => {
-          return row
-        })}
+        rows={patientRecord || []}
         pageSize={10}
         sx={{ mt: 4 }}
         autoHeight={true}

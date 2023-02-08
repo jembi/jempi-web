@@ -125,7 +125,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
-              value={parameter.value}
+              value={parameter?.value}
               onChange={onChange}
               name={'value'}
               sx={{ width: isCustomRow ? 220 : 400 }}
