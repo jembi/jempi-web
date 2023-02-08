@@ -56,7 +56,8 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
     queryFn: async () => {
       return await ApiClient.getCurrentUser()
     },
-    retry: false
+    retry: false,
+    refetchOnWindowFocus: false
   })
 
   const { refetch: logout } = useQuery({

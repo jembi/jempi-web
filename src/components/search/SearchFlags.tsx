@@ -5,21 +5,15 @@ import ToggleButtons from './ToggleButtons'
 
 interface SearchFlagsProps {
   options: SearchFlagsOptionsProps[]
-  setisGoldenRecord: React.Dispatch<React.SetStateAction<boolean>>
+  onChange: (isGoldenOnly: boolean) => void
 }
 
-const SearchFlags: React.FC<SearchFlagsProps> = ({ options, setisGoldenRecord }) => {
+const SearchFlags: React.FC<SearchFlagsProps> = ({ options, onChange }) => {
   const [selectedButton, setSelectedButton] = useState<string>('0')
 
   const handleChange = (event: React.ChangeEvent<any>) => {
-
-   setSelectedButton(event?.target.value)
-   if(event?.target.value === '0'){
-    setisGoldenRecord(true)
-   }
-   else{
-    setisGoldenRecord(false)
-   }
+    setSelectedButton(event?.target.value)
+    onChange(event?.target.value === '0')
   }
 
   return (

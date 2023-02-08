@@ -6,9 +6,11 @@ import {
   Divider,
   Typography
 } from '@mui/material'
+import { useNavigate } from '@tanstack/react-location'
 import group from './Group.png'
 
 const HomePage = () => {
+  const navigate = useNavigate()
   return (
     <Container maxWidth={false}>
       <Typography
@@ -108,6 +110,7 @@ const HomePage = () => {
                 width: '104px',
                 borderColor: theme => theme.palette.primary.main
               }}
+              onClick={() => navigate({ to: '/search/simple' })}
             >
               Search
             </Button>
@@ -118,6 +121,7 @@ const HomePage = () => {
                 width: '177px',
                 borderColor: theme => theme.palette.primary.main
               }}
+              onClick={() => navigate({ to: '/review-matches' })}
             >
               Review Matches
             </Button>

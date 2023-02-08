@@ -20,13 +20,14 @@ import {
   SearchFlagsOptionsProps,
   SearchQuery
 } from '../../types/SimpleSearch'
+import { PAGINATION_LIMIT } from '../../utils/constants'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
 
 const SimpleSearch: React.FC = () => {
   const { availableFields } = useAppConfig()
-  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
+  const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
 
   const options: SearchFlagsOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
@@ -42,9 +43,9 @@ const SimpleSearch: React.FC = () => {
       }
     }),
     sortBy: 'uid',
-    sortAsc: true,
+    sortAsc: false,
     offset: 0,
-    limit: 10
+    limit: PAGINATION_LIMIT
   }
 
   return (
@@ -62,10 +63,7 @@ const SimpleSearch: React.FC = () => {
           }
         ]}
         buttons={[
-          <SearchFlags
-            options={options}
-            setisGoldenRecord={setisGoldenRecord}
-          />,
+          <SearchFlags options={options} onChange={setIsGoldenOnly} />,
           <Button
             variant="outlined"
             sx={{
@@ -73,7 +71,7 @@ const SimpleSearch: React.FC = () => {
               width: '172px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={'/custom-search-screen'}
+            href={'/search/custom'}
           >
             <Typography variant="button">CUSTOM SEARCH</Typography>
           </Button>
@@ -102,7 +100,7 @@ const SimpleSearch: React.FC = () => {
                   <Grid item>
                     <Stack direction={'row'} spacing={0.5}>
                       <Typography variant="h5">Search</Typography>
-                      {isGoldenRecord ? (
+                      {isGoldenOnly ? (
                         <Typography
                           variant="h5"
                           sx={{ color: '#FBC02D', fontWeight: 700 }}
@@ -130,9 +128,7 @@ const SimpleSearch: React.FC = () => {
                         search rules with
                       </Typography>
                       <Typography variant="body2">
-                        <Link href={'/custom-search-screen'}>
-                          Custom Search
-                        </Link>
+                        <Link href={'/search/custom'}>Custom Search</Link>
                       </Typography>
                     </Stack>
                   </Grid>
@@ -143,22 +139,25 @@ const SimpleSearch: React.FC = () => {
                       {availableFields.map((field, index) => {
                         const parameter = values.parameters[index]
                         return (
-                          <SearchRow
-                            field={field}
-                            parameter={parameter}
-                            onChange={handleChange}
-                            key={field.fieldName}
-                            index={index}
-                          />
+                          parameter && (
+                            <SearchRow
+                              field={field}
+                              parameter={parameter}
+                              onChange={handleChange}
+                              key={field.fieldName}
+                              index={index}
+                            />
+                          )
                         )
                       })}
                     </>
                   )}
                 </FieldArray>
                 <Grid item>
-                  {/* TODO move colors to theme */}
                   <LocationLink
-                    to={isGoldenRecord ? '/search/golden' : '/search/patient'}
+                    to={`/search-results/${
+                      isGoldenOnly ? 'golden' : 'patient'
+                    }`}
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}
                   >

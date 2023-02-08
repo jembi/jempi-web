@@ -4,7 +4,11 @@ import AuditTrailRecord from '../types/AuditTrail'
 import { FieldChangeReq, Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
 import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
-import { CustomSearchQuery, SearchQuery } from '../types/SimpleSearch'
+import {
+  ApiSearchResult,
+  CustomSearchQuery,
+  SearchQuery
+} from '../types/SimpleSearch'
 import { OAuthParams, User } from '../types/User'
 import ROUTES from './apiRoutes'
 import axiosInstance from './axios'
@@ -135,30 +139,37 @@ class ApiClient {
       .then(res => res.data)
   }
 
-  async postSimpleSearchGoldenRecordQuery(request: SearchQuery) {
-    return await client
-      .post(ROUTES.POST_SIMPLE_SEARCH_GOLDEN_RECORD, request)
-      .then(res => res.data.records.data.map((data:any) => {
-        return data.customGoldenRecord
-      }))
-  }
-
-  async postSimpleSearchPatientRecordQuery(request: SearchQuery) {
-    return await client
-      .post(ROUTES.POST_SIMPLE_SEARCH_PATIENT_RECORD, request)
-      .then(res => res.data.records.data)
-  }
-
-  async postCustomSearchGoldenRecordQuery(request: CustomSearchQuery) {
-    return await client
-      .post(ROUTES.POST_CUSTOM_SEARCH_GOLDEN_RECORD, request)
-      .then(res => res.data)
-  }
-
-  async postCustomSearchPatientRecordQuery(request: CustomSearchQuery) {
-    return await client
-      .post(ROUTES.POST_CUSTOM_SEARCH_PATIENT_RECORD, request)
-      .then(res => res.data)
+  async searchQuery(
+    request: CustomSearchQuery | SearchQuery,
+    isGoldenOnly: boolean
+  ) {
+    const isCustomSearch = '$or' in request
+    const endpoint = `${
+      isCustomSearch ? ROUTES.POST_CUSTOM_SEARCH : ROUTES.POST_SIMPLE_SEARCH
+    }/${isGoldenOnly ? 'golden' : 'patient'}`
+    return await client.post(endpoint, request).then(res => {
+      if (isGoldenOnly) {
+        const { pagination, data } = res.data.records
+        const result: ApiSearchResult = {
+          records: {
+            data: data.map((d: any) => {
+              return {
+                ...d.customGoldenRecord,
+                linkRecords: d.mpiEntityList.map(
+                  (entityItem: any) => entityItem.entity
+                )
+              }
+            }),
+            pagination: {
+              total: pagination.total
+            }
+          }
+        }
+        return result
+      } else {
+        return res.data
+      }
+    })
   }
 
   async validateOAuth(oauthParams: OAuthParams) {
