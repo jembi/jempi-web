@@ -20,7 +20,7 @@ const {
   currentUser,
   linkedRecords,
   searchGoldenRecordResult,
-  searchPatientRecordResult,
+  searchPatientRecordResult
 } = mockData
 
 axiosMockAdapterInstance
@@ -61,14 +61,17 @@ axiosMockAdapterInstance
   .reply(200, linkedRecords)
   .onGet(ROUTES.AUDIT_TRAIL)
   .reply(200, auditTrail)
+  .onPost(`${ROUTES.POST_SIMPLE_SEARCH}/golden`)
+  .reply(200, searchGoldenRecordResult)
+  .onPost(`${ROUTES.POST_SIMPLE_SEARCH}/patient`)
+  .reply(200, searchPatientRecordResult)
+  .onPost(`${ROUTES.POST_CUSTOM_SEARCH}/golden`)
+  .reply(200, searchGoldenRecordResult)
+  .onPost(`${ROUTES.POST_CUSTOM_SEARCH}/patient`)
+  .reply(200, searchPatientRecordResult)
 
 const sleep = (value: number) =>
   new Promise(resolve => setTimeout(resolve, value))
-
-axiosMockAdapterInstance.onPost(ROUTES.POST_SIMPLE_SEARCH_GOLDEN_RECORD).reply(200, searchGoldenRecordResult)
-axiosMockAdapterInstance.onPost(ROUTES.POST_SIMPLE_SEARCH_PATIENT_RECORD).reply(200, searchPatientRecordResult)
-axiosMockAdapterInstance.onPost(ROUTES.POST_CUSTOM_SEARCH_GOLDEN_RECORD).reply(200, searchGoldenRecordResult)
-axiosMockAdapterInstance.onPost(ROUTES.POST_CUSTOM_SEARCH_PATIENT_RECORD).reply(200, searchPatientRecordResult)
 
 //Successful upload
 axiosMockAdapterInstance.onPost(ROUTES.UPLOAD).reply(async config => {

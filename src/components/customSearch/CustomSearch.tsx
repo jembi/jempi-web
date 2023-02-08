@@ -11,11 +11,8 @@ import {
 } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { FieldArray, Form, Formik } from 'formik'
 import { useState } from 'react'
-import ApiClient from '../../services/ApiClient'
 import {
   CustomSearchQuery,
   FlagLabel,
@@ -23,25 +20,18 @@ import {
   SearchParameter,
   SimpleSearchQuery
 } from '../../types/SimpleSearch'
+import { PAGINATION_LIMIT } from '../../utils/constants'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
 
 const CustomSearch: React.FC = () => {
-  const [isGoldenRecord, setisGoldenRecord] = useState<boolean>(true)
-
+  const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
   const options: SearchFlagsOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
-  //TODO: find a better way of handling error while posting the search request
-  const { mutate } = useMutation({
-    mutationFn: ApiClient.postCustomSearchQuery,
-    onError: (error: AxiosError) => {
-      console.log(`Oops! Error getting search result: ${error.message}`)
-    }
-  })
 
   const initialSearchParameter: SearchParameter = {
     fieldName: '',
@@ -50,7 +40,6 @@ const CustomSearch: React.FC = () => {
   }
 
   function handleOnFormSubmit(value: CustomSearchQuery) {
-    mutate(value)
     console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
   }
 
@@ -59,7 +48,11 @@ const CustomSearch: React.FC = () => {
       {
         parameters: [initialSearchParameter]
       }
-    ]
+    ],
+    sortBy: 'uid',
+    sortAsc: true,
+    offset: 0,
+    limit: PAGINATION_LIMIT
   }
 
   return (
@@ -80,10 +73,7 @@ const CustomSearch: React.FC = () => {
                 }
               ]}
               buttons={[
-                <SearchFlags
-                  options={options}
-                  setisGoldenRecord={setisGoldenRecord}
-                />,
+                <SearchFlags options={options} onChange={setIsGoldenOnly} />,
                 <Button
                   variant="outlined"
                   sx={{
@@ -91,7 +81,7 @@ const CustomSearch: React.FC = () => {
                     width: '172px',
                     borderColor: theme => theme.palette.primary.main
                   }}
-                  href={'/simple-search-screen'}
+                  href={'/search/simple'}
                 >
                   <Typography variant="button">SIMPLE SEARCH</Typography>
                 </Button>
@@ -135,7 +125,7 @@ const CustomSearch: React.FC = () => {
                             Custom Your Search Rules
                           </Typography>
                           <Typography variant="body2">
-                            <Link href={'/simple-search-screen'}>
+                            <Link href={'/search/simple'}>
                               Use simple search
                             </Link>
                           </Typography>
@@ -213,11 +203,9 @@ const CustomSearch: React.FC = () => {
                           sx={{ flexGrow: 1 }}
                         >
                           <LocationLink
-                            to={
-                              isGoldenRecord
-                                ? '/custom-search/golden'
-                                : '/custom-search/patient'
-                            }
+                            to={`/search-results/${
+                              isGoldenOnly ? 'golden' : 'patient'
+                            }`}
                             search={{ payload: values }}
                             style={{ textDecoration: 'none' }}
                           >
@@ -239,7 +227,7 @@ const CustomSearch: React.FC = () => {
                               borderColor: theme => theme.palette.primary.main,
                               color: theme => theme.palette.primary.main
                             }}
-                            href="/simple-search-screen"
+                            href="/search/simple"
                           >
                             Cancel
                           </Button>

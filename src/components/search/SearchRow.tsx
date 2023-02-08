@@ -33,7 +33,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
   remove,
   fieldGroupIndex,
   setFieldValue,
-  isCustomRow = false
+  isCustomRow: isCustomSearchRow = false
 }) => {
   const { availableFields } = useAppConfig()
 
@@ -65,7 +65,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
 
   return (
     <Grid item container direction={'column'}>
-      {isCustomRow && index > 0 ? (
+      {isCustomSearchRow && index > 0 ? (
         <Grid item container direction={'row'} justifyContent={'center'}>
           <Typography>And</Typography>
         </Grid>
@@ -77,10 +77,10 @@ const SearchRow: React.FC<SearchRowProps> = ({
         direction="row"
         alignItems="center"
         width="fit-content"
-        sx={{ mb: isCustomRow ? 1 : 0, ml: isCustomRow ? 3 : 0 }}
-        spacing={isCustomRow ? 1 : 0}
+        sx={{ mb: isCustomSearchRow ? 1 : 0, ml: isCustomSearchRow ? 3 : 0 }}
+        spacing={isCustomSearchRow ? 1 : 0}
       >
-        {isCustomRow && (
+        {isCustomSearchRow && (
           <Grid item>
             <SearchSelectField
               fieldName={fieldToSelect ? fieldToSelect!.fieldName : ''}
@@ -94,9 +94,8 @@ const SearchRow: React.FC<SearchRowProps> = ({
               description={'Select Field Type'}
               sx={{ width: 220, mt: 0.4 }}
               name={`fieldName`}
-              isCustomRow={isCustomRow}
+              isCustomRow={isCustomSearchRow}
               fieldGroupIndex={fieldGroupIndex}
-
             />
           </Grid>
         )}
@@ -105,36 +104,36 @@ const SearchRow: React.FC<SearchRowProps> = ({
           field?.fieldType === 'Date' ? (
             <SearchDateInput
               label={
-                isCustomRow
+                isCustomSearchRow
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
               onChange={onChange}
               name={'value'}
-              sx={{ width: isCustomRow ? 220 : 400 }}
-              size={isCustomRow ? 'medium' : 'small'}
+              sx={{ width: isCustomSearchRow ? 220 : 400 }}
+              size={isCustomSearchRow ? 'medium' : 'small'}
               setFieldValue={setFieldValue}
-              isCustomRow={isCustomRow}
+              isCustomRow={isCustomSearchRow}
               index={index}
               fieldGroupIndex={fieldGroupIndex}
             />
           ) : (
             <SearchTextInput
               label={
-                isCustomRow
+                isCustomSearchRow
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
                   : field!.fieldLabel
               }
               value={parameter.value}
               onChange={onChange}
               name={'value'}
-              sx={{ width: isCustomRow ? 220 : 400 }}
-              size={isCustomRow ? 'medium' : 'small'}
-              isCustomRow={isCustomRow}
+              sx={{ width: isCustomSearchRow ? 220 : 400 }}
+              size={isCustomSearchRow ? 'medium' : 'small'}
+              isCustomRow={isCustomSearchRow}
               index={index}
               fieldGroupIndex={fieldGroupIndex}
-              disabled={fieldToSelect?.fieldName ? false : true}
+              disabled={isCustomSearchRow && !fieldToSelect?.fieldName}
             />
           )}
         </Grid>
@@ -145,16 +144,16 @@ const SearchRow: React.FC<SearchRowProps> = ({
             index={index}
             title={'Match Type'}
             description={'Select Match Type'}
-            sx={{ width: 220, ml: isCustomRow ? 0 : 2, mt: 3 }}
+            sx={{ width: 220, ml: isCustomSearchRow ? 0 : 2, mt: 3 }}
             name={'distance'}
             helperText={'Sets distance parameter 0-3'}
             fieldName={matchType}
-            size={isCustomRow ? 'medium' : 'small'}
-            isCustomRow={isCustomRow}
+            size={isCustomSearchRow ? 'medium' : 'small'}
+            isCustomRow={isCustomSearchRow}
             fieldGroupIndex={fieldGroupIndex}
           />
         </Grid>
-        {isCustomRow && (
+        {isCustomSearchRow && (
           <Grid item minWidth={'48px'}>
             {enableDelete && (
               <IconButton onClick={() => remove && remove(index)}>

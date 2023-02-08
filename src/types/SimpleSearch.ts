@@ -1,3 +1,5 @@
+import { AnyRecord } from './PatientRecord'
+
 export interface SearchParameter {
   fieldName: string
   value: string | Date
@@ -7,15 +9,19 @@ export interface SearchParameter {
 export interface SimpleSearchQuery {
   parameters: SearchParameter[]
 }
-export interface CustomSearchQuery {
+
+export interface BaseSearchQuery {
+  sortBy: string
+  sortAsc: boolean
+  offset: number
+  limit: number
+}
+
+export interface CustomSearchQuery extends BaseSearchQuery {
   $or: SimpleSearchQuery[]
 }
-export interface SearchQuery {
+export interface SearchQuery extends BaseSearchQuery {
   parameters: SearchParameter[]
-  sortBy: string,
-  sortAsc: boolean
-  offset?: number
-  limit?: number
 }
 
 export enum FlagLabel {
@@ -27,4 +33,13 @@ export enum FlagLabel {
 export interface SearchFlagsOptionsProps {
   value: number
   label: string
+}
+
+export interface ApiSearchResult {
+  records: {
+    data: AnyRecord[]
+    pagination: {
+      total: number
+    }
+  }
 }

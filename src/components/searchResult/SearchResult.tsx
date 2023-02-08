@@ -12,82 +12,98 @@ import {
 import { MakeGenerics, useSearch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { Data } from '../../types/SearchResults'
-import { SearchQuery } from '../../types/SimpleSearch'
-import Loading from '../common/Loading'
+import {
+  ApiSearchResult,
+  CustomSearchQuery,
+  SearchQuery
+} from '../../types/SimpleSearch'
 import PageHeader from '../shell/PageHeader'
 
-type ResultProps = MakeGenerics<{
+type UrlQueryParams = MakeGenerics<{
   Search: {
-    payload: SearchQuery
+    payload: SearchQuery | CustomSearchQuery
   }
 }>
 
 type SearchResultProps = {
   isGoldenRecord: boolean
   title: string
-  isCustomSearch: boolean
 }
 
-interface sortingPropertiesProps {
+interface SortingPropertiesProps {
   sortBy: string
   order: GridSortDirection
 }
 
-const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCustomSearch }) => {
-  const searchParams = useSearch<ResultProps>()
+const SearchResult: React.FC<SearchResultProps> = ({
+  isGoldenRecord,
+  title
+}) => {
+  const { payload: searchPayload } = useSearch<UrlQueryParams>()
+  const [payload, setPayLoad] = React.useState<SearchQuery | CustomSearchQuery>(
+    searchPayload!
+  )
   const { availableFields } = useAppConfig()
 
-  const columns: GridColDef[] = availableFields.map(({ fieldName, fieldLabel }) => {
-    return {
-      field: fieldName,
-      headerName: fieldName === 'uid' ? 'Golden ID' : fieldLabel,
-      minWidth: 150,
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: fieldName === 'uid' ? (params: GridRenderCellParams<string>) => {
-        return <Link href={`/golden-record/${params.row.uid}`}  key={params.row.uid}>{params.row.uid}</Link>
-      }: undefined,
-      filterable: false
-    }
-  })
-
-  const [payload, setPayLoad] = React.useState<SearchQuery>(
-    searchParams.payload!
+  const columns: GridColDef[] = useMemo(
+    () =>
+      availableFields.map(({ fieldName, fieldLabel }) => {
+        if (fieldName === 'uid') {
+          return {
+            field: fieldName,
+            headerName: `${isGoldenRecord ? 'Golden ID' : 'Record ID'}`,
+            flex: 2,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: (params: GridRenderCellParams<string>) => {
+              return isGoldenRecord ? (
+                <Link
+                  href={`/golden-record/${params.row.uid}`}
+                  key={params.row.uid}
+                >
+                  {params.row.uid}
+                </Link>
+              ) : (
+                <Link
+                  href={`/patient-record/${params.row.uid}`}
+                  key={params.row.uid}
+                >
+                  {params.row.uid}
+                </Link>
+              )
+            },
+            filterable: false
+          }
+        }
+        return {
+          field: fieldName,
+          headerName: fieldLabel,
+          minWidth: 150,
+          flex: 2,
+          align: 'center',
+          headerAlign: 'center',
+          filterable: false
+        }
+      }),
+    [availableFields, isGoldenRecord]
   )
 
-  const { data: patientRecord, isLoading } = useQuery<Data, AxiosError>({
+  const { data: searchResults, isLoading } = useQuery<
+    ApiSearchResult,
+    AxiosError
+  >({
     queryKey: [isGoldenRecord ? 'golden-record' : 'patient-record', payload],
     queryFn: () => {
-
-      if(isCustomSearch){
-        if (isGoldenRecord) {
-          return ApiClient.postSimpleSearchGoldenRecordQuery(payload)
-        } else {
-          return ApiClient.postSimpleSearchPatientRecordQuery(payload)
-        }
-      }
-      else{
-        if (isGoldenRecord) {
-          return ApiClient.postCustomSearchGoldenRecordQuery(payload)
-        } else {
-          return ApiClient.postCustomSearchPatientRecordQuery(payload)
-        }
-      }
+      return ApiClient.searchQuery(payload, isGoldenRecord)
     },
     refetchOnWindowFocus: false
   })
 
-  if (isLoading) {
-    return <Loading />
-  }
-
-  const initialSortingValues: sortingPropertiesProps = {
-    sortBy: '',
+  const initialSortingValues: SortingPropertiesProps = {
+    sortBy: 'uid',
     order: 'asc'
   }
   const handleRequestToSort = (model: GridSortModel) => {
@@ -99,7 +115,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCu
       initialSortingValues
     )
 
-    const updatedPayload: SearchQuery = {
+    const updatedPayload = {
       ...payload!,
       sortAsc: sortingProperties?.order === 'asc' ? true : false,
       sortBy: sortingProperties?.sortBy
@@ -107,6 +123,26 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCu
 
     setPayLoad(updatedPayload)
   }
+
+  const handlePaginate = useCallback(
+    (page: number) => {
+      setPayLoad({
+        ...payload,
+        offset: page * payload.limit
+      })
+    },
+    [setPayLoad, payload]
+  )
+
+  const handlePageSizeChange = useCallback(
+    (size: number) => {
+      setPayLoad({
+        ...payload,
+        limit: size
+      })
+    },
+    [setPayLoad, payload]
+  )
 
   return (
     <Container maxWidth={false}>
@@ -127,15 +163,23 @@ const SearchResult: React.FC<SearchResultProps> = ({ isGoldenRecord, title, isCu
 
       <DataGrid
         columns={columns}
-        rows={patientRecord!.records!.data!.map((row, index) => {
-          return row
-        })}
-        pageSize={10}
+        rows={searchResults ? searchResults.records.data : []}
         sx={{ mt: 4 }}
         autoHeight={true}
         getRowId={row => row.uid}
         onSortModelChange={handleRequestToSort}
-        rowsPerPageOptions={[5, 10, 20]}
+        pagination
+        rowsPerPageOptions={[
+          payload.limit / 2,
+          payload.limit,
+          payload.limit * 2
+        ]}
+        pageSize={payload.limit}
+        onPageChange={handlePaginate}
+        onPageSizeChange={handlePageSizeChange}
+        rowCount={searchResults?.records.pagination.total || 0}
+        paginationMode="server"
+        loading={isLoading}
       />
     </Container>
   )
