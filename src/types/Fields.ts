@@ -13,7 +13,7 @@ export type FieldGroup =
   | 'linked_records'
   | 'audit_trail'
 
-export type FieldType = 'String' | 'Number' | 'Date' | 'Boolean'
+export type FieldType = 'String' | 'Number' | 'Date' | 'Boolean' | 'SourceId'
 
 export interface Field {
   fieldName: string

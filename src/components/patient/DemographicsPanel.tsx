@@ -3,7 +3,7 @@ import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { FC } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
-import DataGridCutomInput from './DataGridCutomInput'
+import DataGridCellInput from './DataGridCellInput'
 
 const DemographicsPanel: FC<{
   data: PatientRecord | GoldenRecord
@@ -28,7 +28,7 @@ const DemographicsPanel: FC<{
             error: isValid(props.value)
           }
         },
-        renderEditCell: props => <DataGridCutomInput {...props} />
+        renderEditCell: props => <DataGridCellInput {...props} />
       }
     }
   )

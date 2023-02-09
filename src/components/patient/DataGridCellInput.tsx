@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material'
 import { GridEditInputCellProps, useGridApiContext } from '@mui/x-data-grid'
 
-const DataGridCutomInput = (props: GridEditInputCellProps) => {
+const DataGridCellInput = (props: GridEditInputCellProps) => {
   const { id, value, field, error } = props
   const apiRef = useGridApiContext()
 
@@ -28,4 +28,4 @@ const DataGridCutomInput = (props: GridEditInputCellProps) => {
   )
 }
 
-export default DataGridCutomInput
+export default DataGridCellInput
