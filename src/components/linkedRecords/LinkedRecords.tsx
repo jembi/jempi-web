@@ -52,8 +52,6 @@ const LinkedRecords = () => {
     return <NotFound />
   }
 
-  console.log(uid)
-
   return (
     <>
       <PageHeader

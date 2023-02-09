@@ -42,7 +42,6 @@ axiosMockAdapterInstance
   .reply(config => {
     const id = config.url?.split('/').pop()
     if (goldenRecord.uid === id) {
-      console.log(config)
       return [200, goldenRecord]
     }
     return [404, {}]
