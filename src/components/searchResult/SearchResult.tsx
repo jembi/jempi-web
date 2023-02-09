@@ -6,7 +6,6 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
-  GridSortDirection,
   GridSortModel
 } from '@mui/x-data-grid'
 import { MakeGenerics, useSearch } from '@tanstack/react-location'
@@ -31,11 +30,6 @@ type UrlQueryParams = MakeGenerics<{
 type SearchResultProps = {
   isGoldenRecord: boolean
   title: string
-}
-
-interface SortingPropertiesProps {
-  sortBy: string
-  order: GridSortDirection
 }
 
 const SearchResult: React.FC<SearchResultProps> = ({
@@ -102,27 +96,19 @@ const SearchResult: React.FC<SearchResultProps> = ({
     refetchOnWindowFocus: false
   })
 
-  const initialSortingValues: SortingPropertiesProps = {
-    sortBy: 'uid',
-    order: 'asc'
-  }
-  const handleRequestToSort = (model: GridSortModel) => {
-    const sortingProperties = model?.reduce(
-      (acc, curr) => ({
-        sortBy: curr.field,
-        order: curr.sort
-      }),
-      initialSortingValues
-    )
-
-    const updatedPayload = {
-      ...payload!,
-      sortAsc: sortingProperties?.order === 'asc' ? true : false,
-      sortBy: sortingProperties?.sortBy
-    }
-
-    setPayLoad(updatedPayload)
-  }
+  const handleRequestToSort = useCallback(
+    (model: GridSortModel) => {
+      if (model.length > 0) {
+        const [column] = model
+        setPayLoad({
+          ...payload!,
+          sortAsc: column.sort === 'asc',
+          sortBy: column.field
+        })
+      }
+    },
+    [payload, setPayLoad]
+  )
 
   const handlePaginate = useCallback(
     (page: number) => {
