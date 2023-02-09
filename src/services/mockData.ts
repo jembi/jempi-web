@@ -224,7 +224,8 @@ const goldenRecord: GoldenRecord = {
       uid: '0x3288',
       patient: 'xxx'
     }
-  ]
+  ],
+  linkRecords: [...linkedRecords]
 }
 
 const patientRecords = [patientRecord, goldenRecord]

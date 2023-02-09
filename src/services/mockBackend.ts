@@ -18,7 +18,6 @@ const {
   goldenRecords,
   auditTrail,
   currentUser,
-  linkedRecords,
   searchGoldenRecordResult,
   searchPatientRecordResult
 } = mockData
@@ -57,8 +56,6 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
-  .onGet(ROUTES.GET_LINKED_RECORDS)
-  .reply(200, linkedRecords)
   .onGet(ROUTES.AUDIT_TRAIL)
   .reply(200, auditTrail)
   .onPost(`${ROUTES.POST_SIMPLE_SEARCH}/golden`)
