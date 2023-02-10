@@ -1,7 +1,7 @@
 export interface SourceId {
   uid: string
   facility: string
-  patient: String
+  patient: string
 }
 
 export interface AnyRecord

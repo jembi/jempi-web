@@ -22,7 +22,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   description
 }) => {
   return (
-    <Grid container justifyContent="space-between" >
+    <Grid container justifyContent="space-between">
       <Grid item container direction="column" xs="auto">
         <Grid item>
           <Breadcrumbs>
