@@ -22,6 +22,7 @@ import {
 } from '../../types/SimpleSearch'
 import { PAGINATION_LIMIT } from '../../utils/constants'
 import SearchFlags from '../search/SearchFlags'
+import SubmitButton from '../search/SubmitButton'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
@@ -74,15 +75,7 @@ const CustomSearch: React.FC = () => {
               ]}
               buttons={[
                 <SearchFlags options={options} onChange={setIsGoldenOnly} />,
-                <Button
-                  variant="outlined"
-                  sx={{
-                    height: '42px',
-                    width: '172px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
-                  href={'/search/simple'}
-                >
+                <Button variant="outlined" href={'/search/simple'}>
                   <Typography variant="button">SIMPLE SEARCH</Typography>
                 </Button>
               ]}
@@ -209,31 +202,21 @@ const CustomSearch: React.FC = () => {
                             search={{ payload: values }}
                             style={{ textDecoration: 'none' }}
                           >
-                            <Button
-                              variant="contained"
-                              sx={{
-                                backgroundColor: '#274263',
-                                color: 'white',
-                                '&:hover': { backgroundColor: '#375982' }
-                              }}
-                              type="submit"
-                            >
-                              Search
-                            </Button>
+                            <SubmitButton variant="contained" label="Search" />
                           </LocationLink>
-                          <Button
+                          <SubmitButton
+                            label="Cancel"
                             variant="outlined"
-                            sx={{
-                              borderColor: theme => theme.palette.primary.main,
-                              color: theme => theme.palette.primary.main
-                            }}
+                            className='cancelButton'
                             href="/search/simple"
-                          >
-                            Cancel
-                          </Button>
+                          />
                         </Stack>
                         <Grid item>
-                          <Button variant="outlined">Query Builder</Button>
+                          <SubmitButton
+                            variant="outlined"
+                            label="Query Builder"
+                            className='mediumSizeButton'
+                          />
                         </Grid>
                       </Grid>
                     </Grid>

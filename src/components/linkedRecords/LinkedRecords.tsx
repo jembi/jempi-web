@@ -11,6 +11,7 @@ import { PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import SubmitButton from '../search/SubmitButton'
 import PageHeader from '../shell/PageHeader'
 
 const LinkedRecords = () => {
@@ -68,17 +69,11 @@ const LinkedRecords = () => {
           }
         ]}
         buttons={[
-          <Button
-            variant="contained"
-            sx={{
-              height: '36px',
-              width: '152px',
-              borderColor: theme => theme.palette.primary.main
-            }}
+          <SubmitButton
+            variant="headerButton"
             href={`/patient/${uid}`}
-          >
-            <Typography variant="button">BACK TO RECORD</Typography>
-          </Button>
+            label={<Typography variant="button">BACK TO RECORD</Typography>}
+          />
         ]}
       />
       <Divider />

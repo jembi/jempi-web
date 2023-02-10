@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import { useNavigate } from '@tanstack/react-location'
 import group from './Group.png'
+import SubmitButton from '../search/SubmitButton'
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -103,28 +104,19 @@ const HomePage = () => {
               gap: '4px'
             }}
           >
-            <Button
+            <SubmitButton
+              href="/search/simple"
+              sx={{
+                width: '104px'
+              }}
+              label="Search"
               variant="contained"
-              sx={{
-                height: '42px',
-                width: '104px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-              onClick={() => navigate({ to: '/search/simple' })}
-            >
-              Search
-            </Button>
-            <Button
+            />
+            <SubmitButton
+              href="/review-matches"
               variant="outlined"
-              sx={{
-                height: '42px',
-                width: '177px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-              onClick={() => navigate({ to: '/review-matches' })}
-            >
-              Review Matches
-            </Button>
+              label="Review Matches"
+            />
           </Box>
         </Box>
       </Card>

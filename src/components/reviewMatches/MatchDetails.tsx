@@ -30,6 +30,7 @@ import { AnyRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import SubmitButton from '../search/SubmitButton'
 import PageHeader from '../shell/PageHeader'
 
 type MatchDetailsParams = MakeGenerics<{
@@ -377,14 +378,18 @@ const MatchDetails = () => {
           <DialogContentText>{dialog.text}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleConfirm} autoFocus>
-            {accept.isLoading || newGoldenRecord.isLoading ? (
-              <CircularProgress />
-            ) : (
-              'Confirm'
-            )}
-          </Button>
+          <SubmitButton onClick={handleCancel} label="Cancel" />
+          <SubmitButton
+            onClick={handleConfirm}
+            autoFocus
+            label={
+              accept.isLoading || newGoldenRecord.isLoading ? (
+                <CircularProgress />
+              ) : (
+                'Confirm'
+              )
+            }
+          />
         </DialogActions>
       </Dialog>
     </Container>

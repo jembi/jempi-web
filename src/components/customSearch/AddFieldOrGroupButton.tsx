@@ -4,10 +4,12 @@ import { SearchParameter } from '../../types/SimpleSearch'
 
 interface AddFieldOrGroupButtonProps {
   onClick: (obj: any) => void
-  initialCustomSearchValues: SearchParameter
+  initialCustomSearchValues: SearchParameter | {
+    parameters: SearchParameter[]
+  }
   label: string
 }
-const AddFieldOrGroupButton: React.FC<any> = ({
+const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({
   onClick,
   initialCustomSearchValues,
   label

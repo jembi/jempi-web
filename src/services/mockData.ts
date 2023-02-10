@@ -17,6 +17,8 @@ const notifications: Notification[] = [
   }
 ]
 
+//TODO: update 'searchGoldenRecordResult' to match the real backend. 
+
 const searchGoldenRecordResult: ApiSearchResult = {
   records: {
     data: [
@@ -143,7 +145,7 @@ const auditTrail: AuditTrailRecord[] = [
 const patientRecord: PatientRecord = {
   auxId: '0x66',
   score: 0,
-  uid: 'G543',
+  uid: '0x8',
   nationalId: '123456',
   givenName: 'Bob',
   familyName: 'Smith',

@@ -1,6 +1,6 @@
 import { Person, Warning } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Card, Divider, Grid, Link, Typography } from '@mui/material'
+import { Card, Divider, Grid, Link, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { GridColumns } from '@mui/x-data-grid'
 import { DataGrid } from '@mui/x-data-grid/DataGrid'
@@ -12,6 +12,7 @@ import { formatDate } from '../../utils/formatters'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import SubmitButton from '../search/SubmitButton'
 import PageHeader from '../shell/PageHeader'
 
 const AUDIT_TRAIL_COLUMNS: GridColumns = [
@@ -121,17 +122,11 @@ const AuditTrail = () => {
           )}
         </Grid>
         <Grid item>
-          <Button
-            variant="contained"
-            sx={{
-              height: '36px',
-              width: '152px',
-              borderColor: theme => theme.palette.primary.main
-            }}
+          <SubmitButton
+            variant="headerButton"
             href={`patient/${uid}`}
-          >
-            <Typography variant="button">BACK TO RECORD</Typography>
-          </Button>
+            label={<Typography variant="button">BACK TO RECORD</Typography>}
+          />
         </Grid>
       </Grid>
       <Divider />

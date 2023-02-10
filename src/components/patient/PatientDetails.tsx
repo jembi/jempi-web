@@ -13,6 +13,7 @@ import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import SubmitButton from '../search/SubmitButton'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
 import ConfirmationModal from './ConfirmationModal'
@@ -166,30 +167,25 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           }
         ]}
         buttons={
-          isGoldenRecord
+          !isGoldenRecord
             ? [
-                <Button
+                <SubmitButton
                   variant="outlined"
+                  className='mediumSizeButton'
                   sx={{
-                    height: '36px',
-                    width: '117px',
-                    borderColor: theme => theme.palette.primary.main
+                    width: '117px'
                   }}
                   href={`/patient/${uid}/audit-trail`}
-                >
-                  AUDIT TRAIL
-                </Button>,
-                <Button
-                  variant="contained"
-                  sx={{
-                    height: '36px',
-                    width: '152px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
+                  label='AUDIT TRAIL'
+                />
+                
+                ,
+                <SubmitButton
+                  variant="headerButton"
                   href={`/patient/${uid}/linked-records`}
-                >
-                  LINKED RECORDS
-                </Button>
+                  label='LINKED RECORDS'
+                />
+                
               ]
             : []
         }
@@ -231,7 +227,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           />
         </Grid>
       </Grid>
-      {isGoldenRecord && (
+      {!isGoldenRecord && (
         <Box
           sx={{
             py: 4,
@@ -241,38 +237,29 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         >
           {isEditMode ? (
             <ButtonGroup>
-              <Button
+              <SubmitButton
                 onClick={() => onCancelEditing()}
                 variant="outlined"
                 sx={{
-                  height: '42px',
-                  borderColor: theme => theme.palette.primary.main
+                  width: '85px',
                 }}
-              >
-                Cancel
-              </Button>
-              <Button
+                label='Cancel'
+              />
+              <SubmitButton
                 onClick={() => onDataSave()}
                 variant="outlined"
                 sx={{
-                  height: '42px',
-                  borderColor: theme => theme.palette.primary.main
+                  width: '66px',
                 }}
-              >
-                Save
-              </Button>
+                label='Save'
+              />
             </ButtonGroup>
           ) : (
-            <Button
+            <SubmitButton
               onClick={() => setIsEditMode(true)}
               variant="outlined"
-              sx={{
-                height: '42px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-            >
-              Edit Golden Record
-            </Button>
+              label='Edit Golden Record'
+            />
           )}
         </Box>
       )}
