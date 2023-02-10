@@ -7,7 +7,7 @@ import { FC, useState } from 'react'
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone'
 import ApiClient from '../../services/ApiClient'
 import { FileObj, UploadStatus } from '../../types/FileUpload'
-import SubmitButton from '../search/SubmitButton'
+import CustomButton from '../search/CustomButton'
 import './Import.css'
 import UploadFileListItem from './UploadFileListItem'
 
@@ -197,13 +197,13 @@ const DropZone: FC = () => {
       <CardActions
         sx={{ display: 'block', textAlign: 'center', marginTop: '5%' }}
       >
-        <SubmitButton
+        <CustomButton
           variant="contained"
           onClick={handleUpload}
           label="Upload"
           disabled={uploadFileMutation.isLoading}
         />
-        <SubmitButton
+        <CustomButton
           variant="outlined"
           className="cancelButton"
           size="small"

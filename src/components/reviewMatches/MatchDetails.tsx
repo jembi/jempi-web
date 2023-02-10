@@ -29,7 +29,7 @@ import { AnyRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import SubmitButton from '../search/SubmitButton'
+import CustomButton from '../search/CustomButton'
 import PageHeader from '../shell/PageHeader'
 
 type MatchDetailsParams = MakeGenerics<{
@@ -377,8 +377,8 @@ const MatchDetails = () => {
           <DialogContentText>{dialog.text}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <SubmitButton onClick={handleCancel} label="Cancel" />
-          <SubmitButton
+          <CustomButton onClick={handleCancel} label="Cancel" />
+          <CustomButton
             onClick={handleConfirm}
             autoFocus
             label={

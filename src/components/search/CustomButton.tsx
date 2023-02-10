@@ -1,6 +1,6 @@
 import { Button, SxProps, Theme } from '@mui/material'
 
-interface SubmitButtonProps {
+interface CustomButtonProps {
   label: string | JSX.Element
   sx?: SxProps<Theme>
   href?: string
@@ -13,7 +13,7 @@ interface SubmitButtonProps {
   className?: string
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({
+const CustomButton: React.FC<CustomButtonProps> = ({
   label,
   sx,
   href,
@@ -42,4 +42,4 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   )
 }
 
-export default SubmitButton
+export default CustomButton

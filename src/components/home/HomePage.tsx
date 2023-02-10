@@ -1,6 +1,6 @@
 import { Box, Card, Container, Divider, Typography } from '@mui/material'
+import CustomButton from '../search/CustomButton'
 import group from './Group.png'
-import SubmitButton from '../search/SubmitButton'
 
 const HomePage = () => {
   return (
@@ -95,7 +95,7 @@ const HomePage = () => {
               gap: '4px'
             }}
           >
-            <SubmitButton
+            <CustomButton
               href="/search/simple"
               sx={{
                 width: '104px'
@@ -103,7 +103,7 @@ const HomePage = () => {
               label="Search"
               variant="contained"
             />
-            <SubmitButton
+            <CustomButton
               href="/review-matches"
               variant="outlined"
               label="Review Matches"

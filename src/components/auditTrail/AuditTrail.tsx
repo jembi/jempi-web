@@ -12,7 +12,7 @@ import { formatDate } from '../../utils/formatters'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import SubmitButton from '../search/SubmitButton'
+import CustomButton from '../search/CustomButton'
 import PageHeader from '../shell/PageHeader'
 
 const AUDIT_TRAIL_COLUMNS: GridColumns = [
@@ -122,7 +122,7 @@ const AuditTrail = () => {
           )}
         </Grid>
         <Grid item>
-          <SubmitButton
+          <CustomButton
             variant="headerButton"
             href={`patient/${uid}`}
             label={<Typography variant="button">BACK TO RECORD</Typography>}

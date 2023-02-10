@@ -13,7 +13,7 @@ import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import SubmitButton from '../search/SubmitButton'
+import CustomButton from '../search/CustomButton'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
 import ConfirmationModal from './ConfirmationModal'
@@ -167,9 +167,9 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           }
         ]}
         buttons={
-          !isGoldenRecord
+          isGoldenRecord
             ? [
-                <SubmitButton
+                <CustomButton
                   variant="outlined"
                   className="mediumSizeButton"
                   sx={{
@@ -179,7 +179,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
                   label="AUDIT TRAIL"
                 />,
 
-                <SubmitButton
+                <CustomButton
                   variant="headerButton"
                   href={`/patient/${uid}/linked-records`}
                   label="LINKED RECORDS"
@@ -225,7 +225,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           />
         </Grid>
       </Grid>
-      {!isGoldenRecord && (
+      {isGoldenRecord && (
         <Box
           sx={{
             py: 4,
@@ -235,7 +235,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         >
           {isEditMode ? (
             <ButtonGroup>
-              <SubmitButton
+              <CustomButton
                 onClick={() => onCancelEditing()}
                 variant="outlined"
                 sx={{
@@ -243,7 +243,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
                 }}
                 label="Cancel"
               />
-              <SubmitButton
+              <CustomButton
                 onClick={() => onDataSave()}
                 variant="outlined"
                 sx={{
@@ -253,7 +253,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
               />
             </ButtonGroup>
           ) : (
-            <SubmitButton
+            <CustomButton
               onClick={() => setIsEditMode(true)}
               variant="outlined"
               label="Edit Golden Record"

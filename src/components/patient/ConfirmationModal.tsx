@@ -1,6 +1,6 @@
 import { Box, Modal, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import SubmitButton from '../search/SubmitButton'
+import CustomButton from '../search/CustomButton'
 import { UpdatedFields } from './PatientDetails'
 
 const style = {
@@ -94,8 +94,8 @@ const ConfirmationModal: React.FC<{
             alignItems: 'flex-end'
           }}
         >
-          <SubmitButton onClick={handleClose} label="Cancel" />
-          <SubmitButton onClick={onConfirm} label="Confirm" />
+          <CustomButton onClick={handleClose} label="Cancel" />
+          <CustomButton onClick={onConfirm} label="Confirm" />
         </Box>
       </Box>
     </Modal>
