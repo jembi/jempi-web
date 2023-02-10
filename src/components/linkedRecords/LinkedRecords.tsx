@@ -1,13 +1,13 @@
 import { People } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Card, Divider, Typography } from '@mui/material'
-import { DataGrid, GridColumns } from '@mui/x-data-grid'
+import { Button, Card, Divider, Link, Typography } from '@mui/material'
+import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { PatientRecord } from '../../types/PatientRecord'
+import { GoldenRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
@@ -17,26 +17,44 @@ const LinkedRecords = () => {
   const {
     data: { uid }
   } = useMatch()
-  const { getFieldsByGroup } = useAppConfig()
+  const { getFieldsByGroup, getPatientName } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('linked_records').map(
     ({ fieldName, fieldLabel, formatValue }) => {
       return {
         field: fieldName,
-        headerName: fieldLabel,
+        headerName: fieldName === 'sourceId' ? 'Source' : fieldLabel,
         flex: 1,
         valueFormatter: ({ value }) => formatValue(value),
         sortable: false,
-        disableColumnMenu: true
+        disableColumnMenu: true,
+        align: 'center',
+        headerAlign: 'center',
+        filterable: false,
+        renderCell: (params: GridRenderCellParams<string>) => {
+          if (fieldName === 'uid') {
+            return (
+              <Link
+                href={`/patient-record/${params.row.uid}`}
+                key={params.row.uid}
+              >
+                {params.row.uid}
+              </Link>
+            )
+          } else if (fieldName === 'sourceId') {
+            return params.row.sourceId.facility
+          }
+          return undefined
+        }
       }
     }
   )
 
   const { data, isLoading, isError, error } = useQuery<
-    PatientRecord[],
+    GoldenRecord,
     AxiosError
   >({
-    queryKey: ['linked_patient'],
-    queryFn: async () => await ApiClient.getLinkedRecords(uid as string),
+    queryKey: ['golden-record', uid],
+    queryFn: async () => await ApiClient.getGoldenRecord(uid as string),
     refetchOnWindowFocus: false
   })
 
@@ -51,12 +69,13 @@ const LinkedRecords = () => {
   if (!data) {
     return <NotFound />
   }
+  const patientName = getPatientName(data)
 
   return (
     <>
       <PageHeader
         description={uid as string}
-        title={'Bob smith'}
+        title={patientName}
         breadcrumbs={[
           {
             icon: <SearchIcon />,
@@ -75,7 +94,7 @@ const LinkedRecords = () => {
               width: '152px',
               borderColor: theme => theme.palette.primary.main
             }}
-            href={`/patient/${uid}`}
+            href={`/golden-record/${uid}`}
           >
             <Typography variant="button">BACK TO RECORD</Typography>
           </Button>
@@ -93,13 +112,8 @@ const LinkedRecords = () => {
         <DataGrid
           getRowId={({ uid }) => uid}
           columns={columns}
-          rows={data}
+          rows={data.linkRecords || []}
           autoHeight={true}
-          sx={{
-            '& .MuiDataGrid-columnSeparator': {
-              display: 'none'
-            }
-          }}
         />
       </Card>
     </>
