@@ -1,6 +1,6 @@
 import { People } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Card, Divider, Typography } from '@mui/material'
+import { Card, Divider, Typography } from '@mui/material'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'

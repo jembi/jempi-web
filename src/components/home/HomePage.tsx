@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Divider,
-  Typography
-} from '@mui/material'
-import { useNavigate } from '@tanstack/react-location'
+import { Box, Card, Container, Divider, Typography } from '@mui/material'
 import group from './Group.png'
 import SubmitButton from '../search/SubmitButton'
 
 const HomePage = () => {
-  const navigate = useNavigate()
   return (
     <Container maxWidth={false}>
       <Typography

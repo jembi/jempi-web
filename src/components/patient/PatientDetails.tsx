@@ -1,6 +1,6 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, ButtonGroup, Container, Grid } from '@mui/material'
+import { Box, ButtonGroup, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -171,21 +171,19 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
             ? [
                 <SubmitButton
                   variant="outlined"
-                  className='mediumSizeButton'
+                  className="mediumSizeButton"
                   sx={{
                     width: '117px'
                   }}
                   href={`/patient/${uid}/audit-trail`}
-                  label='AUDIT TRAIL'
-                />
-                
-                ,
+                  label="AUDIT TRAIL"
+                />,
+
                 <SubmitButton
                   variant="headerButton"
                   href={`/patient/${uid}/linked-records`}
-                  label='LINKED RECORDS'
+                  label="LINKED RECORDS"
                 />
-                
               ]
             : []
         }
@@ -241,24 +239,24 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
                 onClick={() => onCancelEditing()}
                 variant="outlined"
                 sx={{
-                  width: '85px',
+                  width: '85px'
                 }}
-                label='Cancel'
+                label="Cancel"
               />
               <SubmitButton
                 onClick={() => onDataSave()}
                 variant="outlined"
                 sx={{
-                  width: '66px',
+                  width: '66px'
                 }}
-                label='Save'
+                label="Save"
               />
             </ButtonGroup>
           ) : (
             <SubmitButton
               onClick={() => setIsEditMode(true)}
               variant="outlined"
-              label='Edit Golden Record'
+              label="Edit Golden Record"
             />
           )}
         </Box>

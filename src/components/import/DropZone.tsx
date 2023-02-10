@@ -1,5 +1,5 @@
 import { UploadFile as UploadFileIcon } from '@mui/icons-material'
-import { Box, Button, CardActions, Container, Typography } from '@mui/material'
+import { Box, CardActions, Container, Typography } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { useSnackbar } from 'notistack'
@@ -198,15 +198,15 @@ const DropZone: FC = () => {
         sx={{ display: 'block', textAlign: 'center', marginTop: '5%' }}
       >
         <SubmitButton
-        variant='contained'
+          variant="contained"
           onClick={handleUpload}
           label="Upload"
           disabled={uploadFileMutation.isLoading}
         />
         <SubmitButton
           variant="outlined"
-          className='cancelButton'
-          size='small'
+          className="cancelButton"
+          size="small"
           onClick={handleCancel}
           label={'Cancel'}
         />
@@ -214,5 +214,4 @@ const DropZone: FC = () => {
     </Container>
   )
 }
-
 export default DropZone
