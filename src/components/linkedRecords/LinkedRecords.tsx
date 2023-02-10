@@ -69,7 +69,6 @@ const LinkedRecords = () => {
   if (!data) {
     return <NotFound />
   }
-  console.log(data?.linkRecords)
   const patientName = getPatientName(data)
 
   return (
