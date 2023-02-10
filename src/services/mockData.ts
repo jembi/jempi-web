@@ -224,13 +224,19 @@ const goldenRecord: GoldenRecord = {
       uid: '0x3288',
       patient: 'xxx'
     }
-  ],
-  linkRecords: [...linkedRecords]
+  ]
 }
 
 const patientRecords = [patientRecord, goldenRecord]
 
-const goldenRecords = [{ customGoldenRecord: goldenRecord }]
+const goldenRecordResp = {
+  customGoldenRecord: goldenRecord,
+  mpiEntityList: [{ entity: linkedRecords[0] }, { entity: linkedRecords[1] }]
+}
+
+const goldenRecords = [
+  { customGoldenRecord: goldenRecord, mpiEntityList: [...linkedRecords] }
+]
 
 const currentUser: User = {
   id: 1,
@@ -245,7 +251,7 @@ const mockData = {
   auditTrail,
   notifications,
   patientRecord,
-  goldenRecord,
+  goldenRecord: goldenRecordResp,
   goldenRecords,
   patientRecords,
   currentUser,
