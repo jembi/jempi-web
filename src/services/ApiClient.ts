@@ -64,6 +64,14 @@ class ApiClient {
     return await client
       .get<GoldenRecord>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
+      .then((data: any) => {
+        return {
+          ...data.customGoldenRecord,
+          linkRecords: data.mpiEntityList.map(
+            (entityItem: any) => entityItem.entity
+          )
+        }
+      })
   }
 
   async getGoldenRecords(uid: string[]) {
@@ -78,19 +86,6 @@ class ApiClient {
         }
       })
       .then(res => res.data.goldenRecords)
-  }
-
-  async getLinkedRecords(uid: string) {
-    return await client
-      .get<PatientRecord[]>(ROUTES.GET_LINKED_RECORDS, {
-        params: {
-          uid
-        },
-        paramsSerializer: {
-          indexes: null
-        }
-      })
-      .then(res => res.data)
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
