@@ -5,9 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import * as React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 
-interface NavigationMenuProp {}
-
-const NavigationMenu: React.FC<NavigationMenuProp> = () => {
+const NavigationMenu: React.FC = () => {
   const { user, logout } = useAuth()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)

@@ -73,8 +73,13 @@ const CustomSearch: React.FC = () => {
                 }
               ]}
               buttons={[
-                <SearchFlags options={options} onChange={setIsGoldenOnly} />,
+                <SearchFlags
+                  key="search-Flag"
+                  options={options}
+                  onChange={setIsGoldenOnly}
+                />,
                 <Button
+                  key="simple-search"
                   variant="outlined"
                   sx={{
                     height: '42px',
@@ -141,9 +146,9 @@ const CustomSearch: React.FC = () => {
                                 <FieldGroup
                                   values={parameters}
                                   handleChange={handleChange}
-                                  initialCustomSearchValues={
-                                    initialSearchParameter
-                                  }
+                                  initialCustomSearchValues={{
+                                    parameters: [initialSearchParameter]
+                                  }}
                                   fieldGroupIndex={index}
                                   removeFieldGroup={remove}
                                   key={index}
