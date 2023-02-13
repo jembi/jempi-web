@@ -85,11 +85,16 @@ class ApiClient {
           indexes: null
         }
       })
-      .then(res => res.data.goldenRecords)
+      .then(res => res.data.goldenRecords.map((data:any) => {
+        return data.customGoldenRecord
+      }))
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
   async getMatchDetails(uid: string, goldenId: string, candidates: string[]) {
+    if (uid === null || typeof uid === 'undefined') {
+      return [] as AnyRecord[];
+    }
     const patientRecord = this.getPatientRecord(uid)
     const goldenRecord = this.getGoldenRecords([goldenId])
     const candidateRecords = this.getGoldenRecords(candidates)
