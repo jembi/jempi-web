@@ -5,7 +5,7 @@ import { SearchParameter } from '../../types/SimpleSearch'
 interface AddFieldOrGroupButtonProps {
   onClick: (obj: any) => void
   initialCustomSearchValues: SearchParameter | {
-    parameters: SearchParameter[]
+    parameters: Array<SearchParameter>
   }
   label: string
 }
