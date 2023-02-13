@@ -36,6 +36,7 @@ module.exports = {
   rules: {
     'no-console': ['warn'],
     'react/prop-types': 'off',
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-key': 'off'
   }
 }

@@ -35,14 +35,30 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
+    "prepare": "husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!@codemirror)/\"",
     "eject": "react-scripts eject",
+    "precommit": "lint-staged",
     "lint": "eslint ./src/ --ext ts,js,tsx,jsx",
     "lint:fix": "eslint ./src/ --ext ts,js,tsx,jsx --fix",
     "format": "prettier 'src/**/*.{js,jsx,ts,tsx,json,css}' --write",
     "type-check": "tsc"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache"
+    ],
+    "*.json,.{eslintrc,prettierrc}": [
+      "prettier --ignore-path .eslintignore --parser json --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --ignore-path .eslintignore --single-quote --write"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -71,6 +87,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.1",
     "prettier": "^2.8.4"
   }
 }
