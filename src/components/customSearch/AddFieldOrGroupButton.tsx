@@ -15,16 +15,16 @@ const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({
   label
 }) => {
   return (
-      <Button
-        variant="text"
-        startIcon={<AddIcon />}
-        onClick={() => {
-          onClick(initialCustomSearchValues)
-        }}
-        sx={{ fontSize: '13px' }}
-      >
-        {label}
-      </Button>
+    <Button
+      variant="text"
+      startIcon={<AddIcon />}
+      onClick={() => {
+        onClick(initialCustomSearchValues)
+      }}
+      sx={{ fontSize: '13px' }}
+    >
+      {label}
+    </Button>
   )
 }
 

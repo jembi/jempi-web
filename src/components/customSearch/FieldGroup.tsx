@@ -7,7 +7,7 @@ import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 interface FieldGroupProps {
   values: SimpleSearchQuery
   handleChange: (e: React.ChangeEvent<any>) => void
-  initialCustomSearchValues: SearchParameter
+  initialCustomSearchValues: { parameters: SearchParameter[] }
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
   setFieldValue: (
@@ -24,8 +24,7 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
   initialCustomSearchValues,
   fieldGroupIndex,
   removeFieldGroup,
-  setFieldValue,
-  push
+  setFieldValue
 }) => {
   return (
     <Grid item container direction="column" width="100%" alignItems={'center'}>

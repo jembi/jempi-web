@@ -134,9 +134,9 @@ const CustomSearch: React.FC = () => {
                                 <FieldGroup
                                   values={parameters}
                                   handleChange={handleChange}
-                                  initialCustomSearchValues={
-                                    initialSearchParameter
-                                  }
+                                  initialCustomSearchValues={{
+                                    parameters: [initialSearchParameter]
+                                  }}
                                   fieldGroupIndex={index}
                                   removeFieldGroup={remove}
                                   key={index}

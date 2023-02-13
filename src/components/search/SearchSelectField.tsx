@@ -36,22 +36,27 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
   helperText,
   sx = { width: 200 },
   name,
-  size='medium',
+  size = 'medium',
   index,
   fieldGroupIndex,
   isCustomRow
 }) => {
-
-  const fieldIdentifier = isCustomRow ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`: `parameters[${index}].${name}`
+  const fieldIdentifier = isCustomRow
+    ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`
+    : `parameters[${index}].${name}`
 
   return (
     <FormControl fullWidth sx={sx} size={size}>
       <InputLabel>{title}</InputLabel>
-      <Select value={fieldName} label="Field" onChange={onChange} name={fieldIdentifier}>
+      <Select
+        value={fieldName}
+        label="Field"
+        onChange={onChange}
+        name={fieldIdentifier}
+      >
         <MenuItem value="" disabled>
           <em>{description}</em>
         </MenuItem>
-
         {options.map((item, index) => {
           return (
             <MenuItem value={item.value} key={index}>

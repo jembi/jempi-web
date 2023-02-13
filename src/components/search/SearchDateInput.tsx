@@ -38,11 +38,12 @@ const SearchDateInput: React.FC<SearchDateInputProps> = ({
     value ? moment(value, 'DD/MM/YYYY') : moment()
   )
   const handleChange = (value: Moment | null) => {
-
-    const fieldIdentifier = isCustomRow ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`: `parameters[${index}].${name}`
+    const fieldIdentifier = isCustomRow
+      ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`
+      : `parameters[${index}].${name}`
 
     setDateValue(moment(value, 'DD/MM/YYYY'))
-    let newDate = moment(value).format('DD/MM/YYYY')
+    const newDate = moment(value).format('DD/MM/YYYY')
     setFieldValue && setFieldValue(fieldIdentifier, newDate)
   }
 

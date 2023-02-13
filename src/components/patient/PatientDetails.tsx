@@ -198,9 +198,11 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         </Grid>
         <Grid item xs={3}>
           <RegisteringFacilityPanel
-            data={patientRecord}
-            isEditable={isEditable}
-            onChange={onDataChange}
+            data={
+              Array.isArray(patientRecord.sourceId)
+                ? patientRecord.sourceId
+                : [patientRecord.sourceId]
+            }
           />
         </Grid>
         <Grid item xs={5}>

@@ -10,9 +10,11 @@ import { SearchFlagsOptionsProps } from '../../types/SimpleSearch'
 
 export const triggerInputChange = (node: HTMLInputElement, value = '') => {
   // only process the change on elements we know have a value setter in their constructor
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const setValue = Object.getOwnPropertyDescriptor(node.__proto__, 'value').set
   const event = new Event('input', { bubbles: true })
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   setValue.call(node, value)
   node.dispatchEvent(event)

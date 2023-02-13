@@ -18,7 +18,6 @@ const {
   goldenRecords,
   auditTrail,
   currentUser,
-  linkedRecords,
   searchGoldenRecordResult,
   searchPatientRecordResult
 } = mockData
@@ -41,7 +40,7 @@ axiosMockAdapterInstance
   .onGet(new RegExp(`^${ROUTES.GOLDEN_RECORD_ROUTE}/[A-z0-9]+$`))
   .reply(config => {
     const id = config.url?.split('/').pop()
-    if (goldenRecord.uid === id) {
+    if (goldenRecord.customGoldenRecord.uid === id) {
       return [200, goldenRecord]
     }
     return [404, {}]
@@ -57,8 +56,6 @@ axiosMockAdapterInstance
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
-  .onGet(ROUTES.GET_LINKED_RECORDS)
-  .reply(200, linkedRecords)
   .onGet(ROUTES.AUDIT_TRAIL)
   .reply(200, auditTrail)
   .onPost(`${ROUTES.POST_SIMPLE_SEARCH}/golden`)

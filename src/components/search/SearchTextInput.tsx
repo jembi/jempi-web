@@ -1,5 +1,4 @@
 import { SxProps, TextField, Theme } from '@mui/material'
-import { StringifyOptions } from 'querystring'
 
 interface SearchTextInputProps {
   value: string | Date
@@ -26,9 +25,10 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
   fieldGroupIndex,
   isCustomRow
 }) => {
-  
-  const fieldIdentifier = isCustomRow ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`: `parameters[${index}].${name}`
-  
+  const fieldIdentifier = isCustomRow
+    ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`
+    : `parameters[${index}].${name}`
+
   return (
     <TextField
       id="outlined-basic"
