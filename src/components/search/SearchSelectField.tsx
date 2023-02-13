@@ -57,7 +57,6 @@ const SearchSelectField: React.FC<SearchSelectFieldProps> = ({
         <MenuItem value="" disabled>
           <em>{description}</em>
         </MenuItem>
-
         {options.map((item, index) => {
           return (
             <MenuItem value={item.value} key={index}>
