@@ -85,7 +85,9 @@ class ApiClient {
           indexes: null
         }
       })
-      .then(res => res.data.goldenRecords)
+      .then(res => res.data.goldenRecords.map((data:any) => {
+        return data.customGoldenRecord
+      }))
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
