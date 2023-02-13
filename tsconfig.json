@@ -15,7 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "rootDir": "./"
+    "rootDir": "./",
+    "baseUrl": "./src",
+    "paths": {
+      "types/*": ["types/*"],
+      "components/*": ["components/*"],
+      "utils/*": ["utils/*"],
+      "hooks/*": ["hooks/*"],
+      "services/*": ["services/*"]
+    }
   },
   "include": ["src"]
 }

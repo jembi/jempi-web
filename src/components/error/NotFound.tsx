@@ -12,7 +12,7 @@ const NotFound = () => {
           404
         </Typography>
         <Typography variant="h3">
-          Maybe you're looking for a page we haven't built yet
+          Maybe you&aposre looking for a page we haven&apost built yet
         </Typography>
       </Stack>
     </Container>
