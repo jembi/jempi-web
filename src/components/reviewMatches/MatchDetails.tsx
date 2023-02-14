@@ -1,5 +1,4 @@
 import {
-  CircularProgress,
   Container,
   Dialog,
   DialogActions,
@@ -29,7 +28,7 @@ import { AnyRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import CustomButton from '../search/CustomButton'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 
 type MatchDetailsParams = MakeGenerics<{
@@ -377,18 +376,14 @@ const MatchDetails = () => {
           <DialogContentText>{dialog.text}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <CustomButton onClick={handleCancel} label="Cancel" />
-          <CustomButton
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button
             onClick={handleConfirm}
             autoFocus
-            label={
-              accept.isLoading || newGoldenRecord.isLoading ? (
-                <CircularProgress />
-              ) : (
-                'Confirm'
-              )
-            }
-          />
+            isLoading={accept.isLoading || newGoldenRecord.isLoading}
+          >
+            Confirm
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

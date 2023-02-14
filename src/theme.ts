@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material'
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
-    headerButton: true
+    header: true
   }
 }
 const overrides = createTheme({
@@ -28,7 +28,7 @@ const overrides = createTheme({
             width: '175px'
           }),
           ...(ownerState.className === 'mediumSizeButton' && {
-            height: '36px',
+            height: '36px'
           }),
           ...(ownerState.className === 'cancelButton' && {
             height: '36px',
@@ -38,7 +38,7 @@ const overrides = createTheme({
       },
       variants: [
         {
-          props: { variant: 'headerButton' },
+          props: { variant: 'header' },
           style: ({ theme }) => ({
             height: '36px',
             width: '152px',

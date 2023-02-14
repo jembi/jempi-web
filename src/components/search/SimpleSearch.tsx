@@ -13,8 +13,8 @@ import {
   SearchQuery
 } from '../../types/SimpleSearch'
 import { PAGINATION_LIMIT } from '../../utils/constants'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
-import CustomButton from './CustomButton'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
 
@@ -57,11 +57,9 @@ const SimpleSearch: React.FC = () => {
         ]}
         buttons={[
           <SearchFlags options={options} onChange={setIsGoldenOnly} />,
-          <CustomButton
-            variant="outlined"
-            href={'/search/custom'}
-            label={<Typography variant="button">CUSTOM SEARCH</Typography>}
-          />
+          <Button variant="outlined" href={'/search/custom'}>
+            <Typography variant="button">CUSTOM SEARCH</Typography>
+          </Button>
         ]}
       />
       <Divider />
@@ -148,7 +146,7 @@ const SimpleSearch: React.FC = () => {
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}
                   >
-                    <CustomButton variant="contained" label="Search" />
+                    <Button variant="contained">Search</Button>
                   </LocationLink>
                 </Grid>
               </Grid>

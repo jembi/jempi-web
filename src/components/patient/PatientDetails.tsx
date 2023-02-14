@@ -13,7 +13,7 @@ import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import CustomButton from '../search/CustomButton'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
 import ConfirmationModal from './ConfirmationModal'
@@ -169,21 +169,21 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         buttons={
           isGoldenRecord
             ? [
-                <CustomButton
+                <Button
                   variant="outlined"
                   className="mediumSizeButton"
                   sx={{
                     width: '117px'
                   }}
                   href={`/patient/${uid}/audit-trail`}
-                  label="AUDIT TRAIL"
-                />,
+                ></Button>,
 
-                <CustomButton
-                  variant="headerButton"
+                <Button
+                  variant="header"
                   href={`/patient/${uid}/linked-records`}
-                  label="LINKED RECORDS"
-                />
+                >
+                  LINKED RECORDS
+                </Button>
               ]
             : []
         }
@@ -237,29 +237,29 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         >
           {isEditMode ? (
             <ButtonGroup>
-              <CustomButton
+              <Button
                 onClick={() => onCancelEditing()}
                 variant="outlined"
                 sx={{
                   width: '85px'
                 }}
-                label="Cancel"
-              />
-              <CustomButton
+              >
+                Cancel
+              </Button>
+              <Button
                 onClick={() => onDataSave()}
                 variant="outlined"
                 sx={{
                   width: '66px'
                 }}
-                label="Save"
-              />
+              >
+                Save
+              </Button>
             </ButtonGroup>
           ) : (
-            <CustomButton
-              onClick={() => setIsEditMode(true)}
-              variant="outlined"
-              label="Edit Golden Record"
-            />
+            <Button onClick={() => setIsEditMode(true)} variant="outlined">
+              Edit Golden Record
+            </Button>
           )}
         </Box>
       )}

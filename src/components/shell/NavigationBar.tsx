@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import { AppBar, Box, Toolbar } from '@mui/material'
-import CustomButton from '../search/CustomButton'
+import Button from '../shared/Button'
 import JembiLogo from './JembiLogo'
 import NavigationMenu from './NavigationMenu'
 
@@ -18,30 +18,34 @@ const NavigationBar = () => {
       <Toolbar>
         <JembiLogo />
         <Box sx={{ flexGrow: 1 }}>
-          <CustomButton
+          <Button
             href="/"
             startIcon={<DashboardIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Dashboard'
-          />
-          <CustomButton
+          >
+            Dashboard
+          </Button>
+          <Button
             href="/search/simple"
             startIcon={<SearchIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Search'
-          />
-          <CustomButton
+          >
+            Search
+          </Button>
+          <Button
             href="/review-matches"
             startIcon={<PeopleIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Matches'
-          />
-          <CustomButton
+          >
+            Matches
+          </Button>
+          <Button
             href="/import"
             startIcon={<UploadFileIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='IMPORT'
-          />
+          >
+            IMPORT
+          </Button>
         </Box>
         <NavigationMenu />
       </Toolbar>

@@ -17,7 +17,7 @@ const notifications: Notification[] = [
   }
 ]
 
-//TODO: update 'searchGoldenRecordResult' to match the real backend. 
+//TODO: update 'searchGoldenRecordResult' to match the real backend.
 
 const searchGoldenRecordResult: ApiSearchResult = {
   records: {

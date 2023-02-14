@@ -21,7 +21,6 @@ import {
   SimpleSearchQuery
 } from '../../types/SimpleSearch'
 import { PAGINATION_LIMIT } from '../../utils/constants'
-import CustomButton from '../search/CustomButton'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
@@ -202,21 +201,23 @@ const CustomSearch: React.FC = () => {
                             search={{ payload: values }}
                             style={{ textDecoration: 'none' }}
                           >
-                            <CustomButton variant="contained" label="Search" />
+                            <Button variant="contained">Search</Button>
                           </LocationLink>
-                          <CustomButton
-                            label="Cancel"
+                          <Button
                             variant="outlined"
-                            className='cancelButton'
+                            className="cancelButton"
                             href="/search/simple"
-                          />
+                          >
+                            Cancel
+                          </Button>
                         </Stack>
                         <Grid item>
-                          <CustomButton
+                          <Button
                             variant="outlined"
-                            label="Query Builder"
-                            className='mediumSizeButton'
-                          />
+                            className="mediumSizeButton"
+                          >
+                            Query Builder
+                          </Button>
                         </Grid>
                       </Grid>
                     </Grid>

@@ -11,7 +11,7 @@ import { GoldenRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
-import CustomButton from '../search/CustomButton'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 
 const LinkedRecords = () => {
@@ -88,11 +88,9 @@ const LinkedRecords = () => {
           }
         ]}
         buttons={[
-          <CustomButton
-            variant="headerButton"
-            href={`/patient/${uid}`}
-            label={<Typography variant="button">BACK TO RECORD</Typography>}
-          />
+          <Button variant="header" href={`/patient/${uid}`}>
+            <Typography variant="button">BACK TO RECORD</Typography>
+          </Button>
         ]}
       />
       <Divider />
