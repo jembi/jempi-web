@@ -22,25 +22,25 @@ const NavigationBar = () => {
             href="/"
             startIcon={<DashboardIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Dashboard'
+            label="Dashboard"
           />
           <CustomButton
             href="/search/simple"
             startIcon={<SearchIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Search'
+            label="Search"
           />
           <CustomButton
             href="/review-matches"
             startIcon={<PeopleIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='Matches'
+            label="Matches"
           />
           <CustomButton
             href="/import"
             startIcon={<UploadFileIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
-            label='IMPORT'
+            label="IMPORT"
           />
         </Box>
         <NavigationMenu />

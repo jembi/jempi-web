@@ -4,9 +4,11 @@ import { SearchParameter } from '../../types/SimpleSearch'
 
 interface AddFieldOrGroupButtonProps {
   onClick: (obj: any) => void
-  initialCustomSearchValues: SearchParameter | {
-    parameters: Array<SearchParameter>
-  }
+  initialCustomSearchValues:
+    | SearchParameter
+    | {
+        parameters: Array<SearchParameter>
+      }
   label: string
 }
 const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({

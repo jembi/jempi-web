@@ -207,7 +207,7 @@ const CustomSearch: React.FC = () => {
                           <CustomButton
                             label="Cancel"
                             variant="outlined"
-                            className='cancelButton'
+                            className="cancelButton"
                             href="/search/simple"
                           />
                         </Stack>
@@ -215,7 +215,7 @@ const CustomSearch: React.FC = () => {
                           <CustomButton
                             variant="outlined"
                             label="Query Builder"
-                            className='mediumSizeButton'
+                            className="mediumSizeButton"
                           />
                         </Grid>
                       </Grid>

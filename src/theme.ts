@@ -28,7 +28,7 @@ const overrides = createTheme({
             width: '175px'
           }),
           ...(ownerState.className === 'mediumSizeButton' && {
-            height: '36px',
+            height: '36px'
           }),
           ...(ownerState.className === 'cancelButton' && {
             height: '36px',
