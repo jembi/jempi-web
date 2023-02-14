@@ -14,7 +14,7 @@ export interface SearchDateInputProps {
   size: 'small' | 'medium' | undefined
   setFieldValue?: (
     field: string,
-    value: any,
+    value: Date | string | number,
     shouldValidate?: boolean | undefined
   ) => void
   fieldGroupIndex?: number

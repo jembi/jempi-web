@@ -23,7 +23,7 @@ import RelationshipPanel from './RelationshipPanel'
 import SubHeading from './SubHeading'
 
 export interface UpdatedFields {
-  [fieldName: string]: { oldValue: any; newValue: any }
+  [fieldName: string]: { oldValue: unknown; newValue: unknown }
 }
 
 type PatientDetailsProps = {
@@ -80,7 +80,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
 
   const onDataChange = (newRow: PatientRecord | GoldenRecord) => {
     const newlyUpdatedFields: UpdatedFields = availableFields.reduce(
-      (acc: UpdatedFields, curr: DisplayField, idx: number) => {
+      (acc: UpdatedFields, curr: DisplayField) => {
         if (data && data[curr.fieldName] !== newRow[curr.fieldName]) {
           acc[curr.fieldLabel] = {
             oldValue: data[curr.fieldName],
@@ -121,7 +121,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
   const onConfirm = () => {
     const fields = Object.keys(patientRecord).reduce(
       (acc: { name: string; value: any }[], curr: string) => {
-        if (data[curr] !== patientRecord[curr]) {
+        if (patientRecord && data[curr] !== patientRecord[curr]) {
           acc.push({ name: curr, value: patientRecord[curr] })
         }
         return acc

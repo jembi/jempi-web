@@ -18,7 +18,7 @@ interface SearchRowProps {
   fieldGroupIndex?: number
   setFieldValue?: (
     field: string,
-    value: any,
+    value: string | Date | number,
     shouldValidate?: boolean | undefined
   ) => void
   isCustomRow?: boolean
@@ -83,7 +83,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
         {isCustomSearchRow && (
           <Grid item>
             <SearchSelectField
-              fieldName={fieldToSelect ? fieldToSelect!.fieldName : ''}
+              fieldName={fieldToSelect ? fieldToSelect.fieldName : ''}
               onChange={handleFieldNameChange}
               index={index}
               options={availableFields.map(value => ({
@@ -106,7 +106,9 @@ const SearchRow: React.FC<SearchRowProps> = ({
               label={
                 isCustomSearchRow
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
-                  : field!.fieldLabel
+                  : field
+                  ? field.fieldLabel
+                  : ''
               }
               value={parameter.value}
               onChange={onChange}
@@ -123,7 +125,9 @@ const SearchRow: React.FC<SearchRowProps> = ({
               label={
                 isCustomSearchRow
                   ? fieldToSelect?.fieldLabel || 'Select a field type'
-                  : field!.fieldLabel
+                  : field
+                  ? field.fieldLabel
+                  : ''
               }
               value={parameter.value}
               onChange={onChange}

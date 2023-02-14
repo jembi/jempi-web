@@ -60,7 +60,7 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
         disabled={disabled}
         id={name}
       >
-        {options.map((option, index) => {
+        {options.map(option => {
           return (
             <ToggleButton
               value={`${option.value}`}

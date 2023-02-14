@@ -6,7 +6,7 @@ import SearchRow from '../search/SearchRow'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 interface FieldGroupProps {
   values: SimpleSearchQuery
-  handleChange: (e: React.ChangeEvent<any>) => void
+  handleChange: (e: React.ChangeEvent) => void
   initialCustomSearchValues: { parameters: SearchParameter[] }
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
@@ -15,7 +15,7 @@ interface FieldGroupProps {
     value: any,
     shouldValidate?: boolean | undefined
   ) => void
-  push: (obj: any) => void
+  push: (obj: { parameters: Array<SearchParameter> }) => void
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = ({

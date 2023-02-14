@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import { SearchParameter } from '../../types/SimpleSearch'
 
 interface AddFieldOrGroupButtonProps {
-  onClick: (obj: any) => void
+  onClick: (obj: { parameters: Array<SearchParameter> }) => void
   initialCustomSearchValues: { parameters: Array<SearchParameter> }
   label: string
 }
