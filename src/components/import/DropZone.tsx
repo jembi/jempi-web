@@ -204,12 +204,7 @@ const DropZone: FC = () => {
         >
           Upload
         </Button>
-        <Button
-          variant="outlined"
-          className="cancel"
-          size="small"
-          onClick={handleCancel}
-        >
+        <Button variant="outlined" onClick={handleCancel}>
           Cancel
         </Button>
       </CardActions>

@@ -169,14 +169,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         buttons={
           !isGoldenRecord
             ? [
-                <Button
-                  variant="outlined"
-                  className="medium"
-                  sx={{
-                    maxWidth: 'sm'
-                  }}
-                  href={`/patient/${uid}/audit-trail`}
-                >
+                <Button variant="outlined" href={`/patient/${uid}/audit-trail`}>
                   AUDIT TRAIL
                 </Button>,
 
@@ -239,22 +232,10 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         >
           {isEditMode ? (
             <ButtonGroup>
-              <Button
-                onClick={() => onCancelEditing()}
-                variant="outlined"
-                sx={{
-                  width: '85px'
-                }}
-              >
+              <Button onClick={() => onCancelEditing()} variant="outlined">
                 Cancel
               </Button>
-              <Button
-                onClick={() => onDataSave()}
-                variant="outlined"
-                sx={{
-                  width: '66px'
-                }}
-              >
+              <Button onClick={() => onDataSave()} variant="outlined">
                 Save
               </Button>
             </ButtonGroup>

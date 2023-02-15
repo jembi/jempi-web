@@ -18,31 +18,27 @@ const NavigationBar = () => {
       <Toolbar>
         <JembiLogo />
         <Box sx={{ flexGrow: 1 }}>
-          <Button
-            href="/"
-            startIcon={<DashboardIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
-          >
+          <Button href="/" startIcon={<DashboardIcon />} className="Appbar">
             Dashboard
           </Button>
           <Button
             href="/search/simple"
             startIcon={<SearchIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
+            className="Appbar"
           >
             Search
           </Button>
           <Button
             href="/review-matches"
             startIcon={<PeopleIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
+            className="Appbar"
           >
             Matches
           </Button>
           <Button
             href="/import"
             startIcon={<UploadFileIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
+            className="Appbar"
           >
             IMPORT
           </Button>

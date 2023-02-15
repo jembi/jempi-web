@@ -203,18 +203,12 @@ const CustomSearch: React.FC = () => {
                           >
                             <Button variant="contained">Search</Button>
                           </LocationLink>
-                          <Button
-                            variant="outlined"
-                            className="cancel"
-                            href="/search/simple"
-                          >
+                          <Button variant="outlined" href="/search/simple">
                             Cancel
                           </Button>
                         </Stack>
                         <Grid item>
-                          <Button variant="outlined" className="medium">
-                            Query Builder
-                          </Button>
+                          <Button variant="outlined">Query Builder</Button>
                         </Grid>
                       </Grid>
                     </Grid>

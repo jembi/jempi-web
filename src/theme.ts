@@ -4,6 +4,7 @@ declare module '@mui/material/Button' {
     header: true
   }
 }
+
 const overrides = createTheme({
   components: {
     MuiAppBar: {
@@ -16,24 +17,8 @@ const overrides = createTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ ownerState, theme }) => ({
-          ...(ownerState.variant === 'contained' && {
-            backgroundColor: '#274263',
-            color: 'white',
-            '&:hover': { backgroundColor: '#375982' },
-            maxWidth: 'md'
-          }),
-          ...(ownerState.variant === 'outlined' && {
-            borderColor: theme.palette.primary.main,
-            color: theme.palette.primary.main,
-            height: '42px',
-            width: '175px'
-          }),
-          ...(ownerState.className === 'medium' && {
-            height: '36px'
-          }),
-          ...(ownerState.className === 'cancel' && {
-            height: '36px',
-            width: '85px'
+          ...(ownerState.className === 'Appbar' && {
+            color: theme.palette.text.primary
           })
         })
       },
@@ -41,11 +26,27 @@ const overrides = createTheme({
         {
           props: { variant: 'header' },
           style: ({ theme }) => ({
-            height: '36px',
-            maxWidth: 'md',
+            maxWidth: 'sm',
             color: 'white',
             backgroundColor: theme.palette.primary.main,
             '&:hover': { backgroundColor: theme.palette.primary.dark }
+          })
+        },
+        {
+          props: { variant: 'contained' },
+          style: ({ theme }) => ({
+            backgroundColor: '#274263',
+            color: 'white',
+            '&:hover': { backgroundColor: '#375982' },
+            maxWidth: 'sm'
+          })
+        },
+        {
+          props: { variant: 'outlined' },
+          style: ({ theme }) => ({
+            borderColor: theme.palette.primary.main,
+            color: theme.palette.primary.main,
+            maxWidth: 'sm'
           })
         }
       ]
