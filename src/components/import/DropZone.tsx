@@ -206,7 +206,7 @@ const DropZone: FC = () => {
         </Button>
         <Button
           variant="outlined"
-          className="cancelButton"
+          className="cancel"
           size="small"
           onClick={handleCancel}
         >

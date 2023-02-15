@@ -54,12 +54,17 @@ const FieldGroup: React.FC<FieldGroupProps> = ({
         }}
       >
         {fieldGroupIndex > 0 ? (
-          <Grid item container direction={'row'} justifyContent={'flex-end'}>
+          <Grid
+            item
+            container
+            direction={'row'}
+            justifyContent={'flex-end'}
+            sx={{ pr: 1, mt: 1 }}
+          >
             <Button
               variant="text"
               color={'error'}
               startIcon={<DeleteIcon />}
-              sx={{ mr: 1, mt: 1, fontSize: '13px' }}
               onClick={() => {
                 removeFieldGroup(fieldGroupIndex)
               }}

@@ -123,7 +123,7 @@ const AuditTrail = () => {
         </Grid>
         <Grid item>
           <Button variant="header" href={`patient/${uid}`}>
-            <Typography variant="button">BACK TO RECORD</Typography>
+            BACK TO RECORD
           </Button>
         </Grid>
       </Grid>

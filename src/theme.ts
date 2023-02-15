@@ -19,7 +19,8 @@ const overrides = createTheme({
           ...(ownerState.variant === 'contained' && {
             backgroundColor: '#274263',
             color: 'white',
-            '&:hover': { backgroundColor: '#375982' }
+            '&:hover': { backgroundColor: '#375982' },
+            maxWidth: 'md'
           }),
           ...(ownerState.variant === 'outlined' && {
             borderColor: theme.palette.primary.main,
@@ -27,10 +28,10 @@ const overrides = createTheme({
             height: '42px',
             width: '175px'
           }),
-          ...(ownerState.className === 'mediumSizeButton' && {
+          ...(ownerState.className === 'medium' && {
             height: '36px'
           }),
-          ...(ownerState.className === 'cancelButton' && {
+          ...(ownerState.className === 'cancel' && {
             height: '36px',
             width: '85px'
           })
@@ -41,7 +42,7 @@ const overrides = createTheme({
           props: { variant: 'header' },
           style: ({ theme }) => ({
             height: '36px',
-            width: '152px',
+            maxWidth: 'md',
             color: 'white',
             backgroundColor: theme.palette.primary.main,
             '&:hover': { backgroundColor: theme.palette.primary.dark }

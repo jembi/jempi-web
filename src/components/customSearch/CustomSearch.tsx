@@ -75,7 +75,7 @@ const CustomSearch: React.FC = () => {
               buttons={[
                 <SearchFlags options={options} onChange={setIsGoldenOnly} />,
                 <Button variant="outlined" href={'/search/simple'}>
-                  <Typography variant="button">SIMPLE SEARCH</Typography>
+                  SIMPLE SEARCH
                 </Button>
               ]}
             />
@@ -205,17 +205,14 @@ const CustomSearch: React.FC = () => {
                           </LocationLink>
                           <Button
                             variant="outlined"
-                            className="cancelButton"
+                            className="cancel"
                             href="/search/simple"
                           >
                             Cancel
                           </Button>
                         </Stack>
                         <Grid item>
-                          <Button
-                            variant="outlined"
-                            className="mediumSizeButton"
-                          >
+                          <Button variant="outlined" className="medium">
                             Query Builder
                           </Button>
                         </Grid>

@@ -167,16 +167,18 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           }
         ]}
         buttons={
-          isGoldenRecord
+          !isGoldenRecord
             ? [
                 <Button
                   variant="outlined"
-                  className="mediumSizeButton"
+                  className="medium"
                   sx={{
-                    width: '117px'
+                    maxWidth: 'sm'
                   }}
                   href={`/patient/${uid}/audit-trail`}
-                ></Button>,
+                >
+                  AUDIT TRAIL
+                </Button>,
 
                 <Button
                   variant="header"
@@ -227,7 +229,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           />
         </Grid>
       </Grid>
-      {isGoldenRecord && (
+      {!isGoldenRecord && (
         <Box
           sx={{
             py: 4,

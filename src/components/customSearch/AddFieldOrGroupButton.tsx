@@ -23,7 +23,6 @@ const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({
       onClick={() => {
         onClick(initialCustomSearchValues)
       }}
-      sx={{ fontSize: '13px' }}
     >
       {label}
     </Button>

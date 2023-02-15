@@ -95,13 +95,7 @@ const HomePage = () => {
               gap: '4px'
             }}
           >
-            <Button
-              href="/search/simple"
-              sx={{
-                width: '104px'
-              }}
-              variant="contained"
-            >
+            <Button href="/search/simple" variant="contained">
               Search
             </Button>
             <Button href="/review-matches" variant="outlined">
