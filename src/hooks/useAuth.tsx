@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
     isLoading,
     error,
     refetch
-  } = useQuery<User, AxiosError<unknown, any>>({
+  } = useQuery<User, AxiosError<unknown, User>>({
     queryKey: [key],
     queryFn: async () => {
       return await ApiClient.getCurrentUser()

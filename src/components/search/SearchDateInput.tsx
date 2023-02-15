@@ -9,7 +9,7 @@ export interface SearchDateInputProps {
   name: string
   value: string | Date
   label: string
-  onChange?: (e: React.ChangeEvent<any>) => void | null
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null
   sx: SxProps<Theme>
   size: 'small' | 'medium' | undefined
   setFieldValue?: (

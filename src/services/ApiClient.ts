@@ -35,6 +35,23 @@ interface GoldenRecordResponse {
   goldenRecords: GoldenRecord[]
 }
 
+interface JempiGoldenRecord extends Pick<PatientRecord, 'sourceId' | 'uid'> {
+  demographicData: Omit<GoldenRecord, 'sourceId' | 'uid'>
+}
+
+interface MpiGoldenRecord {
+  goldenRecord: JempiGoldenRecord
+  mpiPatientRecords: Array<MpiPatientRecord>
+}
+
+interface MpiPatientRecord {
+  patientRecord: JempiPatientRecord
+}
+
+interface JempiPatientRecord extends Pick<PatientRecord, 'sourceId' | 'uid'> {
+  demographicData: Omit<PatientRecord, 'sourceId' | 'uid'>
+}
+
 class ApiClient {
   async getFields() {
     return await client
@@ -58,7 +75,7 @@ class ApiClient {
     return await client
       .get<PatientRecord>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
-      .then((patientRecord: any) => {
+      .then((patientRecord: Partial<JempiPatientRecord>) => {
         return {
           ...patientRecord,
           ...patientRecord.demographicData
@@ -73,13 +90,15 @@ class ApiClient {
       .then(({ goldenRecord, mpiPatientRecords }: any) => {
         return {
           ...goldenRecord,
-          ...goldenRecord.demographicData,
-          linkRecords: mpiPatientRecords.map(({ patientRecord }: any) => {
-            return {
-              ...patientRecord,
-              ...patientRecord.demographicData
+          ...goldenRecord?.demographicData,
+          linkRecords: mpiPatientRecords?.map(
+            ({ patientRecord }: Partial<MpiPatientRecord>) => {
+              return {
+                ...patientRecord,
+                ...patientRecord?.demographicData
+              }
             }
-          })
+          )
         }
       })
   }
@@ -96,8 +115,8 @@ class ApiClient {
         }
       })
       .then(({ data }) =>
-        data.goldenRecords.map((data: any) => {
-          return data.goldenRecord
+        data.goldenRecords.map(({ goldenRecord }) => {
+          return goldenRecord
         })
       )
   }
@@ -164,18 +183,22 @@ class ApiClient {
         const { pagination, data } = res.data.records
         const result: ApiSearchResult = {
           records: {
-            data: data.map(({ goldenRecord, mpiPatientRecords }: any) => {
-              return {
-                ...goldenRecord,
-                ...goldenRecord.demographicData,
-                linkRecords: mpiPatientRecords.map(({ patientRecord }: any) => {
-                  return {
-                    ...patientRecord,
-                    ...patientRecord.demographicData
-                  }
-                })
+            data: data.map(
+              ({ goldenRecord, mpiPatientRecords }: MpiGoldenRecord) => {
+                return {
+                  ...goldenRecord,
+                  ...goldenRecord.demographicData,
+                  linkRecords: mpiPatientRecords.map(
+                    ({ patientRecord }: MpiPatientRecord) => {
+                      return {
+                        ...patientRecord,
+                        ...patientRecord.demographicData
+                      }
+                    }
+                  )
+                }
               }
-            }),
+            ),
             pagination: {
               total: pagination.total
             }
@@ -186,7 +209,7 @@ class ApiClient {
         const { pagination, data } = res.data.records
         const result: ApiSearchResult = {
           records: {
-            data: data.map((patientRecord: any) => {
+            data: data.map((patientRecord: JempiPatientRecord) => {
               return {
                 ...patientRecord,
                 ...patientRecord.demographicData

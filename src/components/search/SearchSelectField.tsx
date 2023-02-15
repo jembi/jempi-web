@@ -4,19 +4,20 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   SxProps,
   Theme
 } from '@mui/material'
 
 interface optionsProp {
-  value: number
+  value: string | number
   label: string
 }
 interface SearchSelectFieldProps {
   index: number
-  onChange: ((event: any) => void) | undefined
+  onChange: ((event: SelectChangeEvent<string>) => void) | undefined
   fieldName: string
-  options: any[]
+  options: optionsProp[]
   title: string
   description?: string
   helperText?: string

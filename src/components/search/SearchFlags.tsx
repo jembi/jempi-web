@@ -11,7 +11,7 @@ interface SearchFlagsProps {
 const SearchFlags: React.FC<SearchFlagsProps> = ({ options, onChange }) => {
   const [selectedButton, setSelectedButton] = useState<string>('0')
 
-  const handleChange = (event: React.ChangeEvent<any>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedButton(event?.target.value)
     onChange(event?.target.value === '0')
   }

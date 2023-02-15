@@ -266,17 +266,6 @@ const MatchDetails = () => {
       valueFormatter: (params: GridValueFormatterParams<number>) =>
         params.value ? `${Math.round(params.value * 100)}%` : null
     },
-    ...availableFields.map(field => {
-      const { fieldName, fieldLabel, formatValue } = field
-      return {
-        field: fieldName,
-        headerName: fieldLabel,
-        flex: 1,
-        valueFormatter: ({ value }: any) => formatValue(value),
-        cellClassName: (params: GridCellParams<string>) =>
-          getCellClassName(params, field, data[0])
-      }
-    }),
     {
       field: 'actions',
       headerName: 'Actions',
@@ -328,7 +317,20 @@ const MatchDetails = () => {
             return <></>
         }
       }
-    }
+    },
+    ...availableFields.map(field => {
+      const { fieldName, fieldLabel, formatValue } = field
+      return {
+        field: fieldName,
+        headerName: fieldLabel,
+        flex: 1,
+        valueFormatter: (
+          params: GridValueFormatterParams<number | string | Date>
+        ) => formatValue(params.value),
+        cellClassName: (params: GridCellParams<string>) =>
+          getCellClassName(params, field, data[0])
+      }
+    })
   ]
 
   return (

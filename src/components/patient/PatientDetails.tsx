@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 import { FC, useEffect, useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
-import { DisplayField, FieldChangeReq } from '../../types/Fields'
+import { DisplayField, FieldChangeReq, FieldType } from '../../types/Fields'
 import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
@@ -120,9 +120,9 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
 
   const onConfirm = () => {
     const fields = Object.keys(patientRecord).reduce(
-      (acc: { name: string; value: any }[], curr: string) => {
+      (acc: { name: string; value: FieldType }[], curr: string) => {
         if (patientRecord && data[curr] !== patientRecord[curr]) {
-          acc.push({ name: curr, value: patientRecord[curr] })
+          acc.push({ name: curr, value: patientRecord[curr] as FieldType })
         }
         return acc
       },
