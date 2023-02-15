@@ -23,7 +23,7 @@ interface NotificationRequest {
 
 interface LinkRequest {
   goldenID: string
-  docID: string
+  patientID: string
   newGoldenID?: string
 }
 
@@ -141,7 +141,7 @@ class ApiClient {
   async newGoldenRecord(request: LinkRequest) {
     return await client
       .patch(
-        `${ROUTES.CREATE_GOLDEN_RECORD}?goldenID=${request.goldenID}&docID=${request.docID}`
+        `${ROUTES.CREATE_GOLDEN_RECORD}?goldenID=${request.goldenID}&patientID=${request.patientID}`
       )
       .then(res => res.data)
   }
@@ -149,7 +149,7 @@ class ApiClient {
   async linkRecord(request: LinkRequest) {
     return await client
       .patch(
-        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
+        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&patientID=${request.patientID}&score=2`
       )
       .then(res => res.data)
   }
