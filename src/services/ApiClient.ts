@@ -32,7 +32,7 @@ interface NotificationResponse {
 }
 
 interface GoldenRecordResponse {
-  goldenRecords: GoldenRecord[]
+  expandedGoldenRecords: GoldenRecord[]
 }
 
 class ApiClient {
@@ -96,8 +96,11 @@ class ApiClient {
         }
       })
       .then(({ data }) =>
-        data.goldenRecords.map((data: any) => {
-          return data.goldenRecord
+        data.expandedGoldenRecords.map((data: any) => {
+          return {
+            ...data.goldenRecord,
+            ...data.goldenRecord.demographicData
+          }
         })
       )
   }

@@ -4,7 +4,7 @@ const ROUTES = {
   GET_NOTIFICATIONS: '/MatchesForReview',
   PATIENT_RECORD_ROUTE: '/patient-record',
   GOLDEN_RECORD_ROUTE: '/golden-record',
-  GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecordDocuments',
+  GET_GOLDEN_ID_DOCUMENTS: '/GoldenRecord',
   UPDATE_NOTIFICATION: '/NotificationRequest',
   CREATE_GOLDEN_RECORD: '/Unlink',
   LINK_RECORD: '/Link',
