@@ -1,6 +1,6 @@
 import AuditTrailRecord from '../types/AuditTrail'
 import Notification, { NotificationState } from '../types/Notification'
-import { GoldenRecord, PatientRecord } from '../types/PatientRecord'
+import { PatientRecord } from '../types/PatientRecord'
 import { ApiSearchResult } from '../types/SimpleSearch'
 import { User } from '../types/User'
 
@@ -21,40 +21,55 @@ const searchGoldenRecordResult: ApiSearchResult = {
   records: {
     data: [
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Golden',
-        gender: 'male',
-        givenName: 'Endalekachew',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
-        sourceId: [],
-        uid: '0x4'
+        goldenRecord: {
+          demographicData: {
+            auxId: 'rec-00000000-aaa-0',
+            city: 'Nairobi',
+            dob: '20171114',
+            familyName: 'Moltisanti',
+            gender: 'male',
+            givenName: 'Christopher',
+            nationalId: '198804042874913',
+            phoneNumber: '091-749-4674'
+          },
+          sourceId: [],
+          uid: '0x9833'
+        },
+        mpiPatientRecords: []
       },
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Onyango',
-        gender: 'male',
-        givenName: 'Golden',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
-        sourceId: [],
-        uid: '0x3'
+        goldenRecord: {
+          demographicData: {
+            auxId: 'rec-00000000-aaa-0',
+            city: 'Nairobi',
+            dob: '20171114',
+            familyName: 'Onyango',
+            gender: 'male',
+            givenName: 'Golden',
+            nationalId: '198804042874913',
+            phoneNumber: '091-749-4674'
+          },
+          sourceId: [],
+          uid: '0x3'
+        },
+        mpiPatientRecords: []
       },
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Golden',
-        gender: 'male',
-        givenName: 'Endalekachew',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
-        sourceId: [],
-        uid: '0x2'
+        goldenRecord: {
+          demographicData: {
+            auxId: 'rec-00000000-aaa-0',
+            city: 'Nairobi',
+            dob: '20171114',
+            familyName: 'Golden',
+            gender: 'male',
+            givenName: 'Endalekachew',
+            nationalId: '198804042874913',
+            phoneNumber: '091-749-4674'
+          },
+          sourceId: [],
+          uid: '0x2'
+        },
+        mpiPatientRecords: []
       }
     ],
     pagination: {
@@ -66,36 +81,42 @@ const searchPatientRecordResult: ApiSearchResult = {
   records: {
     data: [
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Patient',
-        gender: 'male',
-        givenName: 'Endalekachew',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
+        demographicData: {
+          auxId: 'rec-00000000-aaa-0',
+          city: 'Nairobi',
+          dob: '20171114',
+          familyName: 'Patient',
+          gender: 'male',
+          givenName: 'Endalekachew',
+          nationalId: '198804042874913',
+          phoneNumber: '091-749-4674'
+        },
         uid: '0x9'
       },
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Onyango',
-        gender: 'male',
-        givenName: 'Patient',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
+        demographicData: {
+          auxId: 'rec-00000000-bbb-0',
+          city: 'Nairobi',
+          dob: '20171114',
+          familyName: 'Onyango',
+          gender: 'male',
+          givenName: 'Patient',
+          nationalId: '198804042874913',
+          phoneNumber: '091-749-4674'
+        },
         uid: '0x8'
       },
       {
-        auxId: 'rec-00000000-aaa-0',
-        city: 'Nairobi',
-        dob: '20171114',
-        familyName: 'Patient',
-        gender: 'male',
-        givenName: 'Endalekachew',
-        nationalId: '198804042874913',
-        phoneNumber: '091-749-4674',
+        demographicData: {
+          auxId: 'rec-00000000-ccc-0',
+          city: 'Nairobi',
+          dob: '20171114',
+          familyName: 'Patient',
+          gender: 'male',
+          givenName: 'Endalekachew',
+          nationalId: '198804042874913',
+          phoneNumber: '091-749-4674'
+        },
         uid: '0x7'
       }
     ],
@@ -143,7 +164,6 @@ const auditTrail: AuditTrailRecord[] = [
 const patientRecord: PatientRecord = {
   auxId: '0x66',
   score: 0,
-  uid: 'G543',
   nationalId: '123456',
   givenName: 'Bob',
   familyName: 'Smith',
@@ -152,6 +172,7 @@ const patientRecord: PatientRecord = {
   phoneNumber: '085145855',
   city: 'Welkom',
   updatedBy: undefined,
+  uid: 'G543',
   sourceId: {
     facility: 'Facility One',
     uid: '0x3289',
@@ -165,7 +186,7 @@ const linkedRecords: PatientRecord[] = [
     type: 'Current',
     source: 'clinic A',
     score: 0,
-    uid: '0x9833',
+    uid: '0x9832',
     nationalId: '123456',
     givenName: 'Christopher',
     familyName: 'Moltisanti',
@@ -201,41 +222,45 @@ const linkedRecords: PatientRecord[] = [
   }
 ]
 
-const goldenRecord: GoldenRecord = {
-  auxId: '0x77',
-  score: 0,
-  uid: '0x9833',
-  nationalId: '123456',
-  givenName: 'Bob',
-  familyName: 'Smith',
-  gender: 'Male',
-  dob: new Date(1605522215666),
-  phoneNumber: '085145855',
-  city: 'Welkom',
-  updatedBy: undefined,
-  sourceId: [
-    {
-      facility: 'Facility One',
-      uid: '0x3289',
-      patient: 'xxx'
+const goldenRecord = {
+  goldenRecord: {
+    uid: '0x9833',
+    demographicData: {
+      auxId: '0x77',
+      nationalId: '123456',
+      givenName: 'Bob',
+      familyName: 'Smith',
+      gender: 'Male',
+      dob: new Date(1605522215666),
+      phoneNumber: '085145855',
+      city: 'Welkom'
     },
-    {
-      facility: 'Facility Two',
-      uid: '0x3288',
-      patient: 'xxx'
-    }
+    sourceId: [
+      {
+        facility: 'Facility One',
+        uid: '0x3289',
+        patient: 'xxx'
+      },
+      {
+        facility: 'Facility Two',
+        uid: '0x3288',
+        patient: 'xxx'
+      }
+    ]
+  },
+  mpiPatientRecords: [
+    { patientRecord: linkedRecords[0] },
+    { patientRecord: linkedRecords[1] }
   ]
 }
 
 const patientRecords = [patientRecord, goldenRecord]
 
-const goldenRecordResp = {
-  customGoldenRecord: goldenRecord,
-  mpiEntityList: [{ entity: linkedRecords[0] }, { entity: linkedRecords[1] }]
-}
-
 const goldenRecords = [
-  { customGoldenRecord: goldenRecord, mpiEntityList: [...linkedRecords] }
+  {
+    records: { data: { ...goldenRecord } },
+    mpiPatientRecords: [...linkedRecords]
+  }
 ]
 
 const currentUser: User = {
@@ -251,7 +276,7 @@ const mockData = {
   auditTrail,
   notifications,
   patientRecord,
-  goldenRecord: goldenRecordResp,
+  goldenRecord,
   goldenRecords,
   patientRecords,
   currentUser,

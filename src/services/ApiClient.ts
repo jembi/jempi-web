@@ -91,7 +91,7 @@ class ApiClient {
         return {
           ...goldenRecord,
           ...goldenRecord?.demographicData,
-          linkRecords: mpiPatientRecords?.map(
+          linkRecords: mpiPatientRecords.map(
             ({ patientRecord }: Partial<MpiPatientRecord>) => {
               return {
                 ...patientRecord,
