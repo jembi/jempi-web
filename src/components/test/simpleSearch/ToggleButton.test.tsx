@@ -19,14 +19,14 @@ const sx: SxProps<Theme> = {
     backgroundColor: theme => theme.palette.primary.main
   }
 }
-test('Toggle button have the correct options when rendered', () => {
+test('Have content 1 when passed as an option label', () => {
   const { container } = render(
     <ToggleButtons selectedButton="1" options={options} sx={sx} />
   )
   expect(container.firstChild).toHaveTextContent('1')
 })
 
-test('Toggle button has the correct initial value when first rendered', () => {
+test('Have option one when passed as the initial selected value', () => {
   render(<ToggleButtons selectedButton="1" options={options} sx={sx} />)
 
   const linkElement = screen.getAllByText('1')
