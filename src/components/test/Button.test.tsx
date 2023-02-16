@@ -16,7 +16,6 @@ test('Show Circular progress icon when isLoading is true', () => {
   render(<Button isLoading={true}>Test</Button>)
 
   const { container } = render(<Button isLoading={true}>Search</Button>)
-  console.log(container.classList.values)
   expect(
     container.getElementsByClassName('MuiCircularProgress-circle')
   ).toBeTruthy()

@@ -39,10 +39,6 @@ const CustomSearch: React.FC = () => {
     distance: 0
   }
 
-  function handleOnFormSubmit(value: CustomSearchQuery) {
-    console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
-  }
-
   const initialValues: CustomSearchQuery = {
     $or: [
       {
@@ -90,7 +86,10 @@ const CustomSearch: React.FC = () => {
           </Grid>
 
           <Divider />
-          <Formik initialValues={initialValues} onSubmit={handleOnFormSubmit}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={() => console.log('Submited')}
+          >
             {({ values, handleChange, setFieldValue }) => (
               <Form>
                 <Box
