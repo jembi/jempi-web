@@ -169,13 +169,18 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         buttons={
           !isGoldenRecord
             ? [
-                <Button variant="outlined" href={`/patient/${uid}/audit-trail`}>
+                <Button
+                  variant="outlined"
+                  href={`/patient/${uid}/audit-trail`}
+                  key="audit-trail"
+                >
                   AUDIT TRAIL
                 </Button>,
 
                 <Button
                   variant="header"
                   href={`/patient/${uid}/linked-records`}
+                  key="linked-records"
                 >
                   LINKED RECORDS
                 </Button>

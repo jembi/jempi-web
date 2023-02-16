@@ -56,8 +56,17 @@ const SimpleSearch: React.FC = () => {
           }
         ]}
         buttons={[
-          <SearchFlags options={options} onChange={setIsGoldenOnly} />,
-          <Button variant="outlined" href={'/search/custom'} size="large">
+          <SearchFlags
+            options={options}
+            onChange={setIsGoldenOnly}
+            key="search-flags"
+          />,
+          <Button
+            variant="outlined"
+            href={'/search/custom'}
+            size="large"
+            key="custom-search"
+          >
             CUSTOM SEARCH
           </Button>
         ]}
