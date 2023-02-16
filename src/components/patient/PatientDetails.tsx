@@ -167,7 +167,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           }
         ]}
         buttons={
-          !isGoldenRecord
+          isGoldenRecord
             ? [
                 <Button
                   variant="outlined"
@@ -227,7 +227,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
           />
         </Grid>
       </Grid>
-      {!isGoldenRecord && (
+      {isGoldenRecord && (
         <Box
           sx={{
             py: 4,
