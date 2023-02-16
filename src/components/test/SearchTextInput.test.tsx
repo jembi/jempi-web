@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import SearchtextInput from '../../search/SearchTextInput'
+import SearchtextInput from '../search/SearchTextInput'
 
 test('Text field renders successfully when called', () => {
   render(
