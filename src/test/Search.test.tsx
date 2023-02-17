@@ -54,36 +54,25 @@ const routes: Route[] = [
   }
 ]
 
-const renderSimpleSearch = () => {
-  act(() => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <Router location={location} routes={routes}>
-          <AppConfigProvider>
-            <SimpleSearch />
-          </AppConfigProvider>
-        </Router>
-      </QueryClientProvider>
-    )
-  })
-}
-
-test('Custom Search button exists when simple search component is rendered', async () => {
-  await renderSimpleSearch()
-
+test('Simple Search button exist when we navigate to custom search', async () => {
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Router location={location} routes={routes}>
+        <AppConfigProvider>
+          <SimpleSearch />
+        </AppConfigProvider>
+      </Router>
+    </QueryClientProvider>
+  )
   const linkElement = await screen.findAllByText(/Custom Search/i)
   expect(linkElement[0]).toBeInTheDocument()
-})
 
-test('Simple Search button exist when we navigate to custom search', async () => {
-  await renderSimpleSearch()
-
-  const customSearchButton = screen.getAllByRole('link', {
+  const customSearchButton = await screen.findAllByRole('link', {
     name: /Custom Search/i
-  })[0]
+  })
 
   act(() => {
-    userEvent.click(customSearchButton)
+    userEvent.click(customSearchButton[0])
   })
 
   expect(await screen.findByText(/Simple Search/i)).toBeInTheDocument()
