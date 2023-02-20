@@ -1,14 +1,14 @@
-import FieldGroup from '../components/customSearch/FieldGroup'
 import { ReactLocation, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FieldArray, Form, Formik } from 'formik'
-import { AppConfigProvider } from '../hooks/useAppConfig'
-import routes from './Routes'
+import FieldGroup from '../../components/customSearch/FieldGroup'
+import { AppConfigProvider } from '../../hooks/useAppConfig'
 import {
   CustomSearchQuery,
   SearchParameter,
   SimpleSearchQuery
-} from '../types/SimpleSearch'
+} from '../../types/SimpleSearch'
+import routes from './Routes'
 
 const queryClient = new QueryClient({
   defaultOptions: {
