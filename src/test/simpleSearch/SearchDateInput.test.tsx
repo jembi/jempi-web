@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import SearchDateInput from '../components/search/SearchDateInput'
+import SearchDateInput from '../../components/search/SearchDateInput'
 
 test('Show correct label when rendered', () => {
   const { container } = render(

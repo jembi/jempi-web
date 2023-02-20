@@ -1,6 +1,6 @@
 import { SxProps, Theme } from '@mui/material'
 import { render, screen } from '@testing-library/react'
-import ToggleButtons from '../components/search/ToggleButtons'
+import ToggleButtons from '../../components/search/ToggleButtons'
 
 const options = [
   { value: 0, label: '0' },
