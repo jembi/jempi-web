@@ -48,11 +48,7 @@ axiosMockAdapterInstance
   .onGet(ROUTES.GET_GOLDEN_ID_DOCUMENTS)
   .reply(() => {
     // Unique row ids for data grid
-    const records = goldenRecords.map(g => {
-      g.records.data.goldenRecord.uid += 1
-      return g
-    })
-    return [200, { goldenRecords: records }]
+    return [200, { expandedGoldenRecords: goldenRecords }]
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
