@@ -214,13 +214,13 @@ const MatchDetails = () => {
     switch (action) {
       case Action.CreateRecord:
         newGoldenRecord.mutate({
-          docID: data![0].uid,
+          patientID: data![0].uid,
           goldenID: data![1].uid
         })
         break
       case Action.Link:
         linkRecord.mutate({
-          docID: data![0].uid,
+          patientID: data![0].uid,
           goldenID: data![1].uid,
           newGoldenID: recordId
         })
