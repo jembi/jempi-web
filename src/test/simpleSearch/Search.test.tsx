@@ -2,10 +2,10 @@ import { ReactLocation, Route, Router } from '@tanstack/react-location'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { AppConfigProvider } from '../hooks/useAppConfig'
-import CustomSearch from '../components/customSearch/CustomSearch'
-import SimpleSearch from '../components/search/SimpleSearch'
-import SearchResult from '../components/searchResult/SearchResult'
+import CustomSearch from '../../components/customSearch/CustomSearch'
+import SimpleSearch from '../../components/search/SimpleSearch'
+import SearchResult from '../../components/searchResult/SearchResult'
+import { AppConfigProvider } from '../../hooks/useAppConfig'
 
 const queryClient = new QueryClient({
   defaultOptions: {
