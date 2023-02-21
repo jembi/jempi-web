@@ -12,7 +12,7 @@ const notifications: Notification[] = [
     names: 'Bob Smith',
     patient_id: '0x5a',
     state: NotificationState.New,
-    golden_id: '0x45',
+    golden_id: '0x9833',
     score: 0.5
   }
 ]
@@ -161,18 +161,18 @@ const auditTrail: AuditTrailRecord[] = [
   }
 ]
 
-const patientRecord: PatientRecord = {
-  auxId: '0x66',
-  score: 0,
-  nationalId: '123456',
-  givenName: 'Bob',
-  familyName: 'Smith',
-  gender: 'Male',
-  dob: new Date(1605522215666),
-  phoneNumber: '085145855',
-  city: 'Welkom',
-  updatedBy: undefined,
-  uid: 'G543',
+const patientRecord = {
+  demographicData: {
+    auxId: '0x66',
+    nationalId: '123456',
+    givenName: 'Bob',
+    familyName: 'Smith',
+    gender: 'Male',
+    dob: new Date(1605522215666),
+    phoneNumber: '085145855',
+    city: 'Welkom'
+  },
+  uid: '0x5a',
   sourceId: {
     facility: 'Facility One',
     uid: '0x3289',
@@ -258,8 +258,7 @@ const patientRecords = [patientRecord, goldenRecord]
 
 const goldenRecords = [
   {
-    records: { data: { ...goldenRecord } },
-    mpiPatientRecords: [...linkedRecords]
+    ...goldenRecord
   }
 ]
 
