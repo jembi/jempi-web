@@ -101,8 +101,8 @@ const MatchDetails = () => {
       queryKey: ['matchDetails', searchParams],
       queryFn: () => {
         return ApiClient.getMatchDetails(
-          searchParams.patient_id!,
-          searchParams.golden_id!,
+          searchParams.patient_id ? searchParams.patient_id : '',
+          searchParams.golden_id ? searchParams.golden_id : '',
           searchParams.candidates?.map(c => c.golden_id) || []
         )
       },
@@ -146,7 +146,9 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId!,
+        notificationId: searchParams.notificationId
+          ? searchParams.notificationId
+          : '',
         state: NotificationState.Actioned
       })
     },
@@ -166,7 +168,9 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId!,
+        notificationId: searchParams.notificationId
+          ? searchParams.notificationId
+          : '',
         state: NotificationState.Actioned
       })
     },
@@ -210,32 +214,6 @@ const MatchDetails = () => {
     setDialog({ open: false })
   }
 
-  const handleConfirm = () => {
-    switch (action) {
-      case Action.CreateRecord:
-        newGoldenRecord.mutate({
-          patientID: data![0].uid,
-          goldenID: data![1].uid
-        })
-        break
-      case Action.Link:
-        linkRecord.mutate({
-          patientID: data![0].uid,
-          goldenID: data![1].uid,
-          newGoldenID: recordId
-        })
-        break
-      case Action.Accept:
-        accept.mutate({
-          notificationId: searchParams.notificationId!,
-          state: NotificationState.Actioned
-        })
-        break
-      default:
-        break
-    }
-  }
-
   if (isLoading) {
     return <Loading />
   }
@@ -246,6 +224,34 @@ const MatchDetails = () => {
 
   if (!data) {
     return <NotFound />
+  }
+
+  const handleConfirm = () => {
+    switch (action) {
+      case Action.CreateRecord:
+        newGoldenRecord.mutate({
+          patientID: data[0].uid,
+          goldenID: data[1].uid
+        })
+        break
+      case Action.Link:
+        linkRecord.mutate({
+          patientID: data[0].uid,
+          goldenID: data[1].uid,
+          newGoldenID: recordId
+        })
+        break
+      case Action.Accept:
+        accept.mutate({
+          notificationId: searchParams.notificationId
+            ? searchParams.notificationId
+            : '',
+          state: NotificationState.Actioned
+        })
+        break
+      default:
+        break
+    }
   }
 
   const columns: GridColumns = [
@@ -260,17 +266,6 @@ const MatchDetails = () => {
       valueFormatter: (params: GridValueFormatterParams<number>) =>
         params.value ? `${Math.round(params.value * 100)}%` : null
     },
-    ...availableFields.map(field => {
-      const { fieldName, fieldLabel, formatValue } = field
-      return {
-        field: fieldName,
-        headerName: fieldLabel,
-        flex: 1,
-        valueFormatter: ({ value }: any) => formatValue(value),
-        cellClassName: (params: GridCellParams<string>) =>
-          getCellClassName(params, field, data[0])
-      }
-    }),
     {
       field: 'actions',
       headerName: 'Actions',
@@ -286,7 +281,7 @@ const MatchDetails = () => {
         patient: params.row.patient,
         type: params.row.type
       }),
-      renderCell: (params: GridRenderCellParams<any>) => {
+      renderCell: (params: GridRenderCellParams) => {
         switch (params.row.type) {
           case 'Current':
             return (
@@ -322,7 +317,20 @@ const MatchDetails = () => {
             return <></>
         }
       }
-    }
+    },
+    ...availableFields.map(field => {
+      const { fieldName, fieldLabel, formatValue } = field
+      return {
+        field: fieldName,
+        headerName: fieldLabel,
+        flex: 1,
+        valueFormatter: (
+          params: GridValueFormatterParams<number | string | Date>
+        ) => formatValue(params.value),
+        cellClassName: (params: GridCellParams<string>) =>
+          getCellClassName(params, field, data[0])
+      }
+    })
   ]
 
   return (
@@ -336,7 +344,7 @@ const MatchDetails = () => {
           },
           {
             link: '/review-matches/',
-            title: getPatientName(data![0])
+            title: getPatientName(data[0])
           }
         ]}
       />

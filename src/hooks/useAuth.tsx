@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
     isLoading,
     error,
     refetch
-  } = useQuery<User, AxiosError<unknown, any>>({
+  } = useQuery<User, AxiosError<unknown, User>>({
     queryKey: [key],
     queryFn: async () => {
       return await ApiClient.getCurrentUser()
@@ -108,6 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
       oauthRef.current = params
       validateOAuth(params)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validateOAuth])
 
   useEffect(() => {
@@ -118,6 +119,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
         navigate({ to: '/' })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   if (isLoading) {

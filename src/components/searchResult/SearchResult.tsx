@@ -38,7 +38,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
 }) => {
   const { payload: searchPayload } = useSearch<UrlQueryParams>()
   const [payload, setPayLoad] = React.useState<SearchQuery | CustomSearchQuery>(
-    searchPayload!
+    searchPayload || ({} as CustomSearchQuery)
   )
   const { availableFields } = useAppConfig()
 
@@ -101,7 +101,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
       if (model.length > 0) {
         const [column] = model
         setPayLoad({
-          ...payload!,
+          ...payload,
           sortAsc: column.sort === 'asc',
           sortBy: column.field
         })

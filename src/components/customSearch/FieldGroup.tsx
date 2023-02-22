@@ -1,21 +1,21 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Button, Grid, Typography } from '@mui/material'
+import { Button, Grid, SelectChangeEvent, Typography } from '@mui/material'
 import { FieldArray } from 'formik'
 import { SearchParameter, SimpleSearchQuery } from '../../types/SimpleSearch'
 import SearchRow from '../search/SearchRow'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 interface FieldGroupProps {
   values: SimpleSearchQuery
-  handleChange: (e: React.ChangeEvent<any>) => void
+  handleChange: (e: SelectChangeEvent<string>) => void
   initialCustomSearchValues: { parameters: SearchParameter[] }
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
   setFieldValue: (
     field: string,
-    value: any,
+    value: string | Date | number,
     shouldValidate?: boolean | undefined
   ) => void
-  push: (obj: any) => void
+  push: (obj: { parameters: Array<SearchParameter> }) => void
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = ({

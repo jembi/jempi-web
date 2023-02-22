@@ -48,9 +48,10 @@ export const AppConfigProvider = ({
         return {
           ...field,
           formatValue: getFieldValueFormatter(field.fieldType),
-          isValid: (value: any) => isInputValid(value, field.rules)
+          isValid: (value: unknown) => isInputValid(value, field.rules)
         }
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields, location.current])
 
   const getFieldsByGroup = useCallback(
