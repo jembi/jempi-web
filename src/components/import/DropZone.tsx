@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { useSnackbar } from 'notistack'
 import { FC, useState } from 'react'
-import { DropEvent, FileRejection, useDropzone } from 'react-dropzone'
+import { FileRejection, useDropzone } from 'react-dropzone'
 import ApiClient from '../../services/ApiClient'
 import { FileObj, UploadStatus } from '../../types/FileUpload'
 import Button from '../shared/Button'
@@ -17,8 +17,7 @@ const DropZone: FC = () => {
 
   const onDrop = (
     acceptedFiles: File[],
-    fileRejections: FileRejection[],
-    event: DropEvent
+    fileRejections: FileRejection[]
   ): void => {
     validate(acceptedFiles, fileRejections)
     setFilesObj([
@@ -76,8 +75,10 @@ const DropZone: FC = () => {
       },
       data: formData,
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-        const progress = (progressEvent.loaded / progressEvent.total!) * 100
-        updateFileUploadProgress(fileObj, progress)
+        if (progressEvent.total) {
+          const progress = (progressEvent.loaded / progressEvent.total) * 100
+          updateFileUploadProgress(fileObj, progress)
+        }
       }
     }
   }

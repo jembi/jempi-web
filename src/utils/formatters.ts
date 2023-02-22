@@ -2,8 +2,10 @@ import moment from 'moment'
 import { FieldType } from '../types/Fields'
 import { AnyRecord, ValueOf } from '../types/PatientRecord'
 
-export const formatDate = (value: any) => {
-  return moment(value).format('YYYY-MM-DD')
+export const formatDate = (value: unknown) => {
+  if (typeof value === 'object') {
+    return moment(value).format('YYYY-MM-DD')
+  }
 }
 
 export const getFieldValueFormatter = (type: FieldType) => {

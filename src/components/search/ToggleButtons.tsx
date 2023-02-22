@@ -23,7 +23,7 @@ export const triggerInputChange = (node: HTMLInputElement, value = '') => {
 interface ToggleButtonsProps {
   selectedButton: string
   name?: string
-  onChange?: (e: React.ChangeEvent<any>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   options: SearchFlagsOptionsProps[]
   sx: SxProps<Theme>
   disabled?: boolean
@@ -42,7 +42,7 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
 
   const handleToggle = (
     _e: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: any
+    value: string
   ) => {
     if (value && ref.current) {
       setSelected(value)
@@ -60,7 +60,7 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
         disabled={disabled}
         id={name}
       >
-        {options.map((option, index) => {
+        {options.map(option => {
           return (
             <ToggleButton
               value={`${option.value}`}

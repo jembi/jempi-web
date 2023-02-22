@@ -2,7 +2,7 @@ import { SxProps, TextField, Theme } from '@mui/material'
 
 interface SearchTextInputProps {
   value: string | Date
-  onChange?: (e: React.ChangeEvent<any>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   name: string
   label: string
   disabled?: boolean

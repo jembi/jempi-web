@@ -3,7 +3,11 @@ import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
 import { FieldChangeReq, Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
-import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
+import {
+  AnyRecord,
+  GoldenRecord as GR,
+  PatientRecord as PR
+} from '../types/PatientRecord'
 import {
   ApiSearchResult,
   CustomSearchQuery,
@@ -23,7 +27,7 @@ interface NotificationRequest {
 
 interface LinkRequest {
   goldenID: string
-  docID: string
+  patientID: string
   newGoldenID?: string
 }
 
@@ -32,7 +36,24 @@ interface NotificationResponse {
 }
 
 interface GoldenRecordResponse {
-  goldenRecords: GoldenRecord[]
+  expandedGoldenRecords: GR[]
+}
+
+interface GoldenRecord extends Pick<GR, 'sourceId' | 'uid'> {
+  demographicData: Omit<GR, 'sourceId' | 'uid'>
+}
+
+interface ExpandedGoldenRecord {
+  goldenRecord: GoldenRecord
+  mpiPatientRecords: Array<ExpandedPatientRecord>
+}
+
+interface ExpandedPatientRecord {
+  patientRecord: PatientRecord
+}
+
+interface PatientRecord extends Pick<PR, 'sourceId' | 'uid'> {
+  demographicData: Omit<PR, 'sourceId' | 'uid'>
 }
 
 class ApiClient {
@@ -56,19 +77,31 @@ class ApiClient {
 
   async getPatientRecord(uid: string) {
     return await client
-      .get<PatientRecord>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
+      .get<PR>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
+      .then((patientRecord: Partial<PatientRecord>) => {
+        return {
+          ...patientRecord,
+          ...patientRecord.demographicData
+        }
+      })
   }
 
   async getGoldenRecord(uid: string) {
     return await client
-      .get<GoldenRecord>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
+      .get<GR>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
-      .then((data: any) => {
+      .then(({ goldenRecord, mpiPatientRecords }: any) => {
         return {
-          ...data.customGoldenRecord,
-          linkRecords: data.mpiEntityList.map(
-            (entityItem: any) => entityItem.entity
+          ...goldenRecord,
+          ...goldenRecord?.demographicData,
+          linkRecords: mpiPatientRecords?.map(
+            ({ patientRecord }: Partial<ExpandedPatientRecord>) => {
+              return {
+                ...patientRecord,
+                ...patientRecord?.demographicData
+              }
+            }
           )
         }
       })
@@ -85,16 +118,20 @@ class ApiClient {
           indexes: null
         }
       })
-      .then(res =>
-        res.data.goldenRecords.map((data: any) => {
-          return data.customGoldenRecord
+      .then(res => res.data)
+      .then(({ expandedGoldenRecords }) =>
+        expandedGoldenRecords.map(({ goldenRecord }: any) => {
+          return {
+            ...goldenRecord,
+            ...goldenRecord.demographicData
+          }
         })
       )
   }
 
   //TODO Move this logic to the backend and just get match details by notification ID
   async getMatchDetails(uid: string, goldenId: string, candidates: string[]) {
-    if (uid === null || typeof uid === 'undefined') {
+    if (uid === null || uid === '' || typeof uid === 'undefined') {
       return [] as AnyRecord[]
     }
     const patientRecord = this.getPatientRecord(uid)
@@ -128,7 +165,7 @@ class ApiClient {
   async newGoldenRecord(request: LinkRequest) {
     return await client
       .patch(
-        `${ROUTES.CREATE_GOLDEN_RECORD}?goldenID=${request.goldenID}&docID=${request.docID}`
+        `${ROUTES.CREATE_GOLDEN_RECORD}?goldenID=${request.goldenID}&patientID=${request.patientID}`
       )
       .then(res => res.data)
   }
@@ -136,7 +173,7 @@ class ApiClient {
   async linkRecord(request: LinkRequest) {
     return await client
       .patch(
-        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&docID=${request.docID}&score=2`
+        `${ROUTES.LINK_RECORD}?goldenID=${request.goldenID}&newGoldenID=${request.newGoldenID}&patientID=${request.patientID}&score=2`
       )
       .then(res => res.data)
   }
@@ -154,12 +191,36 @@ class ApiClient {
         const { pagination, data } = res.data.records
         const result: ApiSearchResult = {
           records: {
-            data: data.map((d: any) => {
+            data: data.map(
+              ({ goldenRecord, mpiPatientRecords }: ExpandedGoldenRecord) => {
+                return {
+                  ...goldenRecord,
+                  ...goldenRecord.demographicData,
+                  linkRecords: mpiPatientRecords.map(
+                    ({ patientRecord }: ExpandedPatientRecord) => {
+                      return {
+                        ...patientRecord,
+                        ...patientRecord.demographicData
+                      }
+                    }
+                  )
+                }
+              }
+            ),
+            pagination: {
+              total: pagination.total
+            }
+          }
+        }
+        return result
+      } else {
+        const { pagination, data } = res.data.records
+        const result: ApiSearchResult = {
+          records: {
+            data: data.map((patientRecord: PatientRecord) => {
               return {
-                ...d.customGoldenRecord,
-                linkRecords: d.mpiEntityList.map(
-                  (entityItem: any) => entityItem.entity
-                )
+                ...patientRecord,
+                ...patientRecord.demographicData
               }
             }),
             pagination: {
@@ -168,8 +229,6 @@ class ApiClient {
           }
         }
         return result
-      } else {
-        return res.data
       }
     })
   }
@@ -189,12 +248,6 @@ class ApiClient {
 
   async logout() {
     return await client.get(ROUTES.LOGOUT)
-  }
-
-  async updatedPatientRecord(uid: string, request: FieldChangeReq) {
-    return await client
-      .post(`${ROUTES.UPDATE_PATIENT_RECORD}/${uid}`, request)
-      .then(res => res)
   }
 
   async updatedGoldenRecord(uid: string, request: FieldChangeReq) {

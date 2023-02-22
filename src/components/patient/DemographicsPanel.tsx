@@ -8,7 +8,7 @@ import DataGridCellInput from './DataGridCellInput'
 const DemographicsPanel: FC<{
   data: PatientRecord | GoldenRecord
   isEditable: boolean
-  onChange: (newRow: PatientRecord | GoldenRecord) => any
+  onChange: (newRow: PatientRecord | GoldenRecord) => unknown
 }> = ({ data, isEditable, onChange }) => {
   const { getFieldsByGroup } = useAppConfig()
   const columns: GridColumns = getFieldsByGroup('demographics').map(
