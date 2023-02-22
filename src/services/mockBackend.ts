@@ -40,7 +40,7 @@ axiosMockAdapterInstance
   .onGet(new RegExp(`^${ROUTES.GOLDEN_RECORD_ROUTE}/[A-z0-9]+$`))
   .reply(config => {
     const id = config.url?.split('/').pop()
-    if (goldenRecord.customGoldenRecord.uid === id) {
+    if (goldenRecord.goldenRecord.uid === id) {
       return [200, goldenRecord]
     }
     return [404, {}]
@@ -48,11 +48,7 @@ axiosMockAdapterInstance
   .onGet(ROUTES.GET_GOLDEN_ID_DOCUMENTS)
   .reply(() => {
     // Unique row ids for data grid
-    const records = goldenRecords.map(g => {
-      g.customGoldenRecord.uid += 1
-      return g
-    })
-    return [200, { goldenRecords: records }]
+    return [200, { expandedGoldenRecords: goldenRecords }]
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)

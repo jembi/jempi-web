@@ -1,4 +1,4 @@
-import { AnyRecord } from './PatientRecord'
+import { AnyRecord, SourceId } from './PatientRecord'
 
 export interface SearchParameter {
   fieldName: string
@@ -35,9 +35,30 @@ export interface SearchFlagsOptionsProps {
   label: string
 }
 
-export interface ApiSearchResult {
+export interface JempiGoldenRecord {
+  goldenRecord: {
+    demographicData: Omit<AnyRecord, 'uid' | 'sourceId'>
+    sourceId?: SourceId[]
+    uid: unknown
+  }
+  mpiPatientRecords: Array<{
+    patientRecord: {
+      demographicData: Omit<AnyRecord, 'uid' | 'sourceId'>
+      sourceId?: SourceId[]
+      uid: unknown
+    }
+  }>
+}
+
+export interface JempiPatientRecord {
+  demographicData: Omit<AnyRecord, 'uid' | 'sourceId'>
+  sourceId?: SourceId[]
+  uid: unknown
+}
+
+export type ApiSearchResult = {
   records: {
-    data: AnyRecord[]
+    data: Array<JempiGoldenRecord | JempiPatientRecord>
     pagination: {
       total: number
     }
