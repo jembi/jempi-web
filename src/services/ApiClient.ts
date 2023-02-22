@@ -3,7 +3,11 @@ import { config } from '../config'
 import AuditTrailRecord from '../types/AuditTrail'
 import { FieldChangeReq, Fields } from '../types/Fields'
 import Notification, { NotificationState } from '../types/Notification'
-import { AnyRecord, GoldenRecord, PatientRecord } from '../types/PatientRecord'
+import {
+  AnyRecord,
+  GoldenRecord as GR,
+  PatientRecord as PR
+} from '../types/PatientRecord'
 import {
   ApiSearchResult,
   CustomSearchQuery,
@@ -32,24 +36,24 @@ interface NotificationResponse {
 }
 
 interface GoldenRecordResponse {
-  expandedGoldenRecords: GoldenRecord[]
+  expandedGoldenRecords: GR[]
 }
 
-interface JempiGoldenRecord extends Pick<PatientRecord, 'sourceId' | 'uid'> {
-  demographicData: Omit<GoldenRecord, 'sourceId' | 'uid'>
+interface GoldenRecord extends Pick<GR, 'sourceId' | 'uid'> {
+  demographicData: Omit<GR, 'sourceId' | 'uid'>
 }
 
-interface MpiGoldenRecord {
-  goldenRecord: JempiGoldenRecord
-  mpiPatientRecords: Array<MpiPatientRecord>
+interface ExpandedGoldenRecord {
+  goldenRecord: GoldenRecord
+  mpiPatientRecords: Array<ExpandedPatientRecord>
 }
 
-interface MpiPatientRecord {
-  patientRecord: JempiPatientRecord
+interface ExpandedPatientRecord {
+  patientRecord: PatientRecord
 }
 
-interface JempiPatientRecord extends Pick<PatientRecord, 'sourceId' | 'uid'> {
-  demographicData: Omit<PatientRecord, 'sourceId' | 'uid'>
+interface PatientRecord extends Pick<PR, 'sourceId' | 'uid'> {
+  demographicData: Omit<PR, 'sourceId' | 'uid'>
 }
 
 class ApiClient {
@@ -73,9 +77,9 @@ class ApiClient {
 
   async getPatientRecord(uid: string) {
     return await client
-      .get<PatientRecord>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
+      .get<PR>(`${ROUTES.PATIENT_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
-      .then((patientRecord: Partial<JempiPatientRecord>) => {
+      .then((patientRecord: Partial<PatientRecord>) => {
         return {
           ...patientRecord,
           ...patientRecord.demographicData
@@ -85,14 +89,14 @@ class ApiClient {
 
   async getGoldenRecord(uid: string) {
     return await client
-      .get<GoldenRecord>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
+      .get<GR>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
       .then(({ goldenRecord, mpiPatientRecords }: any) => {
         return {
           ...goldenRecord,
           ...goldenRecord?.demographicData,
-          linkRecords: mpiPatientRecords.map(
-            ({ patientRecord }: Partial<MpiPatientRecord>) => {
+          linkRecords: mpiPatientRecords?.map(
+            ({ patientRecord }: Partial<ExpandedPatientRecord>) => {
               return {
                 ...patientRecord,
                 ...patientRecord?.demographicData
@@ -188,12 +192,12 @@ class ApiClient {
         const result: ApiSearchResult = {
           records: {
             data: data.map(
-              ({ goldenRecord, mpiPatientRecords }: MpiGoldenRecord) => {
+              ({ goldenRecord, mpiPatientRecords }: ExpandedGoldenRecord) => {
                 return {
                   ...goldenRecord,
                   ...goldenRecord.demographicData,
                   linkRecords: mpiPatientRecords.map(
-                    ({ patientRecord }: MpiPatientRecord) => {
+                    ({ patientRecord }: ExpandedPatientRecord) => {
                       return {
                         ...patientRecord,
                         ...patientRecord.demographicData
@@ -213,7 +217,7 @@ class ApiClient {
         const { pagination, data } = res.data.records
         const result: ApiSearchResult = {
           records: {
-            data: data.map((patientRecord: JempiPatientRecord) => {
+            data: data.map((patientRecord: PatientRecord) => {
               return {
                 ...patientRecord,
                 ...patientRecord.demographicData
