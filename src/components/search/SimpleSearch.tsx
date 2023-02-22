@@ -1,14 +1,6 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Link,
-  Stack,
-  Typography
-} from '@mui/material'
+import { Box, Container, Grid, Link, Stack, Typography } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
 import { FieldArray, Form, Formik } from 'formik'
@@ -21,6 +13,7 @@ import {
   SearchQuery
 } from '../../types/SimpleSearch'
 import { PAGINATION_LIMIT } from '../../utils/constants'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
@@ -63,17 +56,18 @@ const SimpleSearch: React.FC = () => {
           }
         ]}
         buttons={[
-          <SearchFlags options={options} onChange={setIsGoldenOnly} />,
+          <SearchFlags
+            options={options}
+            onChange={setIsGoldenOnly}
+            key="search-flags"
+          />,
           <Button
             variant="outlined"
-            sx={{
-              height: '42px',
-              width: '172px',
-              borderColor: theme => theme.palette.primary.main
-            }}
             href={'/search/custom'}
+            size="large"
+            key="custom-search"
           >
-            <Typography variant="button">CUSTOM SEARCH</Typography>
+            CUSTOM SEARCH
           </Button>
         ]}
       />
@@ -161,16 +155,7 @@ const SimpleSearch: React.FC = () => {
                     search={{ payload: values }}
                     style={{ textDecoration: 'none' }}
                   >
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: '#274263',
-                        color: 'white',
-                        '&:hover': { backgroundColor: '#375982' }
-                      }}
-                    >
-                      Search
-                    </Button>
+                    <Button variant="contained">Search</Button>
                   </LocationLink>
                 </Grid>
               </Grid>
