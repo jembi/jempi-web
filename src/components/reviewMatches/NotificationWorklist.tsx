@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 
-import { Alert, AlertTitle, Chip, Container, Skeleton } from '@mui/material'
+import { Chip, Container, Divider } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -10,11 +10,16 @@ import {
 } from '@mui/x-data-grid'
 import { useQuery } from '@tanstack/react-query'
 
+import { People } from '@mui/icons-material'
 import { Link as LocationLink } from '@tanstack/react-location'
+import Loading from 'components/common/Loading'
+import ApiErrorMessage from 'components/error/ApiErrorMessage'
+import NotFound from 'components/error/NotFound'
 import moment from 'moment'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import PageHeader from '../shell/PageHeader'
+import DataGridToolBar from './DataGridToolBar'
 
 const columns: GridColDef[] = [
   {
@@ -103,48 +108,54 @@ const columns: GridColDef[] = [
   }
 ]
 
-const ReviewMatches = () => {
+const NotificationWorklist = () => {
   //TODO Refactor to custom hook
-  const { data, error, isFetching } = useQuery<Notification[], AxiosError>({
-    queryKey: ['matches'],
+  const { data, error, isLoading, isFetching } = useQuery<
+    Notification[],
+    AxiosError
+  >({
+    queryKey: ['notifications'],
     queryFn: ApiClient.getMatches,
     refetchOnWindowFocus: false
   })
 
-  return isFetching ? (
-    <Container>
-      <Skeleton variant="text" height={100}></Skeleton>
-      <Skeleton variant="rectangular" height={600}></Skeleton>
-    </Container>
-  ) : error ? (
-    // TODO Create a generic error handler
-    <Container>
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        {error.message}
-      </Alert>
-    </Container>
-  ) : (
-    <Container>
+  if (isLoading || isFetching) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <ApiErrorMessage error={error} />
+  }
+
+  if (!data) {
+    return <NotFound />
+  }
+
+  return (
+    <Container maxWidth={false}>
       <PageHeader
-        title={'Review Matches'}
+        title={'Notification Worklist'}
+        description="View the list of possible matches."
         breadcrumbs={[
           {
             link: '/review-matches/',
-            title: 'Matches'
+            title: 'Notifications',
+            icon: <People />
           }
         ]}
       />
+      <Divider />
       <DataGrid
         columns={columns}
+        components={{ Toolbar: DataGridToolBar }}
         rows={data as Notification[]}
         pageSize={10}
-        rowsPerPageOptions={[10]}
-        sx={{ maxWidth: 1400, mt: 4 }}
+        rowsPerPageOptions={[5, 10, 20]}
+        sx={{ mt: 4 }}
         autoHeight={true}
       />
     </Container>
   )
 }
 
-export default ReviewMatches
+export default NotificationWorklist

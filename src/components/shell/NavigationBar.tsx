@@ -31,11 +31,11 @@ const NavigationBar = () => {
             Search
           </Button>
           <Button
-            href="/review-matches"
+            href="/notifications"
             startIcon={<PeopleIcon />}
             sx={{ color: theme => theme.palette.text.primary }}
           >
-            Matches
+            Notifications
           </Button>
         </Box>
         <NavigationMenu />
