@@ -17,7 +17,10 @@ export const parseSearchParams = (search: string) => {
   const queryParams = query.split('&')
   return queryParams.reduce((acc: Record<string, string>, curr: string) => {
     const param = curr.split('=')
-    acc[param[0]] = param[1]
+    //check for a opening square and curly braces respectively
+    if (!param[1]?.includes('%5B') && !param[1]?.includes('%7B')) {
+      acc[param[0]] = param[1]
+    }
     return acc
   }, {})
 }

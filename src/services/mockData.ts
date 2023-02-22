@@ -13,7 +13,13 @@ const notifications: Notification[] = [
     patient_id: '0x5a',
     state: NotificationState.New,
     golden_id: '0x9833',
-    score: 0.5
+    score: 0.5,
+    candidates: [
+      {
+        golden_id: '0x45',
+        score: 0.4
+      }
+    ]
   }
 ]
 
