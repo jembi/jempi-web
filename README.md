@@ -49,6 +49,6 @@ OR
 
 Run `./get-cli.sh {linux|macos|windows}` to download the relevant `platform` binary
 
-Run `./deploy-platform.sh init` to start up the stack
+Run `./deploy-platform-local.sh init` to start up the stack
 
 The script can also be run with `up down destroy` to perform the respective action

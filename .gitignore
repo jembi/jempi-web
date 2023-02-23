@@ -26,3 +26,6 @@ yarn-error.log*
 platform-linux
 platform-macos
 platform.exe
+instant-linux
+instant-macos
+instant.exe

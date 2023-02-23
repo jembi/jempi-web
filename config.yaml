@@ -1,0 +1,20 @@
+---
+projectName: platform
+image: jembi/platform #Defaults to latest if no image tag is specified, e.g. jembi/platform:1.5.0
+logPath: /tmp/logs
+
+packages:
+  - client-registry-jempi
+  - identity-access-manager-keycloak
+customPackages:
+- id: jempi-web
+  path: .
+
+profiles:
+  - name: local
+    packages:
+      - jempi-web
+    envFiles:
+      - .env.local
+    dev: true
+    only: false
