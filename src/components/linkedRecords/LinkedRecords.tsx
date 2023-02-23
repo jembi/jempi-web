@@ -1,6 +1,6 @@
 import { People } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Card, Divider, Link, Typography } from '@mui/material'
+import { Card, Divider, Link, Typography } from '@mui/material'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
@@ -11,6 +11,7 @@ import { GoldenRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 
 const LinkedRecords = () => {
@@ -88,15 +89,11 @@ const LinkedRecords = () => {
         ]}
         buttons={[
           <Button
-            variant="contained"
-            sx={{
-              height: '36px',
-              width: '152px',
-              borderColor: theme => theme.palette.primary.main
-            }}
-            href={`/golden-record/${uid}`}
+            variant="header"
+            href={`/patient/${uid}`}
+            key="back-to-record"
           >
-            <Typography variant="button">BACK TO RECORD</Typography>
+            BACK TO RECORD
           </Button>
         ]}
       />

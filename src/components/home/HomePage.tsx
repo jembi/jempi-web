@@ -1,16 +1,8 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Divider,
-  Typography
-} from '@mui/material'
-import { useNavigate } from '@tanstack/react-location'
+import { Box, Card, Container, Divider, Typography } from '@mui/material'
+import Button from '../shared/Button'
 import group from './Group.png'
 
 const HomePage = () => {
-  const navigate = useNavigate()
   return (
     <Container maxWidth={false}>
       <Typography
@@ -103,26 +95,10 @@ const HomePage = () => {
               gap: '4px'
             }}
           >
-            <Button
-              variant="contained"
-              sx={{
-                height: '42px',
-                width: '104px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-              onClick={() => navigate({ to: '/search/simple' })}
-            >
+            <Button href="/search/simple" variant="contained">
               Search
             </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                height: '42px',
-                width: '177px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-              onClick={() => navigate({ to: '/review-matches' })}
-            >
+            <Button href="/review-matches" variant="outlined">
               Review Matches
             </Button>
           </Box>

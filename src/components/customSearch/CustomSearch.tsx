@@ -39,10 +39,6 @@ const CustomSearch: React.FC = () => {
     distance: 0
   }
 
-  function handleOnFormSubmit(value: CustomSearchQuery) {
-    console.log(`send data to backend: ${JSON.stringify(value, null, 2)}`)
-  }
-
   const initialValues: CustomSearchQuery = {
     $or: [
       {
@@ -74,28 +70,26 @@ const CustomSearch: React.FC = () => {
               ]}
               buttons={[
                 <SearchFlags
-                  key="search-Flag"
                   options={options}
                   onChange={setIsGoldenOnly}
+                  key="search-flags"
                 />,
                 <Button
-                  key="simple-search"
                   variant="outlined"
-                  sx={{
-                    height: '42px',
-                    width: '172px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
                   href={'/search/simple'}
+                  key="simple-search"
                 >
-                  <Typography variant="button">SIMPLE SEARCH</Typography>
+                  SIMPLE SEARCH
                 </Button>
               ]}
             />
           </Grid>
 
           <Divider />
-          <Formik initialValues={initialValues} onSubmit={handleOnFormSubmit}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={() => console.log('Submited')}
+          >
             {({ values, handleChange, setFieldValue }) => (
               <Form>
                 <Box
@@ -214,26 +208,9 @@ const CustomSearch: React.FC = () => {
                             search={{ payload: values }}
                             style={{ textDecoration: 'none' }}
                           >
-                            <Button
-                              variant="contained"
-                              sx={{
-                                backgroundColor: '#274263',
-                                color: 'white',
-                                '&:hover': { backgroundColor: '#375982' }
-                              }}
-                              type="submit"
-                            >
-                              Search
-                            </Button>
+                            <Button variant="contained">Search</Button>
                           </LocationLink>
-                          <Button
-                            variant="outlined"
-                            sx={{
-                              borderColor: theme => theme.palette.primary.main,
-                              color: theme => theme.palette.primary.main
-                            }}
-                            href="/search/simple"
-                          >
+                          <Button variant="outlined" href="/search/simple">
                             Cancel
                           </Button>
                         </Stack>
