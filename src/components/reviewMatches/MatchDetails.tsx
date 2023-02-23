@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   Link
 } from '@mui/material'
 import {
@@ -336,7 +337,8 @@ const MatchDetails = () => {
   return (
     <Container maxWidth="xl">
       <PageHeader
-        title={'Patient Matches Detail'}
+        title={'Review Linked Patient Record'}
+        description="Review the patient record and possible matches in detail."
         breadcrumbs={[
           {
             link: '/review-matches/',
@@ -348,6 +350,7 @@ const MatchDetails = () => {
           }
         ]}
       />
+      <Divider />
       <DataGrid
         columns={columns}
         rows={mapDataToScores(
