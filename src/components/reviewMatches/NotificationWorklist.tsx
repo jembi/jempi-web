@@ -147,7 +147,7 @@ const NotificationWorklist = () => {
       <Divider />
       <DataGrid
         columns={columns}
-        components={{ Toolbar: DataGridToolBar }}
+        components={{ Toolbar: () => <DataGridToolBar /> }}
         rows={data as Notification[]}
         pageSize={10}
         rowsPerPageOptions={[5, 10, 20]}
