@@ -3,7 +3,9 @@ import {
   People as PeopleIcon,
   Search as SearchIcon
 } from '@mui/icons-material'
-import { AppBar, Box, Button, Toolbar } from '@mui/material'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
+import { AppBar, Box, Toolbar } from '@mui/material'
+import Button from '../shared/Button'
 import JembiLogo from './JembiLogo'
 import NavigationMenu from './NavigationMenu'
 
@@ -16,26 +18,29 @@ const NavigationBar = () => {
       <Toolbar>
         <JembiLogo />
         <Box sx={{ flexGrow: 1 }}>
-          <Button
-            href="/"
-            startIcon={<DashboardIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
-          >
+          <Button href="/" startIcon={<DashboardIcon />} className="Appbar">
             Dashboard
           </Button>
           <Button
             href="/search/simple"
             startIcon={<SearchIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
+            className="Appbar"
           >
             Search
           </Button>
           <Button
             href="/notifications"
             startIcon={<PeopleIcon />}
-            sx={{ color: theme => theme.palette.text.primary }}
+            className="Appbar"
           >
             Notifications
+          </Button>
+          <Button
+            href="/import"
+            startIcon={<UploadFileIcon />}
+            className="Appbar"
+          >
+            IMPORT
           </Button>
         </Box>
         <NavigationMenu />

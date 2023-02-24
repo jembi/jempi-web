@@ -1,5 +1,5 @@
 import { UploadFile as UploadFileIcon } from '@mui/icons-material'
-import { Box, Button, CardActions, Container, Typography } from '@mui/material'
+import { Box, CardActions, Container, Typography } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosProgressEvent, AxiosRequestConfig } from 'axios'
 import { useSnackbar } from 'notistack'
@@ -7,6 +7,7 @@ import { FC, useState } from 'react'
 import { FileRejection, useDropzone } from 'react-dropzone'
 import ApiClient from '../../services/ApiClient'
 import { FileObj, UploadStatus } from '../../types/FileUpload'
+import Button from '../shared/Button'
 import './Import.css'
 import UploadFileListItem from './UploadFileListItem'
 
@@ -199,18 +200,16 @@ const DropZone: FC = () => {
       >
         <Button
           variant="contained"
-          size="small"
           onClick={handleUpload}
           disabled={uploadFileMutation.isLoading}
         >
           Upload
         </Button>
-        <Button variant="outlined" size="small" onClick={handleCancel}>
+        <Button variant="outlined" onClick={handleCancel}>
           Cancel
         </Button>
       </CardActions>
     </Container>
   )
 }
-
 export default DropZone

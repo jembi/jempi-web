@@ -3,8 +3,12 @@ import { Button } from '@mui/material'
 import { SearchParameter } from '../../types/SimpleSearch'
 
 interface AddFieldOrGroupButtonProps {
-  onClick: (obj: { parameters: Array<SearchParameter> }) => void
-  initialCustomSearchValues: { parameters: Array<SearchParameter> }
+  onClick: (obj: any) => void
+  initialCustomSearchValues:
+    | SearchParameter
+    | {
+        parameters: Array<SearchParameter>
+      }
   label: string
 }
 const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({
@@ -19,7 +23,6 @@ const AddFieldOrGroupButton: React.FC<AddFieldOrGroupButtonProps> = ({
       onClick={() => {
         onClick(initialCustomSearchValues)
       }}
-      sx={{ fontSize: '13px' }}
     >
       {label}
     </Button>

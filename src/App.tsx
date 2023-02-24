@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SnackbarProvider } from 'notistack'
 import { lazy } from 'react'
-import { parseSearchParams } from 'utils/helpers'
 import AuditTrail from './components/auditTrail/AuditTrail'
 import CustomSearch from './components/customSearch/CustomSearch'
 import ErrorBoundary from './components/error/ErrorBoundary'
@@ -26,9 +25,7 @@ import { AppConfigProvider } from './hooks/useAppConfig'
 import { AuthProvider } from './hooks/useAuth'
 import theme from './theme'
 
-const location = new ReactLocation({
-  parseSearch: (search: string) => parseSearchParams(search)
-})
+const location = new ReactLocation({})
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {}
