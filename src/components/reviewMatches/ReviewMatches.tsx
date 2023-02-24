@@ -88,11 +88,13 @@ const columns: GridColDef[] = [
         <LocationLink
           to={`/match-details`}
           search={{
-            notificationId: id,
-            patient_id,
-            golden_id,
-            score,
-            candidates
+            payload: {
+              notificationId: id,
+              patient_id,
+              golden_id,
+              score,
+              candidates
+            }
           }}
           style={{ textDecoration: 'none' }}
         >

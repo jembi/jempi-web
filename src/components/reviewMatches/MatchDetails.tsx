@@ -33,11 +33,13 @@ import PageHeader from '../shell/PageHeader'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
-    notificationId: string
-    patient_id: string
-    golden_id: string
-    score: number
-    candidates: { golden_id: string; score: number }[]
+    payload: {
+      notificationId: string
+      patient_id: string
+      golden_id: string
+      score: number
+      candidates: { golden_id: string; score: number }[]
+    }
   }
 }>
 
@@ -90,19 +92,19 @@ const MatchDetails = () => {
     open: false
   })
 
-  const searchParams = useSearch<MatchDetailsParams>()
+  const { payload } = useSearch<MatchDetailsParams>()
 
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const { data, error, isLoading, isError } = useQuery<AnyRecord[], AxiosError>(
     {
-      queryKey: ['matchDetails', searchParams],
+      queryKey: ['matchDetails', payload],
       queryFn: () => {
         return ApiClient.getMatchDetails(
-          searchParams.patient_id ? searchParams.patient_id : '',
-          searchParams.golden_id ? searchParams.golden_id : '',
-          searchParams.candidates?.map(c => c.golden_id) || []
+          payload?.patient_id ? payload.patient_id : '',
+          payload?.golden_id ? payload.golden_id : '',
+          payload?.candidates?.map(c => c.golden_id) || []
         )
       },
       refetchOnWindowFocus: false
@@ -145,9 +147,7 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId
-          ? searchParams.notificationId
-          : '',
+        notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Actioned
       })
     },
@@ -167,9 +167,7 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId
-          ? searchParams.notificationId
-          : '',
+        notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Actioned
       })
     },
@@ -242,9 +240,7 @@ const MatchDetails = () => {
         break
       case Action.Accept:
         accept.mutate({
-          notificationId: searchParams.notificationId
-            ? searchParams.notificationId
-            : '',
+          notificationId: payload?.notificationId ? payload.notificationId : '',
           state: NotificationState.Actioned
         })
         break
@@ -349,11 +345,7 @@ const MatchDetails = () => {
       />
       <DataGrid
         columns={columns}
-        rows={mapDataToScores(
-          data,
-          searchParams.score,
-          searchParams.candidates
-        )}
+        rows={mapDataToScores(data, payload?.score, payload?.candidates)}
         pageSize={10}
         rowsPerPageOptions={[10]}
         getRowId={row => row.uid}
