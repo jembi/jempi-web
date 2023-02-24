@@ -1,56 +1,81 @@
 #!/bin/bash
 
-# Constants
-readonly ACTION=$1
-readonly MODE=$2
+declare ACTION=""
+declare MODE=""
+declare COMPOSE_FILE_PATH=""
+declare UTILS_PATH=""
+declare SERVICE_NAMES=()
 
-CLUSTERED_MODE=${CLUSTERED_MODE:-"false"}
+declare CLUSTERED_MODE=${CLUSTERED_MODE:-"false"}
 
-COMPOSE_FILE_PATH=$(
-  cd "$(dirname "${BASH_SOURCE[0]}")" || exit
-  pwd -P
-)
-readonly COMPOSE_FILE_PATH
+function init_vars() {
+  ACTION=$1
+  MODE=$2
 
-# Import libraries
-ROOT_PATH="${COMPOSE_FILE_PATH}/.."
-. "${ROOT_PATH}/utils/config-utils.sh"
-. "${ROOT_PATH}/utils/docker-utils.sh"
-. "${ROOT_PATH}/utils/log.sh"
+  COMPOSE_FILE_PATH=$(
+    cd "$(dirname "${BASH_SOURCE[0]}")" || exit
+    pwd -P
+  )
 
-main() {
-  if [[ "${CLUSTERED_MODE}" == "true" ]]; then
-    log info "Running JeMPI Web package in Cluster node mode"
-    local jempi_web_cluster_compose_param="-c ${COMPOSE_FILE_PATH}/docker-compose.cluster.yml"
-  else
-    log info "Running JeMPI Web package in Single node mode"
-    local jempi_web_cluster_compose_param=""
-  fi
+  UTILS_PATH="${COMPOSE_FILE_PATH}/../utils"
+
+  SERVICE_NAMES=("jempi-web")
+
+  readonly ACTION
+  readonly MODE
+  readonly COMPOSE_FILE_PATH
+  readonly UTILS_PATH
+  readonly SERVICE_NAMES
+}
+
+# shellcheck disable=SC1091
+function import_sources() {
+  source "${UTILS_PATH}/docker-utils.sh"
+  source "${UTILS_PATH}/log.sh"
+}
+
+function initialize_package() {
+  local jempi_web_dev_compose_param=""
 
   if [[ "${MODE}" == "dev" ]]; then
-    log info "Running JeMPI Web package in DEV mode"
-    local jempi_web_dev_compose_param="-c ${COMPOSE_FILE_PATH}/docker-compose.dev.yml"
+    log info "Running package in DEV mode"
+    jempi_web_dev_compose_param="docker-compose.dev.yml"
   else
-    log info "Running JeMPI Web package in PROD mode"
-    local jempi_web_dev_compose_param=""
+    log info "Running package in PROD mode"
   fi
 
-  if [[ "$ACTION" == "init" ]]; then
-    log info "Deploying JeMPI Web..."
-    try "docker stack deploy -c $COMPOSE_FILE_PATH/docker-compose.yml $jempi_web_dev_compose_param instant" "Failed to deploy jempi-web"
-    overwrite "Deploying JeMPI Web... Done"
-  elif [[ "$ACTION" == "up" ]]; then
-    log info "Updating JeMPI Web..."
-    try "docker service scale instant_jempi-web=1" "Failed to scale up jempi-web"
-    overwrite "Starting JeMPI Web... Done"
-  elif [[ "$ACTION" == "down" ]]; then
-    log info "Scaling JeMPI Web down..."
-    try "docker service scale instant_jempi-web=0" "Failed to scale down jempi-web"
-    overwrite "Scaling JeMPI Web down... Done"
-  elif [[ "$ACTION" == "destroy" ]]; then
-    log info "Destroying JeMPI Web..."
-    docker::service_destroy jempi-web
-    overwrite "Destroying JeMPI Web... Done"
+  (
+    docker::deploy_service "${COMPOSE_FILE_PATH}" "docker-compose.yml" "$jempi_web_dev_compose_param"
+    docker::deploy_sanity "${SERVICE_NAMES}"
+  ) || {
+    log error "Failed to deploy package"
+    exit 1
+  }
+}
+
+function destroy_package() {
+  docker::service_destroy "$SERVICE_NAMES"
+}
+
+main() {
+  init_vars "$@"
+  import_sources
+
+  if [[ "${ACTION}" == "init" ]] || [[ "${ACTION}" == "up" ]]; then
+    if [[ "${CLUSTERED_MODE}" == "true" ]]; then
+      log info "Running package in Cluster node mode"
+    else
+      log info "Running package in Single node mode"
+    fi
+
+    initialize_package
+  elif [[ "${ACTION}" == "down" ]]; then
+    log info "Scaling down package"
+
+    docker::scale_services_down "${SERVICE_NAMES}"
+  elif [[ "${ACTION}" == "destroy" ]]; then
+    log info "Destroying package"
+    destroy_package
   else
     log error "Valid options are: init, up, down, or destroy"
   fi
