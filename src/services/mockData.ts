@@ -99,7 +99,7 @@ const searchPatientRecordResult: ApiSearchResult = {
           nationalId: '198804042874913',
           phoneNumber: '091-749-4674'
         },
-        uid: '0x9'
+        uid: '0x5a'
       },
       {
         demographicData: {
