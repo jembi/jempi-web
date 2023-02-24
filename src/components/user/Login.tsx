@@ -76,10 +76,6 @@ const Login = () => {
           <Button
             startIcon={<Person />}
             variant="outlined"
-            sx={{
-              height: '42px',
-              borderColor: theme => theme.palette.primary.main
-            }}
             onClick={signInWithKeyCloak}
           >
             Sign-In with KeyCloak

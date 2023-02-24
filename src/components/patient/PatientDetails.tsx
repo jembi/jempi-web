@@ -1,6 +1,6 @@
 import { Person } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, ButtonGroup, Container, Grid } from '@mui/material'
+import { Box, ButtonGroup, Container, Grid } from '@mui/material'
 import { useMatch } from '@tanstack/react-location'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -13,6 +13,7 @@ import { GoldenRecord, PatientRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
+import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import AddressPanel from './AddressPanel'
 import ConfirmationModal from './ConfirmationModal'
@@ -170,23 +171,16 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
             ? [
                 <Button
                   variant="outlined"
-                  sx={{
-                    height: '36px',
-                    width: '117px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
-                  href={`/golden-record/${uid}/audit-trail`}
+                  href={`/patient/${uid}/audit-trail`}
+                  key="audit-trail"
                 >
                   AUDIT TRAIL
                 </Button>,
+
                 <Button
-                  variant="contained"
-                  sx={{
-                    height: '36px',
-                    width: '152px',
-                    borderColor: theme => theme.palette.primary.main
-                  }}
-                  href={`/golden-record/${uid}/linked-records`}
+                  variant="header"
+                  href={`/patient/${uid}/linked-records`}
+                  key="linked-records"
                 >
                   LINKED RECORDS
                 </Button>
@@ -243,36 +237,15 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
         >
           {isEditMode ? (
             <ButtonGroup>
-              <Button
-                onClick={() => onCancelEditing()}
-                variant="outlined"
-                sx={{
-                  height: '42px',
-                  borderColor: theme => theme.palette.primary.main
-                }}
-              >
+              <Button onClick={() => onCancelEditing()} variant="outlined">
                 Cancel
               </Button>
-              <Button
-                onClick={() => onDataSave()}
-                variant="outlined"
-                sx={{
-                  height: '42px',
-                  borderColor: theme => theme.palette.primary.main
-                }}
-              >
+              <Button onClick={() => onDataSave()} variant="outlined">
                 Save
               </Button>
             </ButtonGroup>
           ) : (
-            <Button
-              onClick={() => setIsEditMode(true)}
-              variant="outlined"
-              sx={{
-                height: '42px',
-                borderColor: theme => theme.palette.primary.main
-              }}
-            >
+            <Button onClick={() => setIsEditMode(true)} variant="outlined">
               Edit Golden Record
             </Button>
           )}
