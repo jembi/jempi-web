@@ -4,7 +4,7 @@
 readonly ACTION=$1
 readonly MODE=$2
 
-CLUSTERED=${CLUSTERED:-"false"}
+CLUSTERED_MODE=${CLUSTERED_MODE:-"false"}
 
 COMPOSE_FILE_PATH=$(
   cd "$(dirname "${BASH_SOURCE[0]}")" || exit
@@ -19,7 +19,7 @@ ROOT_PATH="${COMPOSE_FILE_PATH}/.."
 . "${ROOT_PATH}/utils/log.sh"
 
 main() {
-  if [[ "${CLUSTERED}" == "true" ]]; then
+  if [[ "${CLUSTERED_MODE}" == "true" ]]; then
     log info "Running JeMPI Web package in Cluster node mode"
     local jempi_web_cluster_compose_param="-c ${COMPOSE_FILE_PATH}/docker-compose.cluster.yml"
   else

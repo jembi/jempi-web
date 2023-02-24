@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./instant-linux package "$1" --profile=local
+./instant-linux package "$1" --profile=local-frontend

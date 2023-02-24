@@ -8,12 +8,34 @@ packages:
   - identity-access-manager-keycloak
 customPackages:
 - id: jempi-web
-  path: .
+  path: ../jempi-web
 
 profiles:
-  - name: local
+  - name: local-jempi-web-only
     packages:
       - jempi-web
+    envFiles:
+      - .env.local
+    dev: true
+    only: true
+  - name: local-keycloak-only
+    packages:
+      - identity-access-manager-keycloak
+    envFiles:
+      - .env.local
+    dev: true
+    only: true
+  - name: local-frontend
+    packages:
+      - identity-access-manager-keycloak
+      - jempi-web
+    envFiles:
+      - .env.local
+    dev: true
+    only: false
+  - name: local-backend
+    packages:
+      - client-registry-jempi
     envFiles:
       - .env.local
     dev: true
