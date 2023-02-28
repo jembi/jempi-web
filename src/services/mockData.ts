@@ -43,7 +43,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x9833'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       },
       {
         goldenRecord: {
@@ -60,7 +60,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x3'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       },
       {
         goldenRecord: {
@@ -77,7 +77,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x2'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       }
     ],
     pagination: {
@@ -99,7 +99,7 @@ const searchPatientRecordResult: ApiSearchResult = {
           nationalId: '198804042874913',
           phoneNumber: '091-749-4674'
         },
-        uid: '0x9'
+        uid: '0x5a'
       },
       {
         demographicData: {
@@ -256,7 +256,7 @@ const goldenRecord = {
       }
     ]
   },
-  mpiPatientRecords: [
+  patientRecordsWithScore: [
     { patientRecord: linkedRecords[0] },
     { patientRecord: linkedRecords[1] }
   ]
