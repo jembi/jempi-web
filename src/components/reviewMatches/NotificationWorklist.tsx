@@ -19,7 +19,7 @@ import moment from 'moment'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import PageHeader from '../shell/PageHeader'
-import DataGridToolBar from './DataGridToolBar'
+import DataGridToolbar from './DataGridToolBar'
 
 const columns: GridColDef[] = [
   {
@@ -111,7 +111,6 @@ const columns: GridColDef[] = [
 ]
 
 const NotificationWorklist = () => {
-  //TODO Refactor to custom hook
   const { data, error, isLoading, isFetching } = useQuery<
     Notification[],
     AxiosError
@@ -149,7 +148,9 @@ const NotificationWorklist = () => {
       <Divider />
       <DataGrid
         columns={columns}
-        components={{ Toolbar: () => <DataGridToolBar /> }}
+        components={{
+          Toolbar: () => <DataGridToolbar />
+        }}
         rows={data as Notification[]}
         pageSize={10}
         rowsPerPageOptions={[5, 10, 20]}

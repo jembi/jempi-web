@@ -11,6 +11,7 @@ interface SearchTextInputProps {
   fieldGroupIndex?: number
   index: number
   isCustomRow?: boolean
+  placeholder?: string
 }
 
 const SearchTextInput: React.FC<SearchTextInputProps> = ({
@@ -23,7 +24,8 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
   size = 'small',
   index,
   fieldGroupIndex,
-  isCustomRow
+  isCustomRow,
+  placeholder
 }) => {
   const fieldIdentifier = isCustomRow
     ? `$or[${fieldGroupIndex}].parameters[${index}].${name}`
@@ -31,6 +33,7 @@ const SearchTextInput: React.FC<SearchTextInputProps> = ({
 
   return (
     <TextField
+      placeholder={placeholder}
       id="outlined-basic"
       label={label}
       variant="outlined"
