@@ -43,7 +43,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x9833'
         },
-        patientRecordsWithScore: []
+        mpiPatientRecords: []
       },
       {
         goldenRecord: {
@@ -60,7 +60,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x3'
         },
-        patientRecordsWithScore: []
+        mpiPatientRecords: []
       },
       {
         goldenRecord: {
@@ -77,7 +77,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x2'
         },
-        patientRecordsWithScore: []
+        mpiPatientRecords: []
       }
     ],
     pagination: {
@@ -256,7 +256,7 @@ const goldenRecord = {
       }
     ]
   },
-  patientRecordsWithScore: [
+  mpiPatientRecords: [
     { patientRecord: linkedRecords[0] },
     { patientRecord: linkedRecords[1] }
   ]

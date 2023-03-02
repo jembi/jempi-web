@@ -45,7 +45,7 @@ interface GoldenRecord extends Pick<GR, 'sourceId' | 'uid'> {
 
 interface ExpandedGoldenRecord {
   goldenRecord: GoldenRecord
-  patientRecordsWithScore: Array<ExpandedPatientRecord>
+  mpiPatientRecords: Array<ExpandedPatientRecord>
 }
 
 interface ExpandedPatientRecord {
@@ -192,14 +192,11 @@ class ApiClient {
         const result: ApiSearchResult = {
           records: {
             data: data.map(
-              ({
-                goldenRecord,
-                patientRecordsWithScore
-              }: ExpandedGoldenRecord) => {
+              ({ goldenRecord, mpiPatientRecords }: ExpandedGoldenRecord) => {
                 return {
                   ...goldenRecord,
                   ...goldenRecord.demographicData,
-                  linkRecords: patientRecordsWithScore.map(
+                  linkRecords: mpiPatientRecords.map(
                     ({ patientRecord }: ExpandedPatientRecord) => {
                       return {
                         ...patientRecord,
