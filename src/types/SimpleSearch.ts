@@ -41,7 +41,7 @@ export interface JempiGoldenRecord {
     sourceId?: SourceId[]
     uid: unknown
   }
-  mpiPatientRecords: Array<{
+  patientRecordsWithScore: Array<{
     patientRecord: {
       demographicData: Omit<AnyRecord, 'uid' | 'sourceId'>
       sourceId?: SourceId[]
