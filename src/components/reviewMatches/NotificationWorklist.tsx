@@ -35,16 +35,14 @@ const columns: GridColDef[] = [
     flex: 2
   },
   {
-    field: 'match',
-    headerName: 'Match',
+    field: 'score',
+    headerName: 'Score',
     type: 'number',
     width: 100,
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
-    valueGetter: (params: GridValueGetterParams) => params.row.score,
-    valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${Math.round(params.value * 100)}%`
+    valueGetter: (params: GridValueGetterParams) => params.row.score
   },
   {
     field: 'created',
