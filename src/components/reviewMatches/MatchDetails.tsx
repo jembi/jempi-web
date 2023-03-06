@@ -39,12 +39,13 @@ import RefineSearchModal from './RefineSearchModal'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
-    notificationId: string
-    patient_id: string
-    golden_id: string
-    score: number
-    candidates: GoldenRecord[] | undefined
-    test: any
+    payload: {
+      notificationId: string
+      patient_id: string
+      golden_id: string
+      score: number
+      candidates: { golden_id: string; score: number }[]
+    }
   }
 }>
 
@@ -98,26 +99,25 @@ const MatchDetails = () => {
   })
   const [openRefineSearch, setOpenRefineSearch] = useState<boolean>(false)
 
-  const searchParams = useSearch<MatchDetailsParams>()
+  const { payload } = useSearch<MatchDetailsParams>()
 
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const { data, error, isLoading, isError } = useQuery<AnyRecord[], AxiosError>(
     {
-      queryKey: ['matchDetails', searchParams],
+      queryKey: ['matchDetails', payload],
       queryFn: () => {
         return ApiClient.getMatchDetails(
-          searchParams.patient_id ? searchParams.patient_id : '',
-          searchParams.golden_id ? searchParams.golden_id : '',
-          searchParams.candidates?.map(c => c.golden_id) || []
+          payload?.patient_id ? payload.patient_id : '',
+          payload?.golden_id ? payload.golden_id : '',
+          payload?.candidates?.map(c => c.golden_id) || []
         )
       },
       refetchOnWindowFocus: false
     }
   )
-  console.log(searchParams)
-  console.log(data)
+
   //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
 
   const updateNotification = useMutation({
@@ -154,9 +154,7 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId
-          ? searchParams.notificationId
-          : '',
+        notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Actioned
       })
     },
@@ -180,9 +178,7 @@ const MatchDetails = () => {
       })
       navigate({ to: '/review-matches' })
       updateNotification.mutate({
-        notificationId: searchParams.notificationId
-          ? searchParams.notificationId
-          : '',
+        notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Actioned
       })
     },
@@ -256,9 +252,7 @@ const MatchDetails = () => {
         break
       case Action.Accept:
         accept.mutate({
-          notificationId: searchParams.notificationId
-            ? searchParams.notificationId
-            : '',
+          notificationId: payload?.notificationId ? payload.notificationId : '',
           state: NotificationState.Actioned
         })
         break
@@ -477,7 +471,7 @@ const MatchDetails = () => {
               return r
             }
           }),
-          searchParams.candidates
+          payload?.candidates
         )}
         pageSize={10}
         rowsPerPageOptions={[10]}

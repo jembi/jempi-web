@@ -8,7 +8,7 @@ import { User } from '../types/User'
 const notifications: Notification[] = [
   {
     id: '123',
-    type: 'Threshold',
+    type: 'Review threshold',
     created: 1605112212,
     names: 'Bob Smith',
     patient_id: '0x5a',
@@ -17,8 +17,56 @@ const notifications: Notification[] = [
     score: 0.5,
     candidates: [
       {
-        golden_id: '0x45',
+        golden_id: '0x25',
         score: 0.4
+      }
+    ]
+  },
+  {
+    id: '345',
+    type: 'Review threshold',
+    created: 1605112212,
+    names: 'Jane Doe',
+    patient_id: '0x7j',
+    state: NotificationState.New,
+    golden_id: '0x9824',
+    score: 0.9,
+    candidates: [
+      {
+        golden_id: '0x35',
+        score: 0.4
+      }
+    ]
+  },
+  {
+    id: '758',
+    type: 'Golden record changed',
+    created: 1605112212,
+    names: 'Jane Smith',
+    patient_id: '0x1a',
+    state: NotificationState.New,
+    golden_id: '0x9847',
+    score: 0.3,
+    candidates: [
+      {
+        golden_id: '0x45',
+        score: 0.5
+      }
+    ]
+  },
+  {
+    id: '541',
+    type: 'Review threshold range',
+    created: 1605112212,
+    names: 'John Themba',
+    patient_id: '0x9a',
+    state: NotificationState.New,
+    golden_id: '0x9866',
+    score: 0.7,
+    candidates: [
+      {
+        golden_id: '0x55',
+        score: 0.7
       }
     ]
   }
@@ -46,7 +94,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x9833'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       },
       {
         goldenRecord: {
@@ -63,7 +111,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x3'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       },
       {
         goldenRecord: {
@@ -80,7 +128,7 @@ const searchGoldenRecordResult: ApiSearchResult = {
           sourceId: [],
           uid: '0x2'
         },
-        mpiPatientRecords: []
+        patientRecordsWithScore: []
       }
     ],
     pagination: {
@@ -102,7 +150,7 @@ const searchPatientRecordResult: ApiSearchResult = {
           nationalId: '198804042874913',
           phoneNumber: '091-749-4674'
         },
-        uid: '0x9'
+        uid: '0x5a'
       },
       {
         demographicData: {
@@ -265,7 +313,7 @@ const goldenRecord = {
       }
     ]
   },
-  mpiPatientRecords: [
+  patientRecordsWithScore: [
     { patientRecord: linkedRecords[0] },
     { patientRecord: linkedRecords[1] }
   ]

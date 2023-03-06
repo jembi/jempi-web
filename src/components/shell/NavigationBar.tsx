@@ -29,11 +29,11 @@ const NavigationBar = () => {
             Search
           </Button>
           <Button
-            href="/review-matches"
+            href="/notifications"
             startIcon={<PeopleIcon />}
             className="Appbar"
           >
-            Matches
+            Notifications
           </Button>
           <Button
             href="/import"
