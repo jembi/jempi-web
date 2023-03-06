@@ -1,3 +1,4 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import {
   Container,
   Dialog,
@@ -6,7 +7,10 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  Link
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography
 } from '@mui/material'
 import {
   DataGrid,
@@ -24,13 +28,14 @@ import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import ApiClient from '../../services/ApiClient'
 import { DisplayField } from '../../types/Fields'
-import { NotificationState } from '../../types/Notification'
+import { GoldenRecord, NotificationState } from '../../types/Notification'
 import { AnyRecord } from '../../types/PatientRecord'
 import Loading from '../common/Loading'
 import ApiErrorMessage from '../error/ApiErrorMessage'
 import NotFound from '../error/NotFound'
 import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
+import RefineSearchModal from './RefineSearchModal'
 
 type MatchDetailsParams = MakeGenerics<{
   Search: {
@@ -38,7 +43,8 @@ type MatchDetailsParams = MakeGenerics<{
     patient_id: string
     golden_id: string
     score: number
-    candidates: { golden_id: string; score: number }[]
+    candidates: GoldenRecord[] | undefined
+    test: any
   }
 }>
 
@@ -57,14 +63,13 @@ interface DialogParams {
 //TODO Move horrible function to the backend
 const mapDataToScores = (
   data?: AnyRecord[],
-  score?: number,
   candidates?: { golden_id: string; score: number }[]
 ): AnyRecord[] => {
   if (!data?.length) {
     return []
   }
-  data[1].score = score || 0
-  for (let i = 2; i < data.length; i++) {
+  console.log(data)
+  for (let i = 0; i < data.length; i++) {
     data[i].score =
       candidates?.find(c => c.golden_id === data[i].uid)?.score || 0
   }
@@ -85,11 +90,13 @@ const MatchDetails = () => {
   const { availableFields, getPatientName } = useAppConfig()
   const [action, setAction] = useState<Action>()
   const [recordId, setRecordId] = useState('')
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [dialog, setDialog] = useState<DialogParams>({
     title: '',
     text: '',
     open: false
   })
+  const [openRefineSearch, setOpenRefineSearch] = useState<boolean>(false)
 
   const searchParams = useSearch<MatchDetailsParams>()
 
@@ -109,7 +116,8 @@ const MatchDetails = () => {
       refetchOnWindowFocus: false
     }
   )
-
+  console.log(searchParams)
+  console.log(data)
   //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
 
   const updateNotification = useMutation({
@@ -159,6 +167,10 @@ const MatchDetails = () => {
       setDialog({ open: false })
     }
   })
+
+  const handleRefineSearchClick = () => {
+    setOpenRefineSearch(true)
+  }
 
   const linkRecord = useMutation({
     mutationFn: ApiClient.linkRecord,
@@ -212,6 +224,7 @@ const MatchDetails = () => {
 
   const handleCancel = () => {
     setDialog({ open: false })
+    setOpenRefineSearch(false)
   }
 
   if (isLoading) {
@@ -254,7 +267,60 @@ const MatchDetails = () => {
     }
   }
 
+  const isOpen = Boolean(anchorEl)
+  const open = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const close = () => {
+    setAnchorEl(null)
+  }
+
   const columns: GridColumns = [
+    ...availableFields.map(field => {
+      const { fieldName, fieldLabel, formatValue } = field
+      if (fieldName === 'recordType') {
+        return {
+          field: fieldName,
+          headerName: fieldLabel,
+          flex: 1,
+          valueFormatter: (
+            params: GridValueFormatterParams<number | string | Date>
+          ) => formatValue(params.value),
+          cellClassName: (params: GridCellParams<string>) =>
+            getCellClassName(params, field, data[0]),
+          renderCell: (params: GridRenderCellParams) => {
+            switch (params.row.type) {
+              case 'Current':
+                return <Typography>Patient</Typography>
+              case 'Golden':
+                return (
+                  <Typography color="#D79B01" fontWeight={700}>
+                    Golden
+                  </Typography>
+                )
+              case 'Candidate':
+                if (params.row.searched) {
+                  return <Typography>Searched</Typography>
+                } else {
+                  return <Typography>Blocked</Typography>
+                }
+              default:
+                return <></>
+            }
+          }
+        }
+      }
+      return {
+        field: fieldName,
+        headerName: fieldLabel,
+        flex: 1,
+        valueFormatter: (
+          params: GridValueFormatterParams<number | string | Date>
+        ) => formatValue(params.value),
+        cellClassName: (params: GridCellParams<string>) =>
+          getCellClassName(params, field, data[0])
+      }
+    }),
     {
       field: 'score',
       headerName: 'Match',
@@ -285,52 +351,50 @@ const MatchDetails = () => {
         switch (params.row.type) {
           case 'Current':
             return (
-              <Link
-                component="button"
-                onClick={handleCreateGoldenRecord}
-                underline="none"
+              <IconButton
+                aria-controls={isOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpen ? 'true' : undefined}
+                onClick={open}
+                size="large"
+                edge="end"
+                disabled={true}
               >
-                New Record
-              </Link>
+                <MoreVertIcon />
+              </IconButton>
             )
           case 'Golden':
             return (
-              <Link
-                component="button"
-                onClick={handleAcceptLink}
-                underline="none"
+              <IconButton
+                aria-controls={isOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpen ? 'true' : undefined}
+                onClick={open}
+                size="large"
+                edge="end"
+                disabled={true}
               >
-                Accept
-              </Link>
+                <MoreVertIcon />
+              </IconButton>
             )
           case 'Candidate':
             return (
-              <Link
-                component="button"
-                onClick={() => handleLinkRecord(params.row.uid)}
-                underline="none"
+              <IconButton
+                aria-controls={isOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpen ? 'true' : undefined}
+                onClick={open}
+                size="large"
+                edge="end"
               >
-                Link
-              </Link>
+                <MoreVertIcon />
+              </IconButton>
             )
           default:
             return <></>
         }
       }
-    },
-    ...availableFields.map(field => {
-      const { fieldName, fieldLabel, formatValue } = field
-      return {
-        field: fieldName,
-        headerName: fieldLabel,
-        flex: 1,
-        valueFormatter: (
-          params: GridValueFormatterParams<number | string | Date>
-        ) => formatValue(params.value),
-        cellClassName: (params: GridCellParams<string>) =>
-          getCellClassName(params, field, data[0])
-      }
-    })
+    }
   ]
 
   return (
@@ -348,31 +412,43 @@ const MatchDetails = () => {
             title: getPatientName(data[0])
           }
         ]}
+        buttons={[
+          <Button variant="outlined" onClick={handleRefineSearchClick}>
+            Refine Search
+          </Button>
+        ]}
       />
       <Divider />
+
+      <Typography
+        sx={{
+          fontFamily: 'Roboto',
+          fontSize: '12px',
+          fontWeight: 400,
+          lineHeight: '32px',
+          letterSpacing: '1px',
+          textAlign: 'left',
+          mt: 4
+        }}
+      >
+        PATIENT LINKED TO GOLDEN RECORD
+      </Typography>
       <DataGrid
         columns={columns}
-        rows={mapDataToScores(
-          data,
-          searchParams.score,
-          searchParams.candidates
-        )}
+        rows={data.filter((r: AnyRecord) => {
+          if (r.type === 'Golden' || r.type === 'Current') {
+            return r
+          }
+        })}
         pageSize={10}
         rowsPerPageOptions={[10]}
         getRowId={row => row.uid}
-        getRowClassName={params =>
-          params.row.type === 'Golden' ? 'golden-row' : ''
-        }
         sx={{
-          mt: 4,
           '& .current-patient-cell': {
             color: '#7B61FF'
           },
           '& .golden-patient-cell': {
             color: '#D79B01'
-          },
-          '& .golden-row': {
-            backgroundColor: 'rgba(255, 202, 40, 0.2)'
           },
           '& .matching-cell': {
             fontWeight: 'bold'
@@ -380,6 +456,66 @@ const MatchDetails = () => {
         }}
         autoHeight={true}
       />
+      <Typography
+        sx={{
+          fontFamily: 'Roboto',
+          fontSize: '12px',
+          fontWeight: 400,
+          lineHeight: '32px',
+          letterSpacing: '1px',
+          textAlign: 'left',
+          mt: 4
+        }}
+      >
+        MATCHING RECORDS
+      </Typography>
+      <DataGrid
+        columns={columns}
+        rows={mapDataToScores(
+          data.filter((r: AnyRecord) => {
+            if (r.type === 'Candidate') {
+              return r
+            }
+          }),
+          searchParams.candidates
+        )}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        getRowId={row => row.uid}
+        sx={{
+          '& .current-patient-cell': {
+            color: '#7B61FF'
+          },
+          '& .golden-patient-cell': {
+            color: '#D79B01'
+          },
+          '& .matching-cell': {
+            fontWeight: 'bold'
+          }
+        }}
+        autoHeight={true}
+      />
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={isOpen}
+        onClose={close}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button'
+        }}
+      >
+        <MenuItem>
+          <Typography>View details</Typography>
+        </MenuItem>
+        <Divider sx={{ my: 0.5 }} />
+        <MenuItem>
+          <Typography>Link this record</Typography>
+        </MenuItem>
+        <Divider sx={{ my: 0.5 }} />
+        <MenuItem>
+          <Typography>New golden record</Typography>
+        </MenuItem>
+      </Menu>
 
       <Dialog open={dialog.open} onClose={handleCancel}>
         <DialogTitle>{dialog.title}</DialogTitle>
@@ -397,6 +533,7 @@ const MatchDetails = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <RefineSearchModal onCancel={handleCancel} onOpen={openRefineSearch} />
     </Container>
   )
 }

@@ -2,6 +2,16 @@ import { Fields } from '../types/Fields'
 
 const FIELDS_CONFIG: Fields = [
   {
+    fieldName: 'recordType',
+    fieldType: 'String',
+    fieldLabel: 'Record Type',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
     fieldName: 'uid',
     fieldType: 'String',
     fieldLabel: 'UID',
@@ -19,10 +29,30 @@ const FIELDS_CONFIG: Fields = [
     rules: { required: false, regex: '.*' }
   },
   {
+    fieldName: 'facilityId',
+    fieldType: 'String',
+    fieldLabel: 'Facility ID',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
+    fieldName: 'patientId',
+    fieldType: 'String',
+    fieldLabel: 'Patient ID',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
     fieldName: 'nationalId',
     fieldType: 'String',
     fieldLabel: 'National ID',
-    groups: ['identifiers', 'linked_records'],
+    groups: ['identifiers', 'demographics', 'linked_records'],
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
@@ -164,16 +194,15 @@ const FIELDS_CONFIG: Fields = [
     rules: { required: false, regex: '.*' }
   },
   //TODO Add back when we have user information
-  // {
-  //   fieldName: 'updatedBy',
-  //   fieldType: 'String',
-  //   fieldLabel: 'Updated By',
-  //   group: 'system',
-  //   scope: [
-  //     '/patient/:uid',
-  //   ],
-  //   accessLevel: []
-  // }
+  {
+    fieldName: 'updated',
+    fieldType: 'String',
+    fieldLabel: 'Updated',
+    groups: ['system'],
+    accessLevel: [],
+    readOnly: false,
+    scope: ['/match-details']
+  },
   {
     fieldName: 'sourceId',
     fieldType: 'SourceId',

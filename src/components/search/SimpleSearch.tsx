@@ -18,7 +18,11 @@ import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
 import SearchRow from './SearchRow'
 
-const SimpleSearch: React.FC = () => {
+interface SimpleSearchProps {
+  modal?: boolean
+}
+
+const SimpleSearch: React.FC<SimpleSearchProps> = ({ modal = false }) => {
   const { availableFields } = useAppConfig()
   const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
 
@@ -43,35 +47,37 @@ const SimpleSearch: React.FC = () => {
 
   return (
     <Container maxWidth={false}>
-      <PageHeader
-        description="Quickly access the information you need with our powerful search."
-        title="Simple Search"
-        breadcrumbs={[
-          {
-            icon: <MoreHorizOutlined />
-          },
-          {
-            icon: <SearchIcon />,
-            title: 'Search'
-          }
-        ]}
-        buttons={[
-          <SearchFlags
-            options={options}
-            onChange={setIsGoldenOnly}
-            key="search-flags"
-          />,
-          <Button
-            variant="outlined"
-            href={'/search/custom'}
-            size="large"
-            key="custom-search"
-          >
-            CUSTOM SEARCH
-          </Button>
-        ]}
-      />
-      <Divider />
+      {modal ? null : (
+        <PageHeader
+          description="Quickly access the information you need with our powerful search."
+          title="Simple Search"
+          breadcrumbs={[
+            {
+              icon: <MoreHorizOutlined />
+            },
+            {
+              icon: <SearchIcon />,
+              title: 'Search'
+            }
+          ]}
+          buttons={[
+            <SearchFlags
+              options={options}
+              onChange={setIsGoldenOnly}
+              key="search-flags"
+            />,
+            <Button
+              variant="outlined"
+              href={'/search/custom'}
+              size="large"
+              key="custom-search"
+            >
+              CUSTOM SEARCH
+            </Button>
+          ]}
+        />
+      )}
+      {modal ? null : <Divider />}
       <Formik
         initialValues={initialValues}
         onSubmit={() => console.log('Submited')}
@@ -82,51 +88,54 @@ const SimpleSearch: React.FC = () => {
               sx={{
                 width: '100%',
                 borderRadius: '4px',
-                boxShadow: '0px 0px 0px 1px #E0E0E0',
-                mt: 4,
+                boxShadow: modal ? null : '0px 0px 0px 1px #E0E0E0',
+                mt: modal ? 0 : 4,
                 padding: 2,
                 display: 'flex',
                 justifyContent: 'center'
               }}
             >
               <Grid container direction="column" width="fit-content">
-                <Grid item container direction="column" width="fit-content">
-                  <Grid item>
-                    <Stack direction={'row'} spacing={0.5}>
-                      <Typography variant="h5">Search</Typography>
-                      {isGoldenOnly ? (
+                {modal ? null : (
+                  <Grid item container direction="column" width="fit-content">
+                    <Grid item>
+                      <Stack direction={'row'} spacing={0.5}>
+                        <Typography variant="h5">Search</Typography>
+                        {isGoldenOnly ? (
+                          <Typography
+                            variant="h5"
+                            sx={{ color: '#FBC02D', fontWeight: 700 }}
+                          >
+                            Golden
+                          </Typography>
+                        ) : (
+                          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                            Patient
+                          </Typography>
+                        )}
+
                         <Typography
                           variant="h5"
-                          sx={{ color: '#FBC02D', fontWeight: 700 }}
+                          sx={{ color: theme => theme.typography.h5 }}
                         >
-                          Golden
+                          Records
                         </Typography>
-                      ) : (
-                        <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                          Patient
+                      </Stack>
+                    </Grid>
+                    <Grid item sx={{ mb: 1 }}>
+                      <Stack direction={'row'} spacing={0.5}>
+                        <Typography variant="body2">
+                          Find info fast with these fixed fields or make your
+                          own search rules with
                         </Typography>
-                      )}
+                        <Typography variant="body2">
+                          <Link href={'/search/custom'}>Custom Search</Link>
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                )}
 
-                      <Typography
-                        variant="h5"
-                        sx={{ color: theme => theme.typography.h5 }}
-                      >
-                        Records
-                      </Typography>
-                    </Stack>
-                  </Grid>
-                  <Grid item sx={{ mb: 1 }}>
-                    <Stack direction={'row'} spacing={0.5}>
-                      <Typography variant="body2">
-                        Find info fast with these fixed fields or make your own
-                        search rules with
-                      </Typography>
-                      <Typography variant="body2">
-                        <Link href={'/search/custom'}>Custom Search</Link>
-                      </Typography>
-                    </Stack>
-                  </Grid>
-                </Grid>
                 <FieldArray name="search">
                   {() => (
                     <>
@@ -147,17 +156,19 @@ const SimpleSearch: React.FC = () => {
                     </>
                   )}
                 </FieldArray>
-                <Grid item>
-                  <LocationLink
-                    to={`/search-results/${
-                      isGoldenOnly ? 'golden' : 'patient'
-                    }`}
-                    search={{ payload: values }}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button variant="contained">Search</Button>
-                  </LocationLink>
-                </Grid>
+                {modal ? null : (
+                  <Grid item>
+                    <LocationLink
+                      to={`/search-results/${
+                        isGoldenOnly ? 'golden' : 'patient'
+                      }`}
+                      search={{ payload: values }}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Button variant="contained">Search</Button>
+                    </LocationLink>
+                  </Grid>
+                )}
               </Grid>
             </Box>
           </Form>

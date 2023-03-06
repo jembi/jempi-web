@@ -26,7 +26,11 @@ import PageHeader from '../shell/PageHeader'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
 
-const CustomSearch: React.FC = () => {
+interface CustomSearchProps {
+  modal?: boolean
+}
+
+const CustomSearch: React.FC<CustomSearchProps> = ({ modal = false }) => {
   const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
   const options: SearchFlagsOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
@@ -55,37 +59,38 @@ const CustomSearch: React.FC = () => {
     <>
       <Container maxWidth={false}>
         <Grid container direction={'column'}>
-          <Grid item lg={6}>
-            <PageHeader
-              description="Tailor your search to quickly find the information you need."
-              title="Custom Search"
-              breadcrumbs={[
-                {
-                  icon: <MoreHorizOutlined />
-                },
-                {
-                  icon: <SearchIcon />,
-                  title: 'Search'
-                }
-              ]}
-              buttons={[
-                <SearchFlags
-                  options={options}
-                  onChange={setIsGoldenOnly}
-                  key="search-flags"
-                />,
-                <Button
-                  variant="outlined"
-                  href={'/search/simple'}
-                  key="simple-search"
-                >
-                  SIMPLE SEARCH
-                </Button>
-              ]}
-            />
-          </Grid>
-
-          <Divider />
+          {modal ? null : (
+            <Grid item lg={6}>
+              <PageHeader
+                description="Tailor your search to quickly find the information you need."
+                title="Custom Search"
+                breadcrumbs={[
+                  {
+                    icon: <MoreHorizOutlined />
+                  },
+                  {
+                    icon: <SearchIcon />,
+                    title: 'Search'
+                  }
+                ]}
+                buttons={[
+                  <SearchFlags
+                    options={options}
+                    onChange={setIsGoldenOnly}
+                    key="search-flags"
+                  />,
+                  <Button
+                    variant="outlined"
+                    href={'/search/simple'}
+                    key="simple-search"
+                  >
+                    SIMPLE SEARCH
+                  </Button>
+                ]}
+              />
+            </Grid>
+          )}
+          {modal ? null : <Divider />}
           <Formik
             initialValues={initialValues}
             onSubmit={() => console.log('Submited')}
@@ -96,41 +101,43 @@ const CustomSearch: React.FC = () => {
                   sx={{
                     width: '100%',
                     borderRadius: '4px',
-                    boxShadow: '0px 0px 0px 1px #E0E0E0',
-                    mt: 4,
+                    boxShadow: modal ? null : '0px 0px 0px 1px #E0E0E0',
+                    mt: modal ? 2 : 4,
                     padding: 2,
                     display: 'flex',
                     justifyContent: 'center'
                   }}
                 >
                   <Grid container direction="column" width="100%">
-                    <Grid
-                      item
-                      container
-                      direction="row"
-                      justifyContent="center"
-                      width="100%"
-                    >
+                    {modal ? null : (
                       <Grid
                         item
                         container
-                        width={'756px'}
-                        direction={'row'}
-                        justifyContent={'flex-start'}
-                        sx={{ mt: 1, mb: 3 }}
+                        direction="row"
+                        justifyContent="center"
+                        width="100%"
                       >
-                        <Stack direction={'column'} spacing={1}>
-                          <Typography variant="h5">
-                            Custom Your Search Rules
-                          </Typography>
-                          <Typography variant="body2">
-                            <Link href={'/search/simple'}>
-                              Use simple search
-                            </Link>
-                          </Typography>
-                        </Stack>
+                        <Grid
+                          item
+                          container
+                          width={'756px'}
+                          direction={'row'}
+                          justifyContent={'flex-start'}
+                          sx={{ mt: 1, mb: 3 }}
+                        >
+                          <Stack direction={'column'} spacing={1}>
+                            <Typography variant="h5">
+                              Custom Your Search Rules
+                            </Typography>
+                            <Typography variant="body2">
+                              <Link href={'/search/simple'}>
+                                Use simple search
+                              </Link>
+                            </Typography>
+                          </Stack>
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    )}
                     <FieldArray name="$or">
                       {({ push, remove }) => (
                         <>
@@ -180,45 +187,47 @@ const CustomSearch: React.FC = () => {
                         </>
                       )}
                     </FieldArray>
-                    <Grid
-                      item
-                      container
-                      direction="row"
-                      justifyContent="center"
-                      width="100%"
-                    >
+                    {modal ? null : (
                       <Grid
                         item
                         container
-                        width={'756px'}
-                        direction={'row'}
-                        justifyContent={'flex-start'}
-                        sx={{ mt: 2 }}
+                        direction="row"
+                        justifyContent="center"
+                        width="100%"
                       >
-                        {/* TODO move colors to theme */}
-                        <Stack
+                        <Grid
+                          item
+                          container
+                          width={'756px'}
                           direction={'row'}
-                          spacing={1}
-                          sx={{ flexGrow: 1 }}
+                          justifyContent={'flex-start'}
+                          sx={{ mt: 2 }}
                         >
-                          <LocationLink
-                            to={`/search-results/${
-                              isGoldenOnly ? 'golden' : 'patient'
-                            }`}
-                            search={{ payload: values }}
-                            style={{ textDecoration: 'none' }}
+                          {/* TODO move colors to theme */}
+                          <Stack
+                            direction={'row'}
+                            spacing={1}
+                            sx={{ flexGrow: 1 }}
                           >
-                            <Button variant="contained">Search</Button>
-                          </LocationLink>
-                          <Button variant="outlined" href="/search/simple">
-                            Cancel
-                          </Button>
-                        </Stack>
-                        <Grid item>
-                          <Button variant="outlined">Query Builder</Button>
+                            <LocationLink
+                              to={`/search-results/${
+                                isGoldenOnly ? 'golden' : 'patient'
+                              }`}
+                              search={{ payload: values }}
+                              style={{ textDecoration: 'none' }}
+                            >
+                              <Button variant="contained">Search</Button>
+                            </LocationLink>
+                            <Button variant="outlined" href="/search/simple">
+                              Cancel
+                            </Button>
+                          </Stack>
+                          <Grid item>
+                            <Button variant="outlined">Query Builder</Button>
+                          </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
+                    )}
                   </Grid>
                 </Box>
               </Form>

@@ -48,6 +48,9 @@ interface ExpandedGoldenRecord {
   mpiPatientRecords: Array<ExpandedPatientRecord>
 }
 
+interface ExpandCandidateRecord {
+  expandedGoldenRecords: ExpandedGoldenRecord[]
+}
 interface ExpandedPatientRecord {
   patientRecord: PatientRecord
 }
@@ -150,6 +153,7 @@ class ApiClient {
           .concat(
             response[2].map((r: AnyRecord) => {
               r.type = 'Candidate'
+              r.searched = false
               return r
             })
           )

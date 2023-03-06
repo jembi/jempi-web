@@ -48,6 +48,8 @@ axiosMockAdapterInstance
   .onGet(ROUTES.GET_GOLDEN_ID_DOCUMENTS)
   .reply(() => {
     // Unique row ids for data grid
+    // const ids = ['0x9833', '0x9834', '0x9835', '0x9836', '0x9837', '0x9838']
+    // goldenRecord.goldenRecord.uid = ids[Math.round(Math.random() * 5)]
     return [200, { expandedGoldenRecords: goldenRecords }]
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)

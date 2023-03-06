@@ -4,6 +4,7 @@ import { PatientRecord } from '../types/PatientRecord'
 import { ApiSearchResult } from '../types/SimpleSearch'
 import { User } from '../types/User'
 
+//status
 const notifications: Notification[] = [
   {
     id: '123',
@@ -22,6 +23,8 @@ const notifications: Notification[] = [
     ]
   }
 ]
+
+//send notfication ID and the status ie. Done.
 
 //TODO: update 'searchGoldenRecordResult' to match the real backend.
 
@@ -180,6 +183,9 @@ const patientRecord = {
     phoneNumber: '085145855',
     city: 'Welkom'
   },
+  facilityId: 'Lab01',
+  patientId: 'P567',
+  updated: '1234',
   uid: '0x5a',
   sourceId: {
     facility: 'Facility One',
@@ -232,7 +238,7 @@ const linkedRecords: PatientRecord[] = [
 
 const goldenRecord = {
   goldenRecord: {
-    uid: '0x9833',
+    uid: '0x45',
     demographicData: {
       auxId: '0x77',
       nationalId: '123456',
@@ -243,6 +249,9 @@ const goldenRecord = {
       phoneNumber: '085145855',
       city: 'Welkom'
     },
+    facilityId: 'Lab01',
+    patientId: 'P567',
+    updated: '1234',
     sourceId: [
       {
         facility: 'Facility One',

@@ -12,7 +12,7 @@ export default interface Notification {
   candidates?: GoldenRecord[]
 }
 
-interface GoldenRecord {
+export interface GoldenRecord {
   golden_id: string
   score: number
 }
