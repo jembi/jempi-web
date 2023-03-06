@@ -98,9 +98,6 @@ const HomePage = () => {
             <Button href="/search/simple" variant="contained">
               Search
             </Button>
-            <Button href="/review-matches" variant="outlined">
-              Review Matches
-            </Button>
           </Box>
         </Box>
       </Card>
