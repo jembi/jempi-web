@@ -24,7 +24,12 @@ import DataGridToolbar from './DataGridToolBar'
 const columns: GridColDef[] = [
   {
     field: 'type',
-    headerName: 'Reason for Match',
+    headerName: 'Notification Type',
+    minWidth: 150
+  },
+  {
+    field: 'reason',
+    headerName: 'Notification Reason',
     minWidth: 150,
     flex: 2
   },
@@ -35,16 +40,14 @@ const columns: GridColDef[] = [
     flex: 2
   },
   {
-    field: 'match',
-    headerName: 'Match',
+    field: 'score',
+    headerName: 'Score',
     type: 'number',
     width: 100,
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
-    valueGetter: (params: GridValueGetterParams) => params.row.score,
-    valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${Math.round(params.value * 100)}%`
+    valueGetter: (params: GridValueGetterParams) => params.row.score
   },
   {
     field: 'created',
@@ -55,11 +58,11 @@ const columns: GridColDef[] = [
     align: 'center',
     headerAlign: 'center',
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      params.value ? moment(params.value).format('YYYY-MM-DD') : null
+      params.value ? moment(params.value).format('DD/MM/YYYY') : null
   },
   {
-    field: 'state',
-    headerName: 'State',
+    field: 'status',
+    headerName: 'Status',
     width: 100,
     minWidth: 80,
     align: 'center',
@@ -88,7 +91,8 @@ const columns: GridColDef[] = [
       patient: params.row.patient
     }),
     renderCell: (params: GridRenderCellParams<string, Notification>) => {
-      const { patient_id, candidates, score, id, golden_id, state } = params.row
+      const { patient_id, candidates, score, id, golden_id, status } =
+        params.row
       return (
         <LocationLink
           to={`/match-details`}
@@ -103,7 +107,7 @@ const columns: GridColDef[] = [
           }}
           style={{ textDecoration: 'none' }}
         >
-          {state !== 'Actioned' ? 'VIEW' : null}
+          {status !== 'Actioned' ? 'VIEW' : null}
         </LocationLink>
       )
     }
