@@ -58,7 +58,7 @@ const columns: GridColDef[] = [
     align: 'center',
     headerAlign: 'center',
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      params.value ? moment(params.value).format('DD/MM/YYYY') : null
+      params.value ? moment.unix(params.value).format('DD/MM/YYYY') : null
   },
   {
     field: 'status',
