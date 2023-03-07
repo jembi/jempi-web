@@ -15,7 +15,7 @@ import Import from './components/import/Import'
 import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
 import MatchDetails from './components/reviewMatches/MatchDetails'
-import ReviewMatches from './components/reviewMatches/ReviewMatches'
+import NotificationWorklist from './components/reviewMatches/NotificationWorklist'
 import SimpleSearch from './components/search/SimpleSearch'
 import SearchResult from './components/searchResult/SearchResult'
 import Shell from './components/shell/Shell'
@@ -50,8 +50,8 @@ const routes: Route[] = [
         element: <HomePage />
       },
       {
-        path: 'review-matches',
-        element: <ReviewMatches />
+        path: 'notifications',
+        element: <NotificationWorklist />
       },
       {
         path: 'match-details',
