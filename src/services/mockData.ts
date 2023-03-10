@@ -17,7 +17,7 @@ const notifications: Notification[] = [
     score: 0.5,
     candidates: [
       {
-        golden_id: '0x25',
+        golden_id: '0x45',
         score: 0.4
       }
     ]

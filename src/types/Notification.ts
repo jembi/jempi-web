@@ -20,5 +20,7 @@ export interface GoldenRecord {
 export enum NotificationState {
   New = 'New',
   Seen = 'Seen',
-  Actioned = 'Actioned'
+  Actioned = 'Actioned',
+  Pending = 'Pending',
+  Accepted = 'Accepted'
 }
