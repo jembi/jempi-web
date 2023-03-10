@@ -16,7 +16,7 @@ import PageHeader from '../shell/PageHeader'
 import DataGrid from './DataGrid'
 import Dialog from './Dialog'
 
-type MatchDetailsParams = MakeGenerics<{
+type ReviewLinkParams = MakeGenerics<{
   Search: {
     payload: {
       notificationId: string
@@ -44,7 +44,7 @@ const mapDataToScores = (
   return data
 }
 
-const MatchDetails = () => {
+const ReviewLink = () => {
   const { getPatientName } = useAppConfig()
   const [dialogText, setDialogText] = useState<string>('')
   const [openLinkRecordDialog, setOpenLinkRecordDialog] =
@@ -52,7 +52,7 @@ const MatchDetails = () => {
   const [opencreateNewGRecordDialog, setOpencreateNewGRecordDialog] =
     useState<boolean>(false)
   const [tableData, setTableData] = useState<AnyRecord[]>([])
-  const { payload } = useSearch<MatchDetailsParams>()
+  const { payload } = useSearch<ReviewLinkParams>()
   const [canditateUID, setCandidateUID] = useState<string>('')
 
   const navigate = useNavigate()
@@ -315,4 +315,4 @@ const MatchDetails = () => {
   )
 }
 
-export default MatchDetails
+export default ReviewLink
