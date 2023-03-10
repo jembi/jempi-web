@@ -89,7 +89,6 @@ const columns: GridColDef[] = [
     }),
     renderCell: (params: GridRenderCellParams<string, Notification>) => {
       const { patient_id, candidates, score, id, golden_id, state } = params.row
-
       return (
         <LocationLink
           to={`/match-details`}
