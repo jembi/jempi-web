@@ -98,6 +98,27 @@ const DataGrid: React.FC<DataGridProps> = ({
           }
         }
       }
+      if (fieldName === 'uid') {
+        return {
+          field: fieldName,
+          headerName: fieldLabel,
+          flex: 1,
+          renderCell: (params: GridRenderCellParams) => {
+            if (params.row.type === 'Current') {
+              return (
+                <Link href={`/patient-record/${params.row.uid}`}>
+                  {params.row.uid}
+                </Link>
+              )
+            }
+            return (
+              <Link href={`/golden-record/${params.row.uid}`}>
+                {params.row.uid}
+              </Link>
+            )
+          }
+        }
+      }
       return {
         field: fieldName,
         headerName: fieldLabel,
