@@ -13,13 +13,15 @@ interface PageHeaderProps {
   buttons?: JSX.Element[]
   title: string
   description?: string | JSX.Element
+  color?: string
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   breadcrumbs,
   buttons,
   title,
-  description
+  description,
+  color = 'rgba(0, 0, 0, 0.87)'
 }) => {
   return (
     <Grid container justifyContent="space-between">
@@ -52,7 +54,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             sx={{
               fontSize: '34px',
               fontWeight: 400,
-              color: 'rgba(0, 0, 0, 0.87)'
+              color: color
             }}
           >
             {title}
