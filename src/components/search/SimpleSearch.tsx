@@ -4,7 +4,11 @@ import { Card, Container, Grid } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
 import { useState } from 'react'
-import { FlagLabel, SearchFlagsOptionsProps } from '../../types/SimpleSearch'
+import {
+  FlagLabel,
+  SearchQuery,
+  ToggleOptionsProps
+} from '../../types/SimpleSearch'
 import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import SearchFlags from './SearchFlags'
@@ -13,15 +17,17 @@ import SimpleSearchHeader from './SimpleSearchHeader'
 
 const SimpleSearch: React.FC = () => {
   const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
+  const [simpleSearchQuerry, setSimpleSearchQuerry] = useState<
+    SearchQuery | undefined
+  >(undefined)
 
-  const options: SearchFlagsOptionsProps[] = [
+  const options: ToggleOptionsProps[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
 
   return (
     <Container maxWidth={false}>
-      {/* <SearchModal /> */}
       <PageHeader
         description="Quickly access the information you need with our powerful search."
         title="Simple Search"
@@ -72,11 +78,11 @@ const SimpleSearch: React.FC = () => {
           alignContent="center"
         >
           <SimpleSearchHeader isGoldenOnly={isGoldenOnly} />
-          <SimpleSearchForm onChange={value => console.log(value)} />
+          <SimpleSearchForm onChange={setSimpleSearchQuerry} />
           <Grid item>
             <LocationLink
               to={`/search-results/${isGoldenOnly ? 'golden' : 'patient'}`}
-              // search={{ payload: values }}
+              search={{ payload: simpleSearchQuerry }}
               style={{ textDecoration: 'none' }}
             >
               <Button variant="contained">Search</Button>

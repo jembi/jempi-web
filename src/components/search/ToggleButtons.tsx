@@ -6,7 +6,7 @@ import {
   Typography
 } from '@mui/material'
 import { useRef, useState } from 'react'
-import { SearchFlagsOptionsProps } from '../../types/SimpleSearch'
+import { ToggleOptionsProps } from '../../types/SimpleSearch'
 
 export const triggerInputChange = (node: HTMLInputElement, value = '') => {
   // only process the change on elements we know have a value setter in their constructor
@@ -24,7 +24,7 @@ interface ToggleButtonsProps {
   selectedButton: string
   name?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  options: SearchFlagsOptionsProps[]
+  options: ToggleOptionsProps[]
   sx: SxProps<Theme>
   disabled?: boolean
 }

@@ -1,29 +1,32 @@
 import { Grid } from '@mui/material'
+import ToggleButtons from 'components/search/ToggleButtons'
 import { useState } from 'react'
-import { ToggleOptionsProps } from '../../types/SimpleSearch'
-import ToggleButtons from './ToggleButtons'
+import { ToggleOptionsProps } from 'types/SimpleSearch'
 
-interface SearchFlagsProps {
+interface SearchTypeToggleProps {
   options: ToggleOptionsProps[]
-  onChange: (isGoldenOnly: boolean) => void
+  onChange: (searchType: string) => void
 }
 
-const SearchFlags: React.FC<SearchFlagsProps> = ({ options, onChange }) => {
+const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
+  options,
+  onChange
+}) => {
   const [selectedButton, setSelectedButton] = useState<string>('0')
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedButton(event?.target.value)
-    onChange(event?.target.value === '0')
+    onChange(event?.target.value === '0' ? 'custom-search' : 'simple-search')
   }
 
   return (
-    <Grid container direction={'row'} justifyContent={'flex-end'}>
+    <Grid container direction={'row'} justifyContent={'center'} mt={3}>
       <Grid item>
         <ToggleButtons
           selectedButton={selectedButton}
           onChange={handleChange}
           sx={{
-            width: '129px',
+            width: '150px',
             height: '42px',
             borderColor: theme => theme.palette.primary.main,
             color: theme => theme.palette.primary.main,
@@ -39,4 +42,4 @@ const SearchFlags: React.FC<SearchFlagsProps> = ({ options, onChange }) => {
   )
 }
 
-export default SearchFlags
+export default SearchTypeToggle
