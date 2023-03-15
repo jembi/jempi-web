@@ -11,11 +11,10 @@ const SimpleSearchHeader: FC<{ isGoldenOnly: boolean }> = ({
           <Typography variant="h5">Search</Typography>
           <Typography
             variant="h5"
-            sx={
-              isGoldenOnly
-                ? { color: '#FBC02D', fontWeight: 700 }
-                : { fontWeight: 700 }
-            }
+            sx={{
+              color: isGoldenOnly ? '#FBC02D' : undefined,
+              fontWeight: 700
+            }}
           >
             {isGoldenOnly ? 'Golden' : 'Patient'}
           </Typography>
@@ -28,10 +27,7 @@ const SimpleSearchHeader: FC<{ isGoldenOnly: boolean }> = ({
         <Stack direction={'row'} spacing={0.5}>
           <Typography variant="body2">
             Find info fast with these fixed fields or make your own search rules
-            with
-          </Typography>
-          <Typography variant="body2">
-            <Link href={'/search/custom'}>Custom Search</Link>
+            with <Link href={'/search/custom'}>Custom Search</Link>
           </Typography>
         </Stack>
       </Grid>

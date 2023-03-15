@@ -1,41 +1,23 @@
 import { Grid } from '@mui/material'
-import SubmitListener from 'components/shared/AutoSubmit'
-import { FieldArray, Form, Formik } from 'formik'
+import AutoSubmitForm from 'components/shared/AutoSubmitForm'
+import { FieldArray, Formik } from 'formik'
 import { FC } from 'react'
-import {
-  CustomSearchQuery,
-  SearchParameter,
-  SimpleSearchQuery
-} from 'types/SimpleSearch'
-import { PAGINATION_LIMIT } from 'utils/constants'
+import { CustomSearchQuery, SimpleSearchQuery } from 'types/SimpleSearch'
+import { INITIAL_SEARCH_PARAMETER, INITIAL_VALUES } from 'utils/constants'
 import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 import FieldGroup from './FieldGroup'
 
 const CustomSearchForm: FC<{
   onChange: (values: CustomSearchQuery) => void
 }> = ({ onChange }) => {
-  const initialSearchParameter: SearchParameter = {
-    fieldName: '',
-    value: '',
-    distance: 0
-  }
-
-  const initialValues: CustomSearchQuery = {
-    $or: [
-      {
-        parameters: [initialSearchParameter]
-      }
-    ],
-    sortBy: 'uid',
-    sortAsc: true,
-    offset: 0,
-    limit: PAGINATION_LIMIT
-  }
   return (
-    <Formik initialValues={initialValues} onSubmit={values => onChange(values)}>
+    <Formik
+      initialValues={INITIAL_VALUES}
+      onSubmit={values => onChange(values)}
+    >
       {({ values, handleChange, setFieldValue }) => {
         return (
-          <Form>
+          <AutoSubmitForm>
             <FieldArray name="$or">
               {({ push, remove }) => (
                 <>
@@ -46,7 +28,7 @@ const CustomSearchForm: FC<{
                           values={parameters}
                           handleChange={handleChange}
                           initialCustomSearchValues={{
-                            parameters: [initialSearchParameter]
+                            parameters: [INITIAL_SEARCH_PARAMETER]
                           }}
                           fieldGroupIndex={index}
                           removeFieldGroup={remove}
@@ -76,7 +58,7 @@ const CustomSearchForm: FC<{
                       <AddFieldOrGroupButton
                         onClick={push}
                         initialCustomSearchValues={{
-                          parameters: [initialSearchParameter]
+                          parameters: [INITIAL_SEARCH_PARAMETER]
                         }}
                         label="Add group"
                       />
@@ -85,8 +67,7 @@ const CustomSearchForm: FC<{
                 </>
               )}
             </FieldArray>
-            <SubmitListener />
-          </Form>
+          </AutoSubmitForm>
         )
       }}
     </Formik>

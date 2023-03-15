@@ -1,5 +1,5 @@
-import SubmitListener from 'components/shared/AutoSubmit'
-import { FieldArray, Form, Formik } from 'formik'
+import AutoSubmitForm from 'components/shared/AutoSubmitForm'
+import { FieldArray, Formik } from 'formik'
 import { useAppConfig } from 'hooks/useAppConfig'
 import moment from 'moment'
 import { FC } from 'react'
@@ -30,7 +30,7 @@ const SimpleSearchForm: FC<{
     <Formik initialValues={initialValues} onSubmit={values => onChange(values)}>
       {({ values, handleChange }) => {
         return (
-          <Form>
+          <AutoSubmitForm>
             <FieldArray name="refine-search">
               {() => (
                 <>
@@ -51,8 +51,7 @@ const SimpleSearchForm: FC<{
                 </>
               )}
             </FieldArray>
-            <SubmitListener />
-          </Form>
+          </AutoSubmitForm>
         )
       }}
     </Formik>

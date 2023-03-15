@@ -62,8 +62,8 @@ const SimpleSearch: React.FC = () => {
           container
           direction="column"
           width="fit-content"
-          minWidth="800px"
           alignContent="center"
+          padding="30px"
         >
           <SimpleSearchHeader isGoldenOnly={isGoldenOnly} />
           <SimpleSearchForm onChange={setSimpleSearchQuerry} />

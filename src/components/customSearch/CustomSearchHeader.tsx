@@ -6,10 +6,9 @@ const CustomSearchHeader = () => {
       <Grid
         item
         container
-        width={'756px'}
         direction={'row'}
         justifyContent={'flex-start'}
-        sx={{ mt: 1, mb: 3 }}
+        sx={{ mb: 3 }}
       >
         <Stack direction={'column'} spacing={1}>
           <Typography variant="h5">Customize Your Search Rules</Typography>

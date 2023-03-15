@@ -25,16 +25,6 @@ const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
         <ToggleButtons
           selectedButton={selectedButton}
           onChange={handleChange}
-          sx={{
-            width: '150px',
-            height: '42px',
-            borderColor: theme => theme.palette.primary.main,
-            color: theme => theme.palette.primary.main,
-            '&.Mui-selected, &.Mui-selected:hover': {
-              color: 'white',
-              backgroundColor: theme => theme.palette.primary.main
-            }
-          }}
           options={options}
         />
       </Grid>

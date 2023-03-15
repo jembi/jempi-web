@@ -65,8 +65,8 @@ const CustomSearch: React.FC = () => {
               container
               direction="column"
               width="fit-content"
-              minWidth="800px"
               alignContent="center"
+              padding="20px"
             >
               <CustomSearchHeader />
               <CustomSearchForm onChange={setCustomSearchQuerry} />

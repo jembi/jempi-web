@@ -61,9 +61,21 @@ const overrides = createTheme({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          paddingTop: '30px',
-          paddingBottom: '30px'
+          justifyContent: 'center'
+        })
+      }
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          width: '130px',
+          height: '42px',
+          borderColor: theme.palette.primary.main,
+          color: theme.palette.primary.main,
+          '&.Mui-selected, &.Mui-selected:hover': {
+            color: 'white',
+            backgroundColor: theme.palette.primary.main
+          }
         })
       }
     }

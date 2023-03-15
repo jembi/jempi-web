@@ -1,10 +1,4 @@
-import {
-  SxProps,
-  Theme,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography
-} from '@mui/material'
+import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import { ToggleButtonOptions } from '../../types/SimpleSearch'
 
@@ -25,7 +19,6 @@ interface ToggleButtonsProps {
   name?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   options: ToggleButtonOptions[]
-  sx: SxProps<Theme>
   disabled?: boolean
 }
 
@@ -34,7 +27,6 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
   name,
   onChange,
   options,
-  sx,
   disabled = false
 }) => {
   const [selected, setSelected] = useState(selectedButton)
@@ -65,7 +57,6 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
             <ToggleButton
               value={`${option.value}`}
               aria-label="left aligned"
-              sx={sx}
               key={option.value}
             >
               <Typography id={name} variant="button">
