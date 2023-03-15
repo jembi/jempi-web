@@ -183,16 +183,6 @@ const FIELDS_CONFIG: Fields = [
     readOnly: false,
     rules: { required: false, regex: '.*' }
   },
-  {
-    fieldName: 'score',
-    fieldType: 'Number',
-    fieldLabel: 'Match',
-    groups: ['none'],
-    scope: ['/patient-record/:uid', '/golden-record/:uid'],
-    accessLevel: [],
-    readOnly: false,
-    rules: { required: false, regex: '.*' }
-  },
   //TODO Add back when we have user information
   {
     fieldName: 'updated',
@@ -202,6 +192,16 @@ const FIELDS_CONFIG: Fields = [
     accessLevel: [],
     readOnly: false,
     scope: ['/match-details']
+  },
+  {
+    fieldName: 'score',
+    fieldType: 'Number',
+    fieldLabel: 'Score',
+    groups: ['none'],
+    scope: ['/patient-record/:uid', '/golden-record/:uid', '/match-details'],
+    accessLevel: [],
+    readOnly: false,
+    rules: { required: false, regex: '.*' }
   },
   {
     fieldName: 'sourceId',

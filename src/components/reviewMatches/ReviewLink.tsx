@@ -64,8 +64,8 @@ const ReviewLink = () => {
       queryKey: ['matchDetails', payload],
       queryFn: () => {
         return ApiClient.getMatchDetails(
-          payload?.patient_id ? payload.patient_id : '',
-          payload?.golden_id ? payload.golden_id : '',
+          payload?.patient_id || '',
+          payload?.golden_id || '',
           payload?.candidates?.map(c => c.golden_id) || []
         )
       },

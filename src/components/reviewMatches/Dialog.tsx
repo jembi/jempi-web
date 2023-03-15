@@ -37,10 +37,10 @@ const Dialog: React.FC<DialogProps> = ({
       <DialogTitle>{title}</DialogTitle>
 
       <DialogContent>
-        <Typography>{subTitle ? subTitle : ''}</Typography>
+        {subTitle && <Typography>{subTitle}</Typography>}
         {content}
       </DialogContent>
-      <DialogActions>{buttons.map(element => element)}</DialogActions>
+      <DialogActions>{buttons}</DialogActions>
     </MuiDialog>
   )
 }

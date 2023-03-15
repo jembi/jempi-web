@@ -30,9 +30,7 @@ interface DataGridProps {
   sx?: SxProps<Theme>
 }
 const getRecordTypeClassName = (params: GridCellParams<string>) => {
-  if (params.row.type === 'Golden') {
-    return 'record-type'
-  } else return ''
+  return params.row.type === 'Golden' ? 'record-type' : ''
 }
 
 const getCellClassName = (
@@ -65,80 +63,73 @@ const DataGrid: React.FC<DataGridProps> = ({
 
   const columns: GridColumns = [
     ...availableFields.map(field => {
-      const { fieldName, fieldLabel, formatValue } = field
-      if (fieldName === 'recordType') {
-        return {
-          field: fieldName,
-          headerName: fieldLabel,
-          flex: 1,
-          valueFormatter: (
-            params: GridValueFormatterParams<number | string | Date>
-          ) => formatValue(params.value),
-          cellClassName: (params: GridCellParams<string>) =>
-            getRecordTypeClassName(params),
-          renderCell: (params: GridRenderCellParams) => {
-            switch (params.row.type) {
-              case 'Current':
-                return <Typography>Patient</Typography>
-              case 'Golden':
-                return (
-                  <Typography color="#D79B01" fontWeight={700}>
-                    Golden
-                  </Typography>
-                )
-              case 'Candidate':
-                if (params.row.searched) {
-                  return <Typography>Searched</Typography>
-                } else {
-                  return <Typography>Blocked</Typography>
-                }
-              default:
-                return <></>
+      const { fieldName, fieldLabel, formatValue, fieldType } = field
+      switch (fieldName) {
+        case 'recordType':
+          return {
+            field: fieldName,
+            headerName: fieldLabel,
+            flex: 1,
+            valueFormatter: (
+              params: GridValueFormatterParams<number | string | Date>
+            ) => formatValue(params.value),
+            cellClassName: (params: GridCellParams<string>) =>
+              getRecordTypeClassName(params),
+            renderCell: (params: GridRenderCellParams) => {
+              switch (params.row.type) {
+                case 'Current':
+                  return <Typography>Patient</Typography>
+                case 'Golden':
+                  return (
+                    <Typography color="#D79B01" fontWeight={700}>
+                      Golden
+                    </Typography>
+                  )
+                case 'Candidate':
+                  if (params.row.searched) {
+                    return <Typography>Searched</Typography>
+                  } else {
+                    return <Typography>Blocked</Typography>
+                  }
+                default:
+                  return <></>
+              }
             }
           }
-        }
-      }
-      if (fieldName === 'uid') {
-        return {
-          field: fieldName,
-          headerName: fieldLabel,
-          flex: 1,
-          renderCell: (params: GridRenderCellParams) => {
-            if (params.row.type === 'Current') {
+
+        case 'uid':
+          return {
+            field: fieldName,
+            headerName: fieldLabel,
+            flex: 1,
+            renderCell: (params: GridRenderCellParams) => {
+              if (params.row.type === 'Current') {
+                return (
+                  <Link href={`/patient-record/${params.row.uid}`}>
+                    {params.row.uid}
+                  </Link>
+                )
+              }
               return (
-                <Link href={`/patient-record/${params.row.uid}`}>
+                <Link href={`/golden-record/${params.row.uid}`}>
                   {params.row.uid}
                 </Link>
               )
             }
-            return (
-              <Link href={`/golden-record/${params.row.uid}`}>
-                {params.row.uid}
-              </Link>
-            )
           }
-        }
-      }
-      return {
-        field: fieldName,
-        headerName: fieldLabel,
-        flex: 1,
-        valueFormatter: (
-          params: GridValueFormatterParams<number | string | Date>
-        ) => formatValue(params.value),
-        cellClassName: (params: GridCellParams<string>) =>
-          getCellClassName(params, field, data[0])
+        default:
+          return {
+            field: fieldName,
+            headerName: fieldLabel,
+            flex: 1,
+            valueFormatter: (
+              params: GridValueFormatterParams<number | string | Date>
+            ) => formatValue(params.value),
+            cellClassName: (params: GridCellParams<string>) =>
+              getCellClassName(params, field, data[0])
+          }
       }
     }),
-    {
-      field: 'score',
-      headerName: 'Match',
-      type: 'number',
-      width: 100,
-      minWidth: 80,
-      align: 'center',
-      headerAlign: 'center'
-    },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -158,19 +149,6 @@ const DataGrid: React.FC<DataGridProps> = ({
       renderCell: (params: GridRenderCellParams) => {
         switch (params.row.type) {
           case 'Current':
-            return (
-              <IconButton
-                aria-controls={isOpen ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={isOpen ? 'true' : undefined}
-                onClick={open}
-                size="large"
-                edge="end"
-                disabled={true}
-              >
-                <MoreVertIcon />
-              </IconButton>
-            )
           case 'Golden':
             return (
               <IconButton
