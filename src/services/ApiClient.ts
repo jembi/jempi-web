@@ -119,8 +119,8 @@ class ApiClient {
         }
       })
       .then(res => res.data)
-      .then(({ expandedGoldenRecords }) =>
-        expandedGoldenRecords.map(({ goldenRecord }: any) => {
+      .then((data: any) =>
+        data.map(({ goldenRecord }: any) => {
           return {
             ...goldenRecord,
             ...goldenRecord.demographicData
