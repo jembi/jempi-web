@@ -1,10 +1,10 @@
 import { Grid } from '@mui/material'
 import ToggleButtons from 'components/search/ToggleButtons'
 import { useState } from 'react'
-import { ToggleOptionsProps } from 'types/SimpleSearch'
+import { ToggleButtonOptions } from 'types/SimpleSearch'
 
 interface SearchTypeToggleProps {
-  options: ToggleOptionsProps[]
+  options: ToggleButtonOptions[]
   onChange: (searchType: string) => void
 }
 

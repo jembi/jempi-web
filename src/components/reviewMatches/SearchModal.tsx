@@ -1,11 +1,11 @@
 import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material'
 import CustomSearchForm from 'components/customSearch/CustomSearchForm'
 import SimpleSearchForm from 'components/search/SimpleSearchForm'
-import { FC, useCallback, useState } from 'react'
+import { FC, useState } from 'react'
 import {
   CustomSearchQuery,
   SearchQuery,
-  ToggleOptionsProps
+  ToggleButtonOptions
 } from 'types/SimpleSearch'
 import SearchTypeToggle from './SearchTypeToggle'
 
@@ -20,7 +20,7 @@ const style = {
   boxShadow: 24
 }
 
-const options: ToggleOptionsProps[] = [
+const options: ToggleButtonOptions[] = [
   { value: 0, label: 'Custom search' },
   { value: 1, label: 'Simple search' }
 ]
@@ -30,16 +30,9 @@ const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
   onClose
 }) => {
   const [tabValue, setTabValue] = useState('custom-search')
-  const [refineSearchQuerry, setRefineSearchQuerry] = useState<
+  const [refineSearchQuery, setRefineSearchQuery] = useState<
     SearchQuery | CustomSearchQuery | undefined
   >(undefined)
-
-  const onSearchQuerryChange = useCallback(
-    (value: SearchQuery | CustomSearchQuery) => {
-      setRefineSearchQuerry(value)
-    },
-    []
-  )
 
   return (
     <Modal open={isOpen} onClose={() => onClose()}>
@@ -59,12 +52,12 @@ const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
           <SearchTypeToggle onChange={setTabValue} options={options} />
 
           {tabValue === 'simple-search' && (
-            <SimpleSearchForm onChange={value => onSearchQuerryChange(value)} />
+            <SimpleSearchForm onChange={value => setRefineSearchQuery(value)} />
           )}
           {tabValue === 'custom-search' && (
             <Box mt={3}>
               <CustomSearchForm
-                onChange={value => onSearchQuerryChange(value)}
+                onChange={value => setRefineSearchQuery(value)}
               />
             </Box>
           )}

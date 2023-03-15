@@ -7,7 +7,7 @@ import { useState } from 'react'
 import {
   CustomSearchQuery,
   FlagLabel,
-  ToggleOptionsProps
+  ToggleButtonOptions
 } from '../../types/SimpleSearch'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
@@ -19,7 +19,7 @@ const CustomSearch: React.FC = () => {
   const [customSearchQuerry, setCustomSearchQuerry] = useState<
     CustomSearchQuery | undefined
   >(undefined)
-  const options: ToggleOptionsProps[] = [
+  const options: ToggleButtonOptions[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
@@ -60,19 +60,7 @@ const CustomSearch: React.FC = () => {
           </Grid>
 
           <Divider />
-          <Card
-            sx={{
-              marginTop: '33px',
-              background: '#FFFFFF',
-              boxShadow: '0px 0px 0px 1px #E0E0E0',
-              borderRadius: '4px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              py: '30px'
-            }}
-          >
+          <Card>
             <Grid
               container
               direction="column"
@@ -82,7 +70,6 @@ const CustomSearch: React.FC = () => {
             >
               <CustomSearchHeader />
               <CustomSearchForm onChange={setCustomSearchQuerry} />
-              {/* TODO move colors to theme */}
               <Stack direction={'row'} spacing={1} sx={{ flexGrow: 1 }}>
                 <LocationLink
                   to={`/search-results/${isGoldenOnly ? 'golden' : 'patient'}`}

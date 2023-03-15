@@ -7,7 +7,7 @@ import { useState } from 'react'
 import {
   FlagLabel,
   SearchQuery,
-  ToggleOptionsProps
+  ToggleButtonOptions
 } from '../../types/SimpleSearch'
 import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
@@ -21,7 +21,7 @@ const SimpleSearch: React.FC = () => {
     SearchQuery | undefined
   >(undefined)
 
-  const options: ToggleOptionsProps[] = [
+  const options: ToggleButtonOptions[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
@@ -57,19 +57,7 @@ const SimpleSearch: React.FC = () => {
         ]}
       />
       <Divider />
-      <Card
-        sx={{
-          marginTop: '33px',
-          background: '#FFFFFF',
-          boxShadow: '0px 0px 0px 1px #E0E0E0',
-          borderRadius: '4px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          py: '30px'
-        }}
-      >
+      <Card>
         <Grid
           container
           direction="column"

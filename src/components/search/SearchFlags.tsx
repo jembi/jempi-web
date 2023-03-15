@@ -1,10 +1,10 @@
 import { Grid } from '@mui/material'
 import { useState } from 'react'
-import { ToggleOptionsProps } from '../../types/SimpleSearch'
+import { ToggleButtonOptions } from '../../types/SimpleSearch'
 import ToggleButtons from './ToggleButtons'
 
 interface SearchFlagsProps {
-  options: ToggleOptionsProps[]
+  options: ToggleButtonOptions[]
   onChange: (isGoldenOnly: boolean) => void
 }
 

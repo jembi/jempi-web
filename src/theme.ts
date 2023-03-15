@@ -34,7 +34,7 @@ const overrides = createTheme({
         },
         {
           props: { variant: 'contained' },
-          style: ({ theme }) => ({
+          style: () => ({
             backgroundColor: '#274263',
             color: 'white',
             '&:hover': { backgroundColor: '#375982' },
@@ -50,6 +50,22 @@ const overrides = createTheme({
           })
         }
       ]
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: () => ({
+          marginTop: '33px',
+          background: '#FFFFFF',
+          boxShadow: '0px 0px 0px 1px #E0E0E0',
+          borderRadius: '4px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: '30px',
+          paddingBottom: '30px'
+        })
+      }
     }
   },
   typography: {

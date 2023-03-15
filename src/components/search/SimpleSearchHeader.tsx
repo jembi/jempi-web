@@ -9,16 +9,16 @@ const SimpleSearchHeader: FC<{ isGoldenOnly: boolean }> = ({
       <Grid item>
         <Stack direction={'row'} spacing={0.5}>
           <Typography variant="h5">Search</Typography>
-          {isGoldenOnly ? (
-            <Typography variant="h5" sx={{ color: '#FBC02D', fontWeight: 700 }}>
-              Golden
-            </Typography>
-          ) : (
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Patient
-            </Typography>
-          )}
-
+          <Typography
+            variant="h5"
+            sx={
+              isGoldenOnly
+                ? { color: '#FBC02D', fontWeight: 700 }
+                : { fontWeight: 700 }
+            }
+          >
+            {isGoldenOnly ? 'Golden' : 'Patient'}
+          </Typography>
           <Typography variant="h5" sx={{ color: theme => theme.typography.h5 }}>
             Records
           </Typography>
