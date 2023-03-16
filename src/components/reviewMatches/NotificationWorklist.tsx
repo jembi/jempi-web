@@ -55,7 +55,7 @@ const columns: GridColDef[] = [
     flex: 1,
     align: 'center',
     headerAlign: 'center',
-    valueFormatter: (params: GridValueFormatterParams<number>) =>
+    valueFormatter: (params: GridValueFormatterParams<Date>) =>
       formatDate(params.value)
   },
   {

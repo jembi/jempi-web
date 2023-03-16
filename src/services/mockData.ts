@@ -7,7 +7,7 @@ const notifications: Notification[] = [
   {
     id: '123',
     type: 'Review threshold',
-    created: '05-03-2023',
+    created: new Date('05-03-2023'),
     names: 'Bob Smith',
     patient_id: '0x5a',
     status: NotificationState.New,
@@ -23,7 +23,7 @@ const notifications: Notification[] = [
   {
     id: '345',
     type: 'Review threshold',
-    created: '02-03-2023',
+    created: new Date('02-03-2023'),
     names: 'Jane Doe',
     patient_id: '0x7j',
     status: NotificationState.New,
@@ -39,7 +39,7 @@ const notifications: Notification[] = [
   {
     id: '758',
     type: 'Golden record changed',
-    created: '02-03-2023',
+    created: new Date('02-03-2023'),
     names: 'Jane Smith',
     patient_id: '0x1a',
     status: NotificationState.New,
@@ -55,7 +55,7 @@ const notifications: Notification[] = [
   {
     id: '541',
     type: 'Review threshold range',
-    created: '02-03-2023',
+    created: new Date('02-03-2023'),
     names: 'John Themba',
     patient_id: '0x9a',
     status: NotificationState.New,
