@@ -4,7 +4,7 @@ import { AnyRecord, ValueOf } from '../types/PatientRecord'
 
 export const formatDate = (value: unknown) => {
   if (typeof value === 'object') {
-    return moment(value).format('YYYY-MM-DD')
+    return moment(value).format('DD/MM/YYYY')
   }
 }
 
