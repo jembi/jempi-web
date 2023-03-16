@@ -2,7 +2,7 @@ export default interface Notification {
   id: string
   type: string
   reason?: string | null
-  created: number
+  created: string | Date
   names: string
   patient_id: string | null
   status: NotificationState

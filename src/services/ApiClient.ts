@@ -66,7 +66,13 @@ class ApiClient {
   async getMatches() {
     return await client
       .get<NotificationResponse>(ROUTES.GET_NOTIFICATIONS)
-      .then(res => res.data.records)
+      .then(res => res.data)
+      .then(({ records }) =>
+        records.map(record => ({
+          ...record,
+          created: new Date(record.created)
+        }))
+      )
   }
 
   async getAuditTrail() {

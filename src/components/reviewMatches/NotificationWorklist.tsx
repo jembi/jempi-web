@@ -1,5 +1,4 @@
-import { AxiosError } from 'axios'
-
+import { People } from '@mui/icons-material'
 import { Chip, Container, Divider } from '@mui/material'
 import {
   DataGrid,
@@ -8,14 +7,13 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams
 } from '@mui/x-data-grid'
-import { useQuery } from '@tanstack/react-query'
-
-import { People } from '@mui/icons-material'
 import { Link as LocationLink } from '@tanstack/react-location'
+import { useQuery } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import Loading from 'components/common/Loading'
 import ApiErrorMessage from 'components/error/ApiErrorMessage'
 import NotFound from 'components/error/NotFound'
-import moment from 'moment'
+import { formatDate } from 'utils/formatters'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import PageHeader from '../shell/PageHeader'
@@ -58,7 +56,7 @@ const columns: GridColDef[] = [
     align: 'center',
     headerAlign: 'center',
     valueFormatter: (params: GridValueFormatterParams<number>) =>
-      params.value ? moment.unix(params.value).format('DD/MM/YYYY') : null
+      formatDate(params.value)
   },
   {
     field: 'status',
@@ -139,7 +137,7 @@ const NotificationWorklist = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        title={'Notification Worklist'}
+        title={'Notification Work List'}
         description="View the list of possible matches."
         breadcrumbs={[
           {
