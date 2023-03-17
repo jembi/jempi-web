@@ -6,7 +6,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Record Type',
     groups: ['identifiers', 'linked_records'],
-    scope: ['/match-details'],
+    scope: ['/notifications/match-details'],
     accessLevel: [],
     readOnly: true,
     rules: { required: false, regex: '.*' }
@@ -19,7 +19,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search-results/golden',
       '/search-results/patient'
@@ -33,7 +33,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Facility ID',
     groups: ['identifiers', 'linked_records'],
-    scope: ['/match-details'],
+    scope: ['/notifications/match-details'],
     accessLevel: [],
     readOnly: true,
     rules: { required: false, regex: '.*' }
@@ -43,7 +43,7 @@ const FIELDS_CONFIG: Fields = [
     fieldType: 'String',
     fieldLabel: 'Patient ID',
     groups: ['identifiers', 'linked_records'],
-    scope: ['/match-details'],
+    scope: ['/notifications/match-details'],
     accessLevel: [],
     readOnly: true,
     rules: { required: false, regex: '.*' }
@@ -56,7 +56,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/simple',
       '/search/custom',
@@ -85,7 +85,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
       '/search/simple',
@@ -105,7 +105,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
       '/search/simple',
@@ -125,7 +125,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -141,7 +141,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/search/simple',
       '/search/custom',
       '/search-results/golden',
@@ -159,7 +159,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -175,7 +175,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -191,14 +191,18 @@ const FIELDS_CONFIG: Fields = [
     groups: ['system'],
     accessLevel: [],
     readOnly: false,
-    scope: ['/match-details']
+    scope: ['/notifications/match-details']
   },
   {
     fieldName: 'score',
     fieldType: 'Number',
     fieldLabel: 'Score',
     groups: ['none'],
-    scope: ['/patient-record/:uid', '/golden-record/:uid', '/match-details'],
+    scope: [
+      '/patient-record/:uid',
+      '/golden-record/:uid',
+      '/notifications/match-details'
+    ],
     accessLevel: [],
     readOnly: false,
     rules: { required: false, regex: '.*' }

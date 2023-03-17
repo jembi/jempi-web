@@ -51,12 +51,21 @@ const routes: Route[] = [
       },
       {
         path: 'notifications',
-        element: <NotificationWorklist />
+        children: [
+          {
+            path: '/',
+            element: <NotificationWorklist />
+          },
+          {
+            path: 'match-details',
+            element: <ReviewLink />
+          }
+        ]
       },
-      {
-        path: 'match-details',
-        element: <ReviewLink />
-      },
+      // {
+      //   path: 'notifications/match-details',
+      //   element: <ReviewLink />
+      // },
       {
         path: 'search',
         children: [
