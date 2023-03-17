@@ -2,10 +2,10 @@ export default interface Notification {
   id: string
   type: string
   reason?: string | null
-  created: number
+  created: Date
   names: string
   patient_id: string | null
-  state: NotificationState
+  status: NotificationState
   golden_id: string
   score: number
   linkedTo?: GoldenRecord

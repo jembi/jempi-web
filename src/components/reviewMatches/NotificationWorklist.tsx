@@ -1,5 +1,4 @@
-import { AxiosError } from 'axios'
-
+import { People } from '@mui/icons-material'
 import { Chip, Container, Divider } from '@mui/material'
 import {
   DataGrid,
@@ -8,14 +7,13 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams
 } from '@mui/x-data-grid'
-import { useQuery } from '@tanstack/react-query'
-
-import { People } from '@mui/icons-material'
 import { Link as LocationLink } from '@tanstack/react-location'
+import { useQuery } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import Loading from 'components/common/Loading'
 import ApiErrorMessage from 'components/error/ApiErrorMessage'
 import NotFound from 'components/error/NotFound'
-import moment from 'moment'
+import { formatDate } from 'utils/formatters'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import PageHeader from '../shell/PageHeader'
@@ -24,7 +22,12 @@ import DataGridToolbar from './DataGridToolBar'
 const columns: GridColDef[] = [
   {
     field: 'type',
-    headerName: 'Reason for Match',
+    headerName: 'Notification Type',
+    minWidth: 150
+  },
+  {
+    field: 'reason',
+    headerName: 'Notification Reason',
     minWidth: 150,
     flex: 2
   },
@@ -35,16 +38,14 @@ const columns: GridColDef[] = [
     flex: 2
   },
   {
-    field: 'match',
-    headerName: 'Match',
+    field: 'score',
+    headerName: 'Score',
     type: 'number',
     width: 100,
     minWidth: 80,
     align: 'center',
     headerAlign: 'center',
-    valueGetter: (params: GridValueGetterParams) => params.row.score,
-    valueFormatter: (params: GridValueFormatterParams<number>) =>
-      `${Math.round(params.value * 100)}%`
+    valueGetter: (params: GridValueGetterParams) => params.row.score
   },
   {
     field: 'created',
@@ -54,12 +55,12 @@ const columns: GridColDef[] = [
     flex: 1,
     align: 'center',
     headerAlign: 'center',
-    valueFormatter: (params: GridValueFormatterParams<number>) =>
-      params.value ? moment(params.value).format('YYYY-MM-DD') : null
+    valueFormatter: (params: GridValueFormatterParams<Date>) =>
+      formatDate(params.value)
   },
   {
-    field: 'state',
-    headerName: 'State',
+    field: 'status',
+    headerName: 'Status',
     width: 100,
     minWidth: 80,
     align: 'center',
@@ -88,7 +89,8 @@ const columns: GridColDef[] = [
       patient: params.row.patient
     }),
     renderCell: (params: GridRenderCellParams<string, Notification>) => {
-      const { patient_id, candidates, score, id, golden_id, state } = params.row
+      const { patient_id, candidates, score, id, golden_id, status } =
+        params.row
       return (
         <LocationLink
           to={`/match-details`}
@@ -103,7 +105,7 @@ const columns: GridColDef[] = [
           }}
           style={{ textDecoration: 'none' }}
         >
-          {state !== 'Actioned' ? 'VIEW' : null}
+          {status !== 'Actioned' ? 'VIEW' : null}
         </LocationLink>
       )
     }
@@ -135,7 +137,7 @@ const NotificationWorklist = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        title={'Notification Worklist'}
+        title={'Notification Work List'}
         description="View the list of possible matches."
         breadcrumbs={[
           {
