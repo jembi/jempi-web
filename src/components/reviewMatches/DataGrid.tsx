@@ -1,14 +1,4 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import {
-  Divider,
-  IconButton,
-  Link,
-  Menu,
-  MenuItem,
-  SxProps,
-  Theme,
-  Typography
-} from '@mui/material'
+import { Link, SxProps, Theme, Typography } from '@mui/material'
 import {
   DataGrid as MuiDataGrid,
   GridCellParams,
@@ -21,7 +11,7 @@ import { useState } from 'react'
 import { DisplayField } from 'types/Fields'
 import { AnyRecord } from 'types/PatientRecord'
 import { useAppConfig } from '../../hooks/useAppConfig'
-
+import MoreIcon from './MoreIcon'
 interface DataGridProps {
   data: AnyRecord[]
   handleOpenLinkedRecordDialog?: (uid: string) => void
@@ -51,15 +41,6 @@ const DataGrid: React.FC<DataGridProps> = ({
   sx
 }) => {
   const { availableFields } = useAppConfig()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-  const isOpen = Boolean(anchorEl)
-  const open = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-  const close = () => {
-    setAnchorEl(null)
-  }
 
   const columns: GridColumns = [
     ...availableFields.map(field => {
@@ -150,72 +131,15 @@ const DataGrid: React.FC<DataGridProps> = ({
         switch (params.row.type) {
           case 'Current':
           case 'Golden':
-            return (
-              <IconButton
-                aria-controls={isOpen ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={isOpen ? 'true' : undefined}
-                onClick={open}
-                size="large"
-                edge="end"
-                disabled={true}
-              >
-                <MoreVertIcon />
-              </IconButton>
-            )
+            return <MoreIcon params={params} />
           case 'Candidate':
             return (
-              <>
-                <IconButton
-                  aria-controls={isOpen ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={isOpen ? 'true' : undefined}
-                  onClick={open}
-                  size="large"
-                  edge="end"
-                >
-                  <MoreVertIcon />
-                </IconButton>
-
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={isOpen}
-                  onClose={close}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button'
-                  }}
-                >
-                  <MenuItem>
-                    <Link
-                      href={`/golden-record/${params.row.uid}`}
-                      style={{ textDecoration: 'none', color: 'black' }}
-                    >
-                      <Typography>View details</Typography>
-                    </Link>
-                  </MenuItem>
-                  <Divider sx={{ my: 0.5 }} />
-                  <MenuItem
-                    onClick={() =>
-                      handleOpenLinkedRecordDialog &&
-                      handleOpenLinkedRecordDialog(params.row.uid)
-                    }
-                  >
-                    <Typography>Link this record</Typography>
-                  </MenuItem>
-                  <Divider sx={{ my: 0.5 }} />
-                  <MenuItem>
-                    <Typography
-                      onClick={() =>
-                        handleOpenCreateNewGRDialog &&
-                        handleOpenCreateNewGRDialog(params.row.uid)
-                      }
-                    >
-                      New golden record
-                    </Typography>
-                  </MenuItem>
-                </Menu>
-              </>
+              <MoreIcon
+                disabled={false}
+                params={params}
+                handleOpenLinkedRecordDialog={handleOpenLinkedRecordDialog}
+                handleOpenCreateNewGRDialog={handleOpenCreateNewGRDialog}
+              />
             )
           default:
             return <></>
