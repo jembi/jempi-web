@@ -36,12 +36,10 @@ const mapDataToScores = (
   if (!data?.length) {
     return []
   }
-
-  for (let i = 0; i < data.length; i++) {
-    data[i].score =
-      candidates?.find(c => c.golden_id === data[i].uid)?.score || 0
-  }
-  return data
+  return data.map(d => ({
+    ...d,
+    score: candidates?.find(c => c.golden_id === d.uid)?.score || 0
+  }))
 }
 
 const ReviewLink = () => {
