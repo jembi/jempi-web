@@ -22,7 +22,7 @@ const client = config.shouldMockBackend ? moxios : axiosInstance
 
 interface NotificationRequest {
   notificationId: string
-  state: NotificationState
+  status: NotificationState
 }
 
 interface LinkRequest {
@@ -125,8 +125,8 @@ class ApiClient {
         }
       })
       .then(res => res.data)
-      .then(({ expandedGoldenRecords }) =>
-        expandedGoldenRecords.map(({ goldenRecord }: any) => {
+      .then((data: any) =>
+        data.map(({ goldenRecord }: any) => {
           return {
             ...goldenRecord,
             ...goldenRecord.demographicData
@@ -156,6 +156,7 @@ class ApiClient {
           .concat(
             response[2].map((r: AnyRecord) => {
               r.type = 'Candidate'
+              r.searched = false
               return r
             })
           )
@@ -163,9 +164,9 @@ class ApiClient {
   }
 
   async updateNotification(request: NotificationRequest) {
-    return await client
-      .post(ROUTES.UPDATE_NOTIFICATION, request)
-      .then(res => res.data)
+    return await client.post(ROUTES.UPDATE_NOTIFICATION, request).then(res => {
+      return res.data
+    })
   }
 
   async newGoldenRecord(request: LinkRequest) {

@@ -5,6 +5,24 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    dgSubTitle: React.CSSProperties
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    dgSubTitle?: React.CSSProperties
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    dgSubTitle: true
+  }
+}
+
 const overrides = createTheme({
   components: {
     MuiAppBar: {
@@ -84,6 +102,14 @@ const overrides = createTheme({
     fontFamily: 'Roboto',
     h5: {
       color: 'rgba(0, 0, 0, 0.6)'
+    },
+    dgSubTitle: {
+      fontFamily: 'Roboto',
+      fontSize: '12px',
+      fontWeight: 400,
+      lineHeight: '32px',
+      letterSpacing: '1px',
+      textAlign: 'left'
     }
   }
 })

@@ -2,6 +2,16 @@ import { Fields } from '../types/Fields'
 
 const FIELDS_CONFIG: Fields = [
   {
+    fieldName: 'recordType',
+    fieldType: 'String',
+    fieldLabel: 'Record Type',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/notifications/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
     fieldName: 'uid',
     fieldType: 'String',
     fieldLabel: 'UID',
@@ -9,7 +19,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search-results/golden',
       '/search-results/patient'
@@ -19,14 +29,34 @@ const FIELDS_CONFIG: Fields = [
     rules: { required: false, regex: '.*' }
   },
   {
+    fieldName: 'facilityId',
+    fieldType: 'String',
+    fieldLabel: 'Facility ID',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/notifications/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
+    fieldName: 'patientId',
+    fieldType: 'String',
+    fieldLabel: 'Patient ID',
+    groups: ['identifiers', 'linked_records'],
+    scope: ['/notifications/match-details'],
+    accessLevel: [],
+    readOnly: true,
+    rules: { required: false, regex: '.*' }
+  },
+  {
     fieldName: 'nationalId',
     fieldType: 'String',
     fieldLabel: 'National ID',
-    groups: ['identifiers', 'linked_records'],
+    groups: ['identifiers', 'demographics', 'linked_records'],
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/simple',
       '/search/custom',
@@ -55,7 +85,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
       '/search/simple',
@@ -75,7 +105,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/golden-record/:uid/audit-trail',
       '/search/simple',
@@ -95,7 +125,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -111,7 +141,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/search/simple',
       '/search/custom',
       '/search-results/golden',
@@ -129,7 +159,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -145,7 +175,7 @@ const FIELDS_CONFIG: Fields = [
     scope: [
       '/patient-record/:uid',
       '/golden-record/:uid',
-      '/match-details',
+      '/notifications/match-details',
       '/golden-record/:uid/linked-records',
       '/search/custom'
     ],
@@ -153,27 +183,30 @@ const FIELDS_CONFIG: Fields = [
     readOnly: false,
     rules: { required: false, regex: '.*' }
   },
+  //TODO Add back when we have user information
+  {
+    fieldName: 'updated',
+    fieldType: 'String',
+    fieldLabel: 'Updated',
+    groups: ['system'],
+    accessLevel: [],
+    readOnly: false,
+    scope: ['/notifications/match-details']
+  },
   {
     fieldName: 'score',
     fieldType: 'Number',
-    fieldLabel: 'Match',
+    fieldLabel: 'Score',
     groups: ['none'],
-    scope: ['/patient-record/:uid', '/golden-record/:uid'],
+    scope: [
+      '/patient-record/:uid',
+      '/golden-record/:uid',
+      '/notifications/match-details'
+    ],
     accessLevel: [],
     readOnly: false,
     rules: { required: false, regex: '.*' }
   },
-  //TODO Add back when we have user information
-  // {
-  //   fieldName: 'updatedBy',
-  //   fieldType: 'String',
-  //   fieldLabel: 'Updated By',
-  //   group: 'system',
-  //   scope: [
-  //     '/patient/:uid',
-  //   ],
-  //   accessLevel: []
-  // }
   {
     fieldName: 'sourceId',
     fieldType: 'SourceId',
