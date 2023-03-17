@@ -14,8 +14,8 @@ import HomePage from './components/home/HomePage'
 import Import from './components/import/Import'
 import LinkedRecords from './components/linkedRecords/LinkedRecords'
 import PatientDetails from './components/patient/PatientDetails'
-import MatchDetails from './components/reviewMatches/MatchDetails'
 import NotificationWorklist from './components/reviewMatches/NotificationWorklist'
+import ReviewLink from './components/reviewMatches/ReviewLink'
 import SimpleSearch from './components/search/SimpleSearch'
 import SearchResult from './components/searchResult/SearchResult'
 import Shell from './components/shell/Shell'
@@ -51,11 +51,16 @@ const routes: Route[] = [
       },
       {
         path: 'notifications',
-        element: <NotificationWorklist />
-      },
-      {
-        path: 'match-details',
-        element: <MatchDetails />
+        children: [
+          {
+            path: '/',
+            element: <NotificationWorklist />
+          },
+          {
+            path: 'match-details',
+            element: <ReviewLink />
+          }
+        ]
       },
       {
         path: 'search',

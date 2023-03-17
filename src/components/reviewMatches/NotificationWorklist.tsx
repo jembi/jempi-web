@@ -93,7 +93,7 @@ const columns: GridColDef[] = [
         params.row
       return (
         <LocationLink
-          to={`/match-details`}
+          to={`/notifications/match-details`}
           search={{
             payload: {
               notificationId: id,

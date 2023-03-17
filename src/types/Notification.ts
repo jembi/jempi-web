@@ -12,7 +12,7 @@ export default interface Notification {
   candidates?: GoldenRecord[]
 }
 
-interface GoldenRecord {
+export interface GoldenRecord {
   golden_id: string
   score: number
 }
@@ -20,5 +20,7 @@ interface GoldenRecord {
 export enum NotificationState {
   New = 'New',
   Seen = 'Seen',
-  Actioned = 'Actioned'
+  Actioned = 'Actioned',
+  Pending = 'Pending',
+  Accepted = 'Accepted'
 }
