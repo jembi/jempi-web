@@ -62,10 +62,6 @@ const routes: Route[] = [
           }
         ]
       },
-      // {
-      //   path: 'notifications/match-details',
-      //   element: <ReviewLink />
-      // },
       {
         path: 'search',
         children: [
