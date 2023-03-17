@@ -30,7 +30,7 @@ export enum FlagLabel {
   PATIENT_ONLY = 'PATIENT ONLY'
 }
 
-export interface SearchFlagsOptionsProps {
+export interface ToggleButtonOptions {
   value: number
   label: string
 }

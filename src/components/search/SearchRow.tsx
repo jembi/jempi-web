@@ -64,7 +64,7 @@ const SearchRow: React.FC<SearchRowProps> = ({
   }
 
   return (
-    <Grid item container direction={'column'}>
+    <Grid item container direction={'column'} alignContent={'center'}>
       {isCustomSearchRow && index > 0 ? (
         <Grid item container direction={'row'} justifyContent={'center'}>
           <Typography>And</Typography>

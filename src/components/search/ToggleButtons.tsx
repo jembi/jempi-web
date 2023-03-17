@@ -1,12 +1,6 @@
-import {
-  SxProps,
-  Theme,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography
-} from '@mui/material'
+import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
-import { SearchFlagsOptionsProps } from '../../types/SimpleSearch'
+import { ToggleButtonOptions } from '../../types/SimpleSearch'
 
 export const triggerInputChange = (node: HTMLInputElement, value = '') => {
   // only process the change on elements we know have a value setter in their constructor
@@ -24,8 +18,7 @@ interface ToggleButtonsProps {
   selectedButton: string
   name?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  options: SearchFlagsOptionsProps[]
-  sx: SxProps<Theme>
+  options: ToggleButtonOptions[]
   disabled?: boolean
 }
 
@@ -34,7 +27,6 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
   name,
   onChange,
   options,
-  sx,
   disabled = false
 }) => {
   const [selected, setSelected] = useState(selectedButton)
@@ -65,7 +57,6 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({
             <ToggleButton
               value={`${option.value}`}
               aria-label="left aligned"
-              sx={sx}
               key={option.value}
             >
               <Typography id={name} variant="button">

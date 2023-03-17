@@ -1,3 +1,5 @@
+import { CustomSearchQuery, SearchParameter } from 'types/SimpleSearch'
+
 export enum ACTIONS {
   newnewUserCreated,
   grUpdate,
@@ -14,3 +16,21 @@ export const ACTION_TYPE: { [key: string]: string } = {
 }
 
 export const PAGINATION_LIMIT = 10
+
+export const INITIAL_SEARCH_PARAMETER: SearchParameter = {
+  fieldName: '',
+  value: '',
+  distance: 0
+}
+
+export const INITIAL_VALUES: CustomSearchQuery = {
+  $or: [
+    {
+      parameters: [INITIAL_SEARCH_PARAMETER]
+    }
+  ],
+  sortBy: 'uid',
+  sortAsc: true,
+  offset: 0,
+  limit: PAGINATION_LIMIT
+}

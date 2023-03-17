@@ -1,55 +1,28 @@
 import { MoreHorizOutlined } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Link,
-  Stack,
-  Typography
-} from '@mui/material'
+import { Button, Card, Container, Grid, Stack } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import { Link as LocationLink } from '@tanstack/react-location'
-import { FieldArray, Form, Formik } from 'formik'
 import { useState } from 'react'
 import {
   CustomSearchQuery,
   FlagLabel,
-  SearchFlagsOptionsProps,
-  SearchParameter,
-  SimpleSearchQuery
+  ToggleButtonOptions
 } from '../../types/SimpleSearch'
-import { PAGINATION_LIMIT } from '../../utils/constants'
 import SearchFlags from '../search/SearchFlags'
 import PageHeader from '../shell/PageHeader'
-import AddFieldOrGroupButton from './AddFieldOrGroupButton'
-import FieldGroup from './FieldGroup'
+import CustomSearchForm from './CustomSearchForm'
+import CustomSearchHeader from './CustomSearchHeader'
 
 const CustomSearch: React.FC = () => {
   const [isGoldenOnly, setIsGoldenOnly] = useState<boolean>(true)
-  const options: SearchFlagsOptionsProps[] = [
+  const [customSearchQuerry, setCustomSearchQuerry] = useState<
+    CustomSearchQuery | undefined
+  >(undefined)
+  const options: ToggleButtonOptions[] = [
     { value: 0, label: FlagLabel.GOLDEN_ONLY },
     { value: 1, label: FlagLabel.PATIENT_ONLY }
   ]
-
-  const initialSearchParameter: SearchParameter = {
-    fieldName: '',
-    value: '',
-    distance: 0
-  }
-
-  const initialValues: CustomSearchQuery = {
-    $or: [
-      {
-        parameters: [initialSearchParameter]
-      }
-    ],
-    sortBy: 'uid',
-    sortAsc: true,
-    offset: 0,
-    limit: PAGINATION_LIMIT
-  }
 
   return (
     <>
@@ -78,6 +51,7 @@ const CustomSearch: React.FC = () => {
                   variant="outlined"
                   href={'/search/simple'}
                   key="simple-search"
+                  size="large"
                 >
                   SIMPLE SEARCH
                 </Button>
@@ -86,144 +60,30 @@ const CustomSearch: React.FC = () => {
           </Grid>
 
           <Divider />
-          <Formik
-            initialValues={initialValues}
-            onSubmit={() => console.log('Submited')}
-          >
-            {({ values, handleChange, setFieldValue }) => (
-              <Form>
-                <Box
-                  sx={{
-                    width: '100%',
-                    borderRadius: '4px',
-                    boxShadow: '0px 0px 0px 1px #E0E0E0',
-                    mt: 4,
-                    padding: 2,
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
+          <Card>
+            <Grid
+              container
+              direction="column"
+              width="fit-content"
+              alignContent="center"
+              padding="20px"
+            >
+              <CustomSearchHeader />
+              <CustomSearchForm onChange={setCustomSearchQuerry} />
+              <Stack direction={'row'} spacing={1} sx={{ flexGrow: 1 }}>
+                <LocationLink
+                  to={`/search-results/${isGoldenOnly ? 'golden' : 'patient'}`}
+                  search={{ payload: customSearchQuerry }}
+                  style={{ textDecoration: 'none' }}
                 >
-                  <Grid container direction="column" width="100%">
-                    <Grid
-                      item
-                      container
-                      direction="row"
-                      justifyContent="center"
-                      width="100%"
-                    >
-                      <Grid
-                        item
-                        container
-                        width={'756px'}
-                        direction={'row'}
-                        justifyContent={'flex-start'}
-                        sx={{ mt: 1, mb: 3 }}
-                      >
-                        <Stack direction={'column'} spacing={1}>
-                          <Typography variant="h5">
-                            Custom Your Search Rules
-                          </Typography>
-                          <Typography variant="body2">
-                            <Link href={'/search/simple'}>
-                              Use simple search
-                            </Link>
-                          </Typography>
-                        </Stack>
-                      </Grid>
-                    </Grid>
-                    <FieldArray name="$or">
-                      {({ push, remove }) => (
-                        <>
-                          {values.$or.map(
-                            (parameters: SimpleSearchQuery, index: number) => {
-                              return (
-                                <FieldGroup
-                                  values={parameters}
-                                  handleChange={handleChange}
-                                  initialCustomSearchValues={{
-                                    parameters: [initialSearchParameter]
-                                  }}
-                                  fieldGroupIndex={index}
-                                  removeFieldGroup={remove}
-                                  key={index}
-                                  setFieldValue={setFieldValue}
-                                  push={push}
-                                />
-                              )
-                            }
-                          )}
-
-                          <Grid
-                            item
-                            container
-                            direction="column"
-                            width="100%"
-                            alignItems={'center'}
-                            sx={{ mt: 1 }}
-                          >
-                            <Grid
-                              item
-                              container
-                              direction="row"
-                              width="756px"
-                              justifyContent={'flex-end'}
-                            >
-                              <AddFieldOrGroupButton
-                                onClick={push}
-                                initialCustomSearchValues={{
-                                  parameters: [initialSearchParameter]
-                                }}
-                                label="Add group"
-                              />
-                            </Grid>
-                          </Grid>
-                        </>
-                      )}
-                    </FieldArray>
-                    <Grid
-                      item
-                      container
-                      direction="row"
-                      justifyContent="center"
-                      width="100%"
-                    >
-                      <Grid
-                        item
-                        container
-                        width={'756px'}
-                        direction={'row'}
-                        justifyContent={'flex-start'}
-                        sx={{ mt: 2 }}
-                      >
-                        {/* TODO move colors to theme */}
-                        <Stack
-                          direction={'row'}
-                          spacing={1}
-                          sx={{ flexGrow: 1 }}
-                        >
-                          <LocationLink
-                            to={`/search-results/${
-                              isGoldenOnly ? 'golden' : 'patient'
-                            }`}
-                            search={{ payload: values }}
-                            style={{ textDecoration: 'none' }}
-                          >
-                            <Button variant="contained">Search</Button>
-                          </LocationLink>
-                          <Button variant="outlined" href="/search/simple">
-                            Cancel
-                          </Button>
-                        </Stack>
-                        <Grid item>
-                          <Button variant="outlined">Query Builder</Button>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Form>
-            )}
-          </Formik>
+                  <Button variant="contained">Search</Button>
+                </LocationLink>
+                <Button variant="outlined" href="/search/simple">
+                  Cancel
+                </Button>
+              </Stack>
+            </Grid>
+          </Card>
         </Grid>
       </Container>
     </>
