@@ -87,7 +87,7 @@ const ReviewLink = () => {
     updateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Accepted
+        status: NotificationState.Accepted
       },
       {
         onSuccess: () => {
@@ -103,7 +103,7 @@ const ReviewLink = () => {
     updateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Pending
+        status: NotificationState.Pending
       },
       {
         onSuccess: () => {
@@ -124,7 +124,7 @@ const ReviewLink = () => {
     onSuccess: () => {
       updateNotification.mutate({
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
+        status: NotificationState.Actioned
       })
     },
     onError: (error: AxiosError) => {
@@ -144,7 +144,7 @@ const ReviewLink = () => {
       navigate({ to: '/notifications' })
       updateNotification.mutate({
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
+        status: NotificationState.Actioned
       })
     },
     onError: (error: AxiosError) => {

@@ -53,7 +53,7 @@ axiosMockAdapterInstance
   })
   .onPost(ROUTES.UPDATE_NOTIFICATION)
   .reply(() => {
-    notifications[0].state = NotificationState.Accepted
+    notifications[0].status = NotificationState.Accepted
     return [200, notifications]
   })
   .onPatch(new RegExp(`^${ROUTES.CREATE_GOLDEN_RECORD}?.*`))
