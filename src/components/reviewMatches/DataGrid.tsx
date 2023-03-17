@@ -7,7 +7,6 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams
 } from '@mui/x-data-grid'
-import { useState } from 'react'
 import { DisplayField } from 'types/Fields'
 import { AnyRecord } from 'types/PatientRecord'
 import { useAppConfig } from '../../hooks/useAppConfig'
@@ -44,7 +43,7 @@ const DataGrid: React.FC<DataGridProps> = ({
 
   const columns: GridColumns = [
     ...availableFields.map(field => {
-      const { fieldName, fieldLabel, formatValue, fieldType } = field
+      const { fieldName, fieldLabel, formatValue } = field
       switch (fieldName) {
         case 'recordType':
           return {
