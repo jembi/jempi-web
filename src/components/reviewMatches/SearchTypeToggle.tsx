@@ -15,19 +15,21 @@ const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
   const [selectedButton, setSelectedButton] = useState<string>('0')
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedButton(event?.target.value)
-    onChange(event?.target.value === '0' ? 'custom-search' : 'simple-search')
+    const selectedValue = event?.target.value
+    const selectedLabel = options.find(
+      ({ value }) => value === Number(selectedValue)
+    )
+    setSelectedButton(selectedValue)
+    onChange(selectedLabel?.label || '')
   }
 
   return (
-    <Grid container direction={'row'} justifyContent={'center'} mt={3}>
-      <Grid item>
-        <ToggleButtons
-          selectedButton={selectedButton}
-          onChange={handleChange}
-          options={options}
-        />
-      </Grid>
+    <Grid item container direction={'row'} justifyContent={'center'} mt={3}>
+      <ToggleButtons
+        selectedButton={selectedButton}
+        onChange={handleChange}
+        options={options}
+      />
     </Grid>
   )
 }

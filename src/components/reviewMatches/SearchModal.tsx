@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider
+} from '@mui/material'
 import CustomSearchForm from 'components/customSearch/CustomSearchForm'
 import SimpleSearchForm from 'components/search/SimpleSearchForm'
 import { FC, useState } from 'react'
@@ -9,17 +17,6 @@ import {
 } from 'types/SimpleSearch'
 import SearchTypeToggle from './SearchTypeToggle'
 
-const style = {
-  position: 'absolute',
-  minWidth: '900px',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24
-}
-
 const options: ToggleButtonOptions[] = [
   { value: 0, label: 'Custom search' },
   { value: 1, label: 'Simple search' }
@@ -29,46 +26,35 @@ const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose
 }) => {
-  const [tabValue, setTabValue] = useState('custom-search')
+  const [tabValue, setTabValue] = useState('Custom search')
   const [refineSearchQuery, setRefineSearchQuery] = useState<
     SearchQuery | CustomSearchQuery | undefined
   >(undefined)
 
   return (
-    <Modal open={isOpen} onClose={() => onClose()}>
-      <Box sx={{ ...style }}>
-        <Box sx={{ px: 3, py: 2 }}>
-          <Typography lineHeight={'32px'} fontSize={'20px'} fontWeight={500}>
-            Refine the current search
-          </Typography>
-        </Box>
+    <Dialog fullWidth maxWidth={'md'} open={isOpen} onClose={() => onClose()}>
+      <DialogContent sx={{ p: 0 }}>
+        <DialogTitle>Refine the current search</DialogTitle>
         <Divider />
-        <Box
-          sx={{
-            height: '500px',
-            overflowY: 'scroll'
-          }}
+        <SearchTypeToggle onChange={setTabValue} options={options} />
+
+        {tabValue === 'Simple search' && (
+          <SimpleSearchForm onChange={value => setRefineSearchQuery(value)} />
+        )}
+        {tabValue === 'Custom search' && (
+          <Box mt={3}>
+            <CustomSearchForm onChange={value => setRefineSearchQuery(value)} />
+          </Box>
+        )}
+
+        <DialogActions
+          sx={{ display: 'flex', justifyContent: 'space-between', p: '20px' }}
         >
-          <SearchTypeToggle onChange={setTabValue} options={options} />
-
-          {tabValue === 'simple-search' && (
-            <SimpleSearchForm onChange={value => setRefineSearchQuery(value)} />
-          )}
-          {tabValue === 'custom-search' && (
-            <Box mt={3}>
-              <CustomSearchForm
-                onChange={value => setRefineSearchQuery(value)}
-              />
-            </Box>
-          )}
-        </Box>
-
-        <Grid mb={2} px={3} container justifyContent="space-between">
           <Button>Cancel</Button>
           <Button>Refine Search</Button>
-        </Grid>
-      </Box>
-    </Modal>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
   )
 }
 

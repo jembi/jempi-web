@@ -10,7 +10,7 @@ const AutoSubmitForm: FC<{ children: ReactNode }> = ({ children }) => {
     debounce((): void => {
       submitForm()
     }, 500),
-    []
+    [submitForm]
   )
 
   React.useEffect(() => {
