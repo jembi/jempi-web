@@ -87,7 +87,7 @@ const ReviewLink = () => {
     updateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        status: NotificationState.Accepted
+        state: NotificationState.Accepted
       },
       {
         onSuccess: () => {
@@ -103,7 +103,7 @@ const ReviewLink = () => {
     updateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        status: NotificationState.Pending
+        state: NotificationState.Pending
       },
       {
         onSuccess: () => {
@@ -124,7 +124,7 @@ const ReviewLink = () => {
     onSuccess: () => {
       updateNotification.mutate({
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        status: NotificationState.Actioned
+        state: NotificationState.Actioned
       })
     },
     onError: (error: AxiosError) => {
@@ -144,7 +144,7 @@ const ReviewLink = () => {
       navigate({ to: '/notifications' })
       updateNotification.mutate({
         notificationId: payload?.notificationId ? payload.notificationId : '',
-        status: NotificationState.Actioned
+        state: NotificationState.Actioned
       })
     },
     onError: (error: AxiosError) => {
@@ -222,7 +222,7 @@ const ReviewLink = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth={false}>
       <PageHeader
         title={'Review Linked Patient Record'}
         description="Review the patient record and possible matches in detail."

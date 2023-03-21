@@ -16,3 +16,8 @@ export const getFieldValueFormatter = (type: FieldType) => {
     }
   }
 }
+
+export const formatName = (value: string) => {
+  const fullName = value.split(',')
+  return `${fullName[0] ? fullName[0] : ''} ${fullName[1] ? fullName[1] : ''}`
+}

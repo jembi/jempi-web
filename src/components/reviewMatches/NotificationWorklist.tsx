@@ -1,5 +1,5 @@
 import { People } from '@mui/icons-material'
-import { Chip, Container, Divider } from '@mui/material'
+import { Container, Divider } from '@mui/material'
 import {
   DataGrid,
   GridColDef,
@@ -13,13 +13,25 @@ import { AxiosError } from 'axios'
 import Loading from 'components/common/Loading'
 import ApiErrorMessage from 'components/error/ApiErrorMessage'
 import NotFound from 'components/error/NotFound'
-import { formatDate } from 'utils/formatters'
+import { formatDate, formatName } from 'utils/formatters'
 import ApiClient from '../../services/ApiClient'
 import Notification from '../../types/Notification'
 import PageHeader from '../shell/PageHeader'
 import DataGridToolbar from './DataGridToolBar'
+import NotificationState from './NotificationState'
 
 const columns: GridColDef[] = [
+  {
+    field: 'state',
+    headerName: 'Status',
+    width: 100,
+    minWidth: 80,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: (params: GridRenderCellParams<string>) => {
+      return <NotificationState value={params.value || ''} />
+    }
+  },
   {
     field: 'type',
     headerName: 'Notification Type',
@@ -35,7 +47,9 @@ const columns: GridColDef[] = [
     field: 'names',
     headerName: 'Patient',
     minWidth: 150,
-    flex: 2
+    flex: 2,
+    valueFormatter: (params: GridValueFormatterParams<string>) =>
+      formatName(params.value)
   },
   {
     field: 'score',
@@ -57,23 +71,6 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
     valueFormatter: (params: GridValueFormatterParams<Date>) =>
       formatDate(params.value)
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    width: 100,
-    minWidth: 80,
-    align: 'center',
-    headerAlign: 'center',
-    renderCell: (params: GridRenderCellParams<string>) => {
-      return (
-        <Chip
-          variant="outlined"
-          label={params.value}
-          color={params.value === 'New' ? 'primary' : 'default'}
-        />
-      )
-    }
   },
   {
     field: 'actions',
@@ -137,7 +134,7 @@ const NotificationWorklist = () => {
   return (
     <Container maxWidth={false}>
       <PageHeader
-        title={'Notification Work List'}
+        title={'Notification Worklist'}
         description="View the list of possible matches."
         breadcrumbs={[
           {
