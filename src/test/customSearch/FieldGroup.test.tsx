@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react'
-import SearchRowTest from './SearchRowTest'
+import SearchRowTest from './SearchRow'
 
 test('Field group renders successfully when called', async () => {
   await act(() => {
