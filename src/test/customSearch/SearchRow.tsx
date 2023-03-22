@@ -54,9 +54,7 @@ const SearchRowTest: React.FC = () => {
                           return (
                             <FieldGroup
                               values={parameters}
-                              initialCustomSearchValues={{
-                                parameters: [initialSearchParameter]
-                              }}
+                              initialCustomSearchValues={initialSearchParameter}
                               handleChange={handleChange}
                               fieldGroupIndex={index}
                               removeFieldGroup={remove}

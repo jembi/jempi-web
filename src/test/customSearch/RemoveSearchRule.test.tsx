@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import SearchRowTest from './SearchRowTest'
+import SearchRowTest from './SearchRow'
 
 test('Delete button show when we have more than one row and it deletes search rule successfully', async () => {
   await act(() => {
