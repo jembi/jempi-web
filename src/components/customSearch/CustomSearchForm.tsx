@@ -27,9 +27,7 @@ const CustomSearchForm: FC<{
                         <FieldGroup
                           values={parameters}
                           handleChange={handleChange}
-                          initialCustomSearchValues={{
-                            parameters: [INITIAL_SEARCH_PARAMETER]
-                          }}
+                          initialCustomSearchValues={INITIAL_SEARCH_PARAMETER}
                           fieldGroupIndex={index}
                           removeFieldGroup={remove}
                           key={index}
