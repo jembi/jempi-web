@@ -33,7 +33,7 @@ test('User is in the notification screen, and the search input works as expected
       </Router>
     </QueryClientProvider>
   )
-  const headerElement = await screen.findByText(/Notification Work List/i)
+  const headerElement = await screen.findByText(/Notification Worklist/i)
   expect(headerElement).toBeInTheDocument()
 
   const searchInput = screen.getByPlaceholderText(/Filter/i)
