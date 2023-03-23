@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import Button from '../shared/Button'
+import Button from 'components/shared/Button'
 
 test('Render Button Component', () => {
   render(<Button>Search</Button>)

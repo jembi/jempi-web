@@ -22,7 +22,7 @@ const client = config.shouldMockBackend ? moxios : axiosInstance
 
 interface NotificationRequest {
   notificationId: string
-  status: NotificationState
+  state: NotificationState
 }
 
 interface LinkRequest {
