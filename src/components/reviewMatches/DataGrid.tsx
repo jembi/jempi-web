@@ -16,6 +16,7 @@ interface DataGridProps {
   handleOpenLinkedRecordDialog?: (uid: string) => void
   handleOpenCreateNewGRDialog?: (uid: string) => void
   hideAction?: boolean
+  isLoading?: boolean
   sx?: SxProps<Theme>
 }
 const getRecordTypeClassName = (params: GridCellParams<string>) => {
@@ -35,8 +36,8 @@ const getCellClassName = (
 const DataGrid: React.FC<DataGridProps> = ({
   data,
   handleOpenLinkedRecordDialog,
-  handleOpenCreateNewGRDialog,
   hideAction = false,
+  isLoading = false,
   sx
 }) => {
   const { availableFields } = useAppConfig()
@@ -133,12 +134,16 @@ const DataGrid: React.FC<DataGridProps> = ({
             return <MoreIcon params={params} />
           case 'Candidate':
             return (
-              <MoreIcon
-                disabled={false}
-                params={params}
-                handleOpenLinkedRecordDialog={handleOpenLinkedRecordDialog}
-                handleOpenCreateNewGRDialog={handleOpenCreateNewGRDialog}
-              />
+              <Link
+                sx={{ ':hover': { cursor: 'pointer' } }}
+                onClick={() =>
+                  handleOpenLinkedRecordDialog
+                    ? handleOpenLinkedRecordDialog(params.row.uid)
+                    : null
+                }
+              >
+                Link this record
+              </Link>
             )
           default:
             return <></>
@@ -155,6 +160,7 @@ const DataGrid: React.FC<DataGridProps> = ({
       rowsPerPageOptions={[10]}
       getRowId={row => row.uid}
       hideFooter
+      loading={isLoading}
       sx={{
         '.MuiDataGrid-root': {
           borderRadius: '50px'

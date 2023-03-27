@@ -22,17 +22,28 @@ const options: ToggleButtonOptions[] = [
   { value: 1, label: 'Simple search' }
 ]
 
-const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose
-}) => {
+const SearchModal: FC<{
+  isOpen: boolean
+  onClose: () => void
+  onChange: (query: SearchQuery | CustomSearchQuery | undefined) => void
+}> = ({ isOpen, onClose, onChange }) => {
   const [tabValue, setTabValue] = useState('Custom search')
   const [refineSearchQuery, setRefineSearchQuery] = useState<
     SearchQuery | CustomSearchQuery | undefined
   >(undefined)
 
+  const handleClose = () => {
+    onClose()
+    setTabValue('Custom search')
+  }
+
+  const onConfirmSearch = () => {
+    onChange(refineSearchQuery)
+    onClose()
+  }
+
   return (
-    <Dialog fullWidth maxWidth={'md'} open={isOpen} onClose={() => onClose()}>
+    <Dialog fullWidth maxWidth={'md'} open={isOpen}>
       <DialogContent sx={{ p: 0 }}>
         <DialogTitle>Refine the current search</DialogTitle>
         <Divider />
@@ -50,8 +61,8 @@ const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
         <DialogActions
           sx={{ display: 'flex', justifyContent: 'space-between', p: '20px' }}
         >
-          <Button>Cancel</Button>
-          <Button>Refine Search</Button>
+          <Button onClick={() => handleClose()}>Cancel</Button>
+          <Button onClick={() => onConfirmSearch()}>Refine Search</Button>
         </DialogActions>
       </DialogContent>
     </Dialog>

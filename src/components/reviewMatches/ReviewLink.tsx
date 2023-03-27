@@ -1,10 +1,21 @@
-import { Container, Divider, Stack, Typography } from '@mui/material'
+import { SearchOutlined } from '@mui/icons-material'
+import {
+  Box,
+  Container,
+  Divider,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography
+} from '@mui/material'
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useLinkReview } from 'hooks/useLinkReview'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { useAppConfig } from '../../hooks/useAppConfig'
+import { CustomSearchQuery, SearchQuery } from 'types/SimpleSearch'
 import ApiClient from '../../services/ApiClient'
 import { NotificationState } from '../../types/Notification'
 import { AnyRecord } from '../../types/PatientRecord'
@@ -15,8 +26,9 @@ import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import DataGrid from './DataGrid'
 import Dialog from './Dialog'
+import SearchModal from './SearchModal'
 
-type ReviewLinkParams = MakeGenerics<{
+export type ReviewLinkParams = MakeGenerics<{
   Search: {
     payload: {
       notificationId: string
@@ -28,48 +40,38 @@ type ReviewLinkParams = MakeGenerics<{
   }
 }>
 
-//TODO Move horrible function to the backend
-const mapDataToScores = (
-  data?: AnyRecord[],
-  candidates?: { golden_id: string; score: number }[]
-): AnyRecord[] => {
-  if (!data?.length) {
-    return []
-  }
-  return data.map(d => ({
-    ...d,
-    score: candidates?.find(c => c.golden_id === d.uid)?.score || 0
-  }))
-}
+const steps = [
+  'Read Instructions',
+  'Review Linked Records',
+  'Refine Search (Optional)',
+  'Close'
+]
 
 const ReviewLink = () => {
-  const { getPatientName } = useAppConfig()
-  const [dialogText, setDialogText] = useState<string>('')
-  const [openLinkRecordDialog, setOpenLinkRecordDialog] =
-    useState<boolean>(false)
-  const [opencreateNewGRecordDialog, setOpencreateNewGRecordDialog] =
-    useState<boolean>(false)
-  const [tableData, setTableData] = useState<AnyRecord[]>([])
   const { payload } = useSearch<ReviewLinkParams>()
-  const [canditateUID, setCandidateUID] = useState<string>('')
-
   const navigate = useNavigate()
-
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data, error, isLoading, isError } = useQuery<AnyRecord[], AxiosError>(
-    {
-      queryKey: ['matchDetails', payload],
-      queryFn: () => {
-        return ApiClient.getMatchDetails(
-          payload?.patient_id || '',
-          payload?.golden_id || '',
-          payload?.candidates?.map(c => c.golden_id) || []
-        )
-      },
-      refetchOnWindowFocus: false
-    }
-  )
+  const [dialogText, setDialogText] = useState('')
+  const [openLinkRecordDialog, setOpenLinkRecordDialog] = useState(false)
+  const [isSearchModalVisible, setIsSearchModalVisible] = useState(false)
+  const [opencreateNewGRecordDialog, setOpencreateNewGRecordDialog] =
+    useState(false)
+  const [tableData, setTableData] = useState<AnyRecord[]>([])
+  const [canditateUID, setCandidateUID] = useState('')
+  const [refineSearchQuery, setRefineSearchQuery] = useState<
+    SearchQuery | CustomSearchQuery | undefined
+  >(undefined)
+
+  const {
+    goldenRecord,
+    patientRecord,
+    candidateGoldenRecords,
+    matchDetails,
+    error,
+    isLoading,
+    isError
+  } = useLinkReview(payload, refineSearchQuery)
 
   //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
 
@@ -158,8 +160,8 @@ const ReviewLink = () => {
   const handleCreateNewGR = (id: string) => {
     newGoldenRecord.mutate(
       {
-        patientID: data ? data[0].uid : '',
-        goldenID: data ? data[1].uid : '',
+        patientID: patientRecord ? patientRecord.uid : '',
+        goldenID: goldenRecord ? goldenRecord.uid : '',
         newGoldenID: id
       },
       {
@@ -175,8 +177,8 @@ const ReviewLink = () => {
 
   const handleLinkRecord = (id: string) => {
     linkRecord.mutate({
-      patientID: data ? data[0].uid : '',
-      goldenID: data ? data[1].uid : '',
+      patientID: patientRecord ? patientRecord.uid : '',
+      goldenID: goldenRecord ? goldenRecord.uid : '',
       newGoldenID: id
     })
   }
@@ -190,94 +192,127 @@ const ReviewLink = () => {
     return <Loading />
   }
 
-  if (isError) {
+  if (isError && error) {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data) {
+  if (!matchDetails) {
     return <NotFound />
   }
 
   const handleOpenLinkedRecordDialog = (uid: string) => {
-    const tableDataTemp: AnyRecord[] = data.filter(d => {
-      if (d.uid === uid || d.type === 'Golden') {
+    const tableDataTemp = candidateGoldenRecords?.filter(d => {
+      if (d.uid === uid) {
         return d
       }
     })
 
-    setTableData(tableDataTemp)
+    if (tableDataTemp && patientRecord)
+      setTableData([patientRecord, ...tableDataTemp])
+
     setOpenLinkRecordDialog(true)
     setCandidateUID(uid)
     close()
   }
 
-  const handleOpenCreateNewGRDialog = (uid: string) => {
-    const goldenRecordUid = data[1].uid
-
+  const handleOpenCreateNewGRDialog = () => {
     setDialogText(
-      `Are you sure you want to unlink the patient record ${uid} and golden record ${goldenRecordUid} and create a new record?`
+      `Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`
     )
     setOpencreateNewGRecordDialog(true)
-    setCandidateUID(uid)
+    setCandidateUID(patientRecord?.uid || '')
   }
 
   return (
     <Container maxWidth={false}>
+      <Stepper sx={{ mb: 5 }} activeStep={1}>
+        {steps.map(label => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
       <PageHeader
         title={'Review Linked Patient Record'}
         description="Review the patient record and possible matches in detail."
-        breadcrumbs={[
-          {
-            link: '/review-matches/',
-            title: 'Matches'
-          },
-          {
-            link: '/review-matches/',
-            title: getPatientName(data[0])
-          }
+        buttons={[
+          <Button
+            startIcon={<SearchOutlined />}
+            variant="outlined"
+            size="large"
+            onClick={() => setIsSearchModalVisible(true)}
+          >
+            Refine Search
+          </Button>
         ]}
       />
       <Divider
         sx={{
-          mb: 4
+          mb: 3
         }}
       />
-
-      <Typography variant="dgSubTitle">
-        PATIENT LINKED TO GOLDEN RECORD
-      </Typography>
-      <DataGrid
-        data={data.filter((r: AnyRecord) => {
-          if (r.type === 'Golden' || r.type === 'Current') {
-            return r
-          }
-        })}
+      <Box
         sx={{
-          mb: 4
+          mb: 3,
+          borderRadius: '4px',
+          boxShadow: '0px 0px 0px 1px #E0E0E0'
         }}
-      />
-      <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
-      <DataGrid
-        data={mapDataToScores(
-          data.filter((r: AnyRecord) => {
-            if (r.type === 'Candidate') {
+      >
+        <Typography pl={1.5} variant="dgSubTitle">
+          PATIENT LINKED TO GOLDEN RECORD
+        </Typography>
+
+        <DataGrid
+          data={matchDetails.filter((r: AnyRecord) => {
+            if (r.type === 'Golden' || r.type === 'Current') {
               return r
             }
-          }),
-          payload?.candidates
-        )}
+          })}
+          sx={{
+            '.MuiDataGrid-columnSeparator': {
+              display: 'none'
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#274263',
+              color: '#FFF',
+              borderRadius: '0px'
+            },
+            borderRadius: '0px',
+            p: 0
+          }}
+        />
+      </Box>
+      <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
+      <DataGrid
+        data={candidateGoldenRecords || []}
         handleOpenCreateNewGRDialog={handleOpenCreateNewGRDialog}
         handleOpenLinkedRecordDialog={handleOpenLinkedRecordDialog}
+        sx={{
+          '& .MuiDataGrid-columnHeaders': { display: 'none' },
+          '& .MuiDataGrid-virtualScroller': { marginTop: '0!important' }
+        }}
       />
-
-      <Stack direction="row" sx={{ mt: 3 }} spacing={1}>
-        <Button variant="contained" onClick={() => acceptAndClose()}>
-          Accept & Close
-        </Button>
-        <Button variant="outlined" onClick={() => leavePending()}>
-          Leave as pending
+      <Stack direction="row" sx={{ mt: 3 }} justifyContent={'space-between'}>
+        <Stack direction="row" spacing={1}>
+          <Button variant="contained" onClick={() => acceptAndClose()}>
+            Accept & Close
+          </Button>
+          <Button variant="outlined" onClick={() => leavePending()}>
+            Leave as pending
+          </Button>
+        </Stack>
+        <Button
+          variant="outlined"
+          onClick={() => handleOpenCreateNewGRDialog()}
+        >
+          Create new golden record
         </Button>
       </Stack>
+      <SearchModal
+        isOpen={isSearchModalVisible}
+        onClose={() => setIsSearchModalVisible(false)}
+        onChange={setRefineSearchQuery}
+      />
       <Dialog
         buttons={[
           <Button onClick={() => handleCancel()}>Cancel</Button>,
