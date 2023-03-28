@@ -73,8 +73,6 @@ const ReviewLink = () => {
     isError
   } = useLinkReview(payload, refineSearchQuery)
 
-  //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
-
   const updateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
     onError: (error: AxiosError) => {
