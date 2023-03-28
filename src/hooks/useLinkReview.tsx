@@ -18,6 +18,13 @@ interface ReviewLinkParams {
   candidates: { golden_id: string; score: number }[]
 }
 
+const getRecordByType = (type: string, data: AnyRecord[]) =>
+  data.find((r: AnyRecord) => {
+    if (r.type === type) {
+      return r
+    }
+  })
+
 const mapDataToScores = (
   data?: AnyRecord[],
   candidates?: { golden_id: string; score: number }[]
@@ -71,20 +78,8 @@ export const useLinkReview = (
           payload?.candidates
         )
       )
-      setGoldenRecord(
-        data.find((r: AnyRecord) => {
-          if (r.type === 'Golden') {
-            return r
-          }
-        })
-      )
-      setPatientRecord(
-        data.find((r: AnyRecord) => {
-          if (r.type === 'Current') {
-            return r
-          }
-        })
-      )
+      setGoldenRecord(getRecordByType('Golden', data))
+      setPatientRecord(getRecordByType('Current', data))
     },
     refetchOnWindowFocus: false
   })

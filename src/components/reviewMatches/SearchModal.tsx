@@ -15,6 +15,7 @@ import {
   SearchQuery,
   ToggleButtonOptions
 } from 'types/SimpleSearch'
+import { SEARCH_TYPE } from 'utils/constants'
 import SearchTypeToggle from './SearchTypeToggle'
 
 const options: ToggleButtonOptions[] = [
@@ -34,7 +35,7 @@ const SearchModal: FC<{
 
   const handleClose = () => {
     onClose()
-    setTabValue('Custom search')
+    setTabValue(SEARCH_TYPE.customSearch)
   }
 
   const onConfirmSearch = () => {
@@ -49,10 +50,10 @@ const SearchModal: FC<{
         <Divider />
         <SearchTypeToggle onChange={setTabValue} options={options} />
 
-        {tabValue === 'Simple search' && (
+        {tabValue === SEARCH_TYPE.simpleSearch && (
           <SimpleSearchForm onChange={value => setRefineSearchQuery(value)} />
         )}
-        {tabValue === 'Custom search' && (
+        {tabValue === SEARCH_TYPE.customSearch && (
           <Box mt={3}>
             <CustomSearchForm onChange={value => setRefineSearchQuery(value)} />
           </Box>
@@ -61,8 +62,8 @@ const SearchModal: FC<{
         <DialogActions
           sx={{ display: 'flex', justifyContent: 'space-between', p: '20px' }}
         >
-          <Button onClick={() => handleClose()}>Cancel</Button>
-          <Button onClick={() => onConfirmSearch()}>Refine Search</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={onConfirmSearch}>Refine Search</Button>
         </DialogActions>
       </DialogContent>
     </Dialog>

@@ -1,14 +1,5 @@
 import { SearchOutlined } from '@mui/icons-material'
-import {
-  Box,
-  Container,
-  Divider,
-  Stack,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography
-} from '@mui/material'
+import { Box, Container, Divider, Stack, Typography } from '@mui/material'
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -27,6 +18,7 @@ import PageHeader from '../shell/PageHeader'
 import DataGrid from './DataGrid'
 import Dialog from './Dialog'
 import SearchModal from './SearchModal'
+import Stepper from './Stepper'
 
 export type ReviewLinkParams = MakeGenerics<{
   Search: {
@@ -39,13 +31,6 @@ export type ReviewLinkParams = MakeGenerics<{
     }
   }
 }>
-
-const steps = [
-  'Read Instructions',
-  'Review Linked Records',
-  'Refine Search (Optional)',
-  'Close'
-]
 
 const ReviewLink = () => {
   const { payload } = useSearch<ReviewLinkParams>()
@@ -190,7 +175,7 @@ const ReviewLink = () => {
     return <Loading />
   }
 
-  if (isError && error) {
+  if (isError) {
     return <ApiErrorMessage error={error} />
   }
 
@@ -223,13 +208,7 @@ const ReviewLink = () => {
 
   return (
     <Container maxWidth={false}>
-      <Stepper sx={{ mb: 5 }} activeStep={1}>
-        {steps.map(label => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <Stepper />
       <PageHeader
         title={'Review Linked Patient Record'}
         description="Review the patient record and possible matches in detail."
