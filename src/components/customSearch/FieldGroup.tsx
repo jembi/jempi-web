@@ -7,7 +7,7 @@ import AddFieldOrGroupButton from './AddFieldOrGroupButton'
 interface FieldGroupProps {
   values: SimpleSearchQuery
   handleChange: (e: SelectChangeEvent<string>) => void
-  initialCustomSearchValues: { parameters: SearchParameter[] }
+  initialCustomSearchValues: SearchParameter
   fieldGroupIndex: number
   removeFieldGroup: <T>(index: number) => T | undefined
   setFieldValue: (

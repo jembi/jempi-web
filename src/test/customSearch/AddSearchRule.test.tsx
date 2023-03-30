@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import SearchRowTest from './SearchRowTest'
+import SearchRowTest from './SearchRow'
 
 test('Search rule is successfully added when we click on add search rule button', async () => {
   await act(() => {

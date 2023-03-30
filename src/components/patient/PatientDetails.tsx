@@ -156,6 +156,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
       <PageHeader
         description={<SubHeading data={data} isGoldenRecord={isGoldenRecord} />}
         title={patientName}
+        color={isGoldenRecord ? '#FBC02D' : '#01579B'}
         breadcrumbs={[
           {
             icon: <SearchIcon />,

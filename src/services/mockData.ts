@@ -3,19 +3,20 @@ import Notification, { NotificationState } from '../types/Notification'
 import { PatientRecord } from '../types/PatientRecord'
 import { User } from '../types/User'
 
+//status
 const notifications: Notification[] = [
   {
     id: '123',
     type: 'Review threshold',
-    created: 1605112212,
+    created: new Date('05-03-2023'),
     names: 'Bob Smith',
     patient_id: '0x5a',
-    state: NotificationState.New,
+    status: NotificationState.New,
     golden_id: '0x9833',
     score: 0.5,
     candidates: [
       {
-        golden_id: '0x25',
+        golden_id: '0x45',
         score: 0.4
       }
     ]
@@ -23,10 +24,10 @@ const notifications: Notification[] = [
   {
     id: '345',
     type: 'Review threshold',
-    created: 1605112212,
+    created: new Date('02-03-2023'),
     names: 'Jane Doe',
     patient_id: '0x7j',
-    state: NotificationState.New,
+    status: NotificationState.New,
     golden_id: '0x9824',
     score: 0.9,
     candidates: [
@@ -39,10 +40,10 @@ const notifications: Notification[] = [
   {
     id: '758',
     type: 'Golden record changed',
-    created: 1605112212,
+    created: new Date('02-03-2023'),
     names: 'Jane Smith',
     patient_id: '0x1a',
-    state: NotificationState.New,
+    status: NotificationState.New,
     golden_id: '0x9847',
     score: 0.3,
     candidates: [
@@ -55,10 +56,10 @@ const notifications: Notification[] = [
   {
     id: '541',
     type: 'Review threshold range',
-    created: 1605112212,
+    created: new Date('02-03-2023'),
     names: 'John Themba',
     patient_id: '0x9a',
-    state: NotificationState.New,
+    status: NotificationState.New,
     golden_id: '0x9866',
     score: 0.7,
     candidates: [
@@ -69,6 +70,8 @@ const notifications: Notification[] = [
     ]
   }
 ]
+
+//send notfication ID and the status ie. Done.
 
 //TODO: update 'searchGoldenRecordResult' to match the real backend.
 
@@ -224,6 +227,9 @@ const patientRecord = {
     phoneNumber: '085145855',
     city: 'Welkom'
   },
+  facilityId: 'Lab01',
+  patientId: 'P567',
+  updated: '1234',
   uid: '0x5a',
   sourceId: {
     facility: 'Facility One',
@@ -276,7 +282,7 @@ const linkedRecords: PatientRecord[] = [
 
 const goldenRecord = {
   goldenRecord: {
-    uid: '0x9833',
+    uid: '0x45',
     demographicData: {
       auxId: '0x77',
       nationalId: '123456',
@@ -287,6 +293,9 @@ const goldenRecord = {
       phoneNumber: '085145855',
       city: 'Welkom'
     },
+    facilityId: 'Lab01',
+    patientId: 'P567',
+    updated: '1234',
     sourceId: [
       {
         facility: 'Facility One',

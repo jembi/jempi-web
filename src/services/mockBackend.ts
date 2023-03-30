@@ -1,5 +1,6 @@
 import axios from 'axios'
 import AxiosMockAdapter from 'axios-mock-adapter'
+import { NotificationState } from '../types/Notification'
 import ROUTES from './apiRoutes'
 
 import mockData from './mockData'
@@ -48,7 +49,20 @@ axiosMockAdapterInstance
   .onGet(ROUTES.GET_GOLDEN_ID_DOCUMENTS)
   .reply(() => {
     // Unique row ids for data grid
-    return [200, { expandedGoldenRecords: goldenRecords }]
+    return [200, goldenRecords]
+  })
+  .onPost(ROUTES.UPDATE_NOTIFICATION)
+  .reply(() => {
+    notifications[0].status = NotificationState.Accepted
+    return [200, notifications]
+  })
+  .onPatch(new RegExp(`^${ROUTES.CREATE_GOLDEN_RECORD}?.*`))
+  .reply(() => {
+    return [200, notifications]
+  })
+  .onPatch(new RegExp(`^${ROUTES.LINK_RECORD}?.*`))
+  .reply(() => {
+    return [200, notifications]
   })
   .onGet(ROUTES.GET_FIELDS_CONFIG)
   .reply(200, mockFields)
