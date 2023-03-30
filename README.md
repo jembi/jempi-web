@@ -49,6 +49,14 @@ OR
 
 Run `./get-cli.sh {linux|macos|windows}` to download the relevant `platform` binary
 
-Run `./deploy-platform.sh init` to start up the stack
+Ensure you specified the correct version of the platform docker image in the `config.yaml` file. This image will be the one that creates the `instant-openhie` container (deployment container) on the target host.
 
-The script can also be run with `up down destroy` to perform the respective action
+Run `./deploy-platform-local.sh {action} {profile}` to start up platform and perform an action on the stack.
+
+E.g. Run `./deploy-platform-local.sh init local-frontend` to deploy the front end and keycloak.
+
+Other available actions are `init` `up` `down` and `remove`.
+
+E.g. To cleanup local environment, run `./deploy-platform-local.sh remove local-frontend`
+
+The available profiles can be seen in the `config.yaml` file.
