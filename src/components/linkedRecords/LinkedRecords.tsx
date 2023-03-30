@@ -1,6 +1,6 @@
 import { People } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import { Card, Divider, Link } from '@mui/material'
+import { Divider, Link } from '@mui/material'
 import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid'
 import { useMatch } from '@tanstack/react-location'
 import { useQuery } from '@tanstack/react-query'
@@ -98,21 +98,12 @@ const LinkedRecords = () => {
         ]}
       />
       <Divider />
-      <Card
-        sx={{
-          marginTop: '33px',
-          background: '#FFFFFF',
-          boxShadow: '0px 0px 0px 1px #E0E0E0',
-          borderRadius: '4px'
-        }}
-      >
-        <DataGrid
-          getRowId={({ uid }) => uid}
-          columns={columns}
-          rows={data.linkRecords || []}
-          autoHeight={true}
-        />
-      </Card>
+      <DataGrid
+        getRowId={({ uid }) => uid}
+        columns={columns}
+        rows={data.linkRecords || []}
+        autoHeight={true}
+      />
     </>
   )
 }
