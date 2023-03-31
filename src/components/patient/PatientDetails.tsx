@@ -180,7 +180,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({ isGoldenRecord }) => {
 
                 <Button
                   variant="header"
-                  href={`/patient/${uid}/linked-records`}
+                  href={`/golden-record/${uid}/linked-records`}
                   key="linked-records"
                 >
                   LINKED RECORDS
