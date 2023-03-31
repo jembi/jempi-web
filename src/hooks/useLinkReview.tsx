@@ -47,8 +47,8 @@ export const useLinkReview = (
 ) => {
   const { enqueueSnackbar } = useSnackbar()
   const [candidateGoldenRecords, setCandidateGoldenRecords] = useState<
-    AnyRecord[] | undefined
-  >(undefined)
+    AnyRecord[]
+  >([])
   const [goldenRecord, setGoldenRecord] = useState<AnyRecord | undefined>(
     undefined
   )
@@ -87,7 +87,7 @@ export const useLinkReview = (
     refetchOnWindowFocus: false
   })
 
-  const refineSearchResult = useQuery<ApiSearchResult, AxiosError>({
+  useQuery<ApiSearchResult, AxiosError>({
     queryKey: ['search', refineSearchQuery],
     queryFn: () => {
       return ApiClient.searchQuery(

@@ -1,11 +1,14 @@
 import { Grid } from '@mui/material'
 import ToggleButtons from 'components/search/ToggleButtons'
 import { useState } from 'react'
+import { SearchType } from 'types/ReviewLink'
 import { ToggleButtonOptions } from 'types/SimpleSearch'
 
 interface SearchTypeToggleProps {
   options: ToggleButtonOptions[]
-  onChange: (searchType: string) => void
+  onChange: (
+    searchType: SearchType.CUSTOM_SEARCH | SearchType.SIMPLE_SEARCH
+  ) => void
 }
 
 const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
@@ -20,7 +23,11 @@ const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
       ({ value }) => value === Number(selectedValue)
     )
     setSelectedButton(selectedValue)
-    onChange(selectedLabel?.label || '')
+    onChange(
+      selectedLabel?.label as
+        | SearchType.CUSTOM_SEARCH
+        | SearchType.SIMPLE_SEARCH
+    )
   }
 
   return (

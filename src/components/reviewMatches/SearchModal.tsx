@@ -10,7 +10,7 @@ import {
 import CustomSearchForm from 'components/customSearch/CustomSearchForm'
 import SimpleSearchForm from 'components/search/SimpleSearchForm'
 import { FC, useState } from 'react'
-import { SEARCH_TYPE } from 'types/ReviewLink'
+import { SearchType } from 'types/ReviewLink'
 import {
   CustomSearchQuery,
   SearchQuery,
@@ -19,8 +19,8 @@ import {
 import SearchTypeToggle from './SearchTypeToggle'
 
 const options: ToggleButtonOptions[] = [
-  { value: 0, label: 'Custom search' },
-  { value: 1, label: 'Simple search' }
+  { value: 0, label: SearchType.CUSTOM_SEARCH },
+  { value: 1, label: SearchType.SIMPLE_SEARCH }
 ]
 
 const SearchModal: FC<{
@@ -28,14 +28,13 @@ const SearchModal: FC<{
   onClose: () => void
   onChange: (query: SearchQuery | CustomSearchQuery | undefined) => void
 }> = ({ isOpen, onClose, onChange }) => {
-  const [selectedTab, setSelectedTab] = useState('Custom search')
+  const [selectedTab, setSelectedTab] = useState(SearchType.CUSTOM_SEARCH)
   const [refineSearchQuery, setRefineSearchQuery] = useState<
     SearchQuery | CustomSearchQuery | undefined
   >(undefined)
 
   const handleClose = () => {
     onClose()
-    setSelectedTab(SEARCH_TYPE.customSearch)
   }
 
   const onConfirmSearch = () => {
@@ -50,10 +49,10 @@ const SearchModal: FC<{
         <Divider />
         <SearchTypeToggle onChange={setSelectedTab} options={options} />
 
-        {selectedTab === SEARCH_TYPE.simpleSearch && (
+        {selectedTab === SearchType.SIMPLE_SEARCH && (
           <SimpleSearchForm onChange={setRefineSearchQuery} />
         )}
-        {selectedTab === SEARCH_TYPE.customSearch && (
+        {selectedTab === SearchType.CUSTOM_SEARCH && (
           <Box mt={3}>
             <CustomSearchForm onChange={setRefineSearchQuery} />
           </Box>

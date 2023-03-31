@@ -40,7 +40,7 @@ const ReviewLink = () => {
   const [dialogText, setDialogText] = useState('')
   const [openLinkRecordDialog, setOpenLinkRecordDialog] = useState(false)
   const [isSearchModalVisible, setIsSearchModalVisible] = useState(false)
-  const [opencreateNewGRecordDialog, setOpencreateNewGRecordDialog] =
+  const [isNewGoldenRecordDialogOpen, setIsNewGoldenRecordDialogOpen] =
     useState(false)
   const [tableData, setTableData] = useState<AnyRecord[]>([])
   const [canditateUID, setCandidateUID] = useState('')
@@ -116,7 +116,7 @@ const ReviewLink = () => {
       enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
         variant: 'error'
       })
-      setOpencreateNewGRecordDialog(false)
+      setIsNewGoldenRecordDialogOpen(false)
     }
   })
 
@@ -167,7 +167,7 @@ const ReviewLink = () => {
   }
 
   const handleCancel = () => {
-    setOpencreateNewGRecordDialog(false)
+    setIsNewGoldenRecordDialogOpen(false)
     setOpenLinkRecordDialog(false)
   }
 
@@ -184,10 +184,9 @@ const ReviewLink = () => {
   }
 
   const handleOpenLinkedRecordDialog = (uid: string) => {
-    const tableDataTemp = candidateGoldenRecords?.filter(d => d.uid === uid)
+    const tableDataTemp = candidateGoldenRecords.filter(d => d.uid === uid)
 
-    if (tableDataTemp && patientRecord)
-      setTableData([patientRecord, ...tableDataTemp])
+    if (patientRecord) setTableData([patientRecord, ...tableDataTemp])
 
     setOpenLinkRecordDialog(true)
     setCandidateUID(uid)
@@ -198,7 +197,7 @@ const ReviewLink = () => {
     setDialogText(
       `Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`
     )
-    setOpencreateNewGRecordDialog(true)
+    setIsNewGoldenRecordDialogOpen(true)
     setCandidateUID(patientRecord?.uid || '')
   }
 
@@ -300,7 +299,7 @@ const ReviewLink = () => {
         content={dialogText}
         title="Confirm Records Unlinking"
         onClose={handleCancel}
-        onOpen={opencreateNewGRecordDialog}
+        onOpen={isNewGoldenRecordDialogOpen}
       />
       <Dialog
         buttons={[
