@@ -13,7 +13,9 @@ const Shell = () => {
     </ErrorBoundary>
   ) : (
     <Box sx={{ display: 'flex' }}>
-      <NavigationBar />
+      {location.current.pathname !== '/notifications/match-details' && (
+        <NavigationBar />
+      )}
       <Box
         component="main"
         sx={{

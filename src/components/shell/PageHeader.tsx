@@ -26,7 +26,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <Grid container justifyContent="space-between">
       <Grid item container direction="column" xs="auto">
-        {breadcrumbs && (
+        {breadcrumbs && breadcrumbs.length > 0 && (
           <Grid item>
             <Breadcrumbs>
               <IconButton href="/">

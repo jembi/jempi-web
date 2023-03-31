@@ -13,8 +13,8 @@ import { useAppConfig } from '../../hooks/useAppConfig'
 import MoreIcon from './MoreIcon'
 interface DataGridProps {
   data: AnyRecord[]
-  handleOpenLinkedRecordDialog?: (uid: string) => void
-  handleOpenCreateNewGRDialog?: (uid: string) => void
+  onLinkedRecordDialogOpen?: (uid: string) => void
+  onCreateNewGRDialogOpen?: (uid: string) => void
   hideAction?: boolean
   isLoading?: boolean
   sx?: SxProps<Theme>
@@ -35,7 +35,7 @@ const getCellClassName = (
 
 const DataGrid: React.FC<DataGridProps> = ({
   data,
-  handleOpenLinkedRecordDialog,
+  onLinkedRecordDialogOpen,
   hideAction = false,
   isLoading = false,
   sx
@@ -137,8 +137,8 @@ const DataGrid: React.FC<DataGridProps> = ({
               <Link
                 sx={{ ':hover': { cursor: 'pointer' } }}
                 onClick={() =>
-                  handleOpenLinkedRecordDialog
-                    ? handleOpenLinkedRecordDialog(params.row.uid)
+                  onLinkedRecordDialogOpen
+                    ? onLinkedRecordDialogOpen(params.row.uid)
                     : null
                 }
               >

@@ -18,7 +18,10 @@ interface ReviewLinkParams {
   candidates: { golden_id: string; score: number }[]
 }
 
-const getRecordByType = (type: string, data: AnyRecord[]) =>
+const getRecordByType = (
+  type: 'Golden' | 'Current' | 'Candidate',
+  data: AnyRecord[]
+) =>
   data.find((r: AnyRecord) => {
     if (r.type === type) {
       return r

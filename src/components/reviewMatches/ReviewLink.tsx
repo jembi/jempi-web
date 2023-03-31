@@ -140,7 +140,7 @@ const ReviewLink = () => {
     }
   })
 
-  const handleCreateNewGR = (id: string) => {
+  const createNewGoldenRecord = (id: string) => {
     newGoldenRecord.mutate(
       {
         patientID: patientRecord ? patientRecord.uid : '',
@@ -158,7 +158,7 @@ const ReviewLink = () => {
     )
   }
 
-  const handleLinkRecord = (id: string) => {
+  const linkRecords = (id: string) => {
     linkRecord.mutate({
       patientID: patientRecord ? patientRecord.uid : '',
       goldenID: goldenRecord ? goldenRecord.uid : '',
@@ -184,11 +184,7 @@ const ReviewLink = () => {
   }
 
   const handleOpenLinkedRecordDialog = (uid: string) => {
-    const tableDataTemp = candidateGoldenRecords?.filter(d => {
-      if (d.uid === uid) {
-        return d
-      }
-    })
+    const tableDataTemp = candidateGoldenRecords?.filter(d => d.uid === uid)
 
     if (tableDataTemp && patientRecord)
       setTableData([patientRecord, ...tableDataTemp])
@@ -198,7 +194,7 @@ const ReviewLink = () => {
     close()
   }
 
-  const handleOpenCreateNewGRDialog = () => {
+  const openCreateGoldenRecordDialog = () => {
     setDialogText(
       `Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`
     )
@@ -262,8 +258,8 @@ const ReviewLink = () => {
       <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
       <DataGrid
         data={candidateGoldenRecords || []}
-        handleOpenCreateNewGRDialog={handleOpenCreateNewGRDialog}
-        handleOpenLinkedRecordDialog={handleOpenLinkedRecordDialog}
+        onCreateNewGRDialogOpen={openCreateGoldenRecordDialog}
+        onLinkedRecordDialogOpen={handleOpenLinkedRecordDialog}
         sx={{
           '& .MuiDataGrid-columnHeaders': { display: 'none' },
           '& .MuiDataGrid-virtualScroller': { marginTop: '0!important' }
@@ -272,15 +268,15 @@ const ReviewLink = () => {
       <Stack direction="row" sx={{ mt: 3 }} justifyContent={'space-between'}>
         <Stack direction="row" spacing={1}>
           <Button variant="contained" onClick={() => acceptAndClose()}>
-            Accept & Close
+            Accept
           </Button>
           <Button variant="outlined" onClick={() => leavePending()}>
-            Leave as pending
+            Leave pending
           </Button>
         </Stack>
         <Button
           variant="outlined"
-          onClick={() => handleOpenCreateNewGRDialog()}
+          onClick={() => openCreateGoldenRecordDialog()}
         >
           Create new golden record
         </Button>
@@ -294,7 +290,7 @@ const ReviewLink = () => {
         buttons={[
           <Button onClick={() => handleCancel()}>Cancel</Button>,
           <Button
-            onClick={() => handleCreateNewGR(canditateUID)}
+            onClick={() => createNewGoldenRecord(canditateUID)}
             isLoading={newGoldenRecord.isLoading}
             autoFocus
           >
@@ -309,7 +305,7 @@ const ReviewLink = () => {
       <Dialog
         buttons={[
           <Button onClick={() => handleCancel()}>Don&apos;t link</Button>,
-          <Button onClick={() => handleLinkRecord(canditateUID)}>
+          <Button onClick={() => linkRecords(canditateUID)}>
             Link records
           </Button>
         ]}

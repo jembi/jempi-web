@@ -7,11 +7,6 @@ export enum ACTIONS {
   grAndPatientRecordLinkApproved
 }
 
-export enum SEARCH_TYPE {
-  customSearch = 'Custom search',
-  simpleSearch = 'Simple search'
-}
-
 export const ACTION_TYPE: { [key: string]: string } = {
   [ACTIONS.newnewUserCreated]: 'New user created',
   [ACTIONS.grUpdate]: 'GR updated',
@@ -44,5 +39,5 @@ export const REVIEW_LINK_STEPS = [
   'Read Instructions',
   'Review Linked Records',
   'Refine Search (Optional)',
-  'Close'
+  'Accept'
 ]
