@@ -97,11 +97,11 @@ class ApiClient {
     return await client
       .get<GR>(`${ROUTES.GOLDEN_RECORD_ROUTE}/${uid}`)
       .then(res => res.data)
-      .then(({ goldenRecord, patientRecordsWithScore }: any) => {
+      .then(({ goldenRecord, mpiPatientRecords }: any) => {
         return {
           ...goldenRecord,
           ...goldenRecord?.demographicData,
-          linkRecords: patientRecordsWithScore?.map(
+          linkRecords: mpiPatientRecords?.map(
             ({ patientRecord }: Partial<ExpandedPatientRecord>) => {
               return {
                 ...patientRecord,

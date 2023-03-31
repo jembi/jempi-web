@@ -1,0 +1,42 @@
+---
+projectName: platform
+image: jembi/platform #Defaults to latest if no image tag is specified, e.g. jembi/platform:1.5.0
+logPath: /tmp/logs
+
+packages:
+  - client-registry-jempi
+  - identity-access-manager-keycloak
+customPackages:
+- id: jempi-web
+  path: ../jempi-web
+
+profiles:
+  - name: local-jempi-web-only
+    packages:
+      - jempi-web
+    envFiles:
+      - .env.local
+    dev: true
+    only: true
+  - name: local-keycloak-only
+    packages:
+      - identity-access-manager-keycloak
+    envFiles:
+      - .env.local
+    dev: true
+    only: true
+  - name: local-frontend
+    packages:
+      - identity-access-manager-keycloak
+      - jempi-web
+    envFiles:
+      - .env.local
+    dev: true
+    only: false
+  - name: local-backend
+    packages:
+      - client-registry-jempi
+    envFiles:
+      - .env.local
+    dev: true
+    only: false
