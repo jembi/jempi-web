@@ -14,7 +14,7 @@ import MoreIcon from './MoreIcon'
 interface DataGridProps {
   data: AnyRecord[]
   onLinkedRecordDialogOpen?: (uid: string) => void
-  onCreateNewGRDialogOpen?: (uid: string) => void
+  onNewGoldenRecordDialogOpen?: (uid: string) => void
   hideAction?: boolean
   isLoading?: boolean
   sx?: SxProps<Theme>

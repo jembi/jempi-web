@@ -140,7 +140,7 @@ const ReviewLink = () => {
     }
   })
 
-  const createNewGoldenRecord = (id: string) => {
+  const createGoldenRecord = (id: string) => {
     newGoldenRecord.mutate(
       {
         patientID: patientRecord ? patientRecord.uid : '',
@@ -257,7 +257,7 @@ const ReviewLink = () => {
       <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
       <DataGrid
         data={candidateGoldenRecords || []}
-        onCreateNewGRDialogOpen={openCreateGoldenRecordDialog}
+        onNewGoldenRecordDialogOpen={openCreateGoldenRecordDialog}
         onLinkedRecordDialogOpen={handleOpenLinkedRecordDialog}
         sx={{
           '& .MuiDataGrid-columnHeaders': { display: 'none' },
@@ -289,7 +289,7 @@ const ReviewLink = () => {
         buttons={[
           <Button onClick={() => handleCancel()}>Cancel</Button>,
           <Button
-            onClick={() => createNewGoldenRecord(canditateUID)}
+            onClick={() => createGoldenRecord(canditateUID)}
             isLoading={newGoldenRecord.isLoading}
             autoFocus
           >

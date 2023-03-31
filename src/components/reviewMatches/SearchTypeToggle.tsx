@@ -23,11 +23,7 @@ const SearchTypeToggle: React.FC<SearchTypeToggleProps> = ({
       ({ value }) => value === Number(selectedValue)
     )
     setSelectedButton(selectedValue)
-    onChange(
-      selectedLabel?.label as
-        | SearchType.CUSTOM_SEARCH
-        | SearchType.SIMPLE_SEARCH
-    )
+    onChange(selectedLabel?.label as SearchType)
   }
 
   return (
