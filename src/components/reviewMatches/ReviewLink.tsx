@@ -37,7 +37,6 @@ const ReviewLink = () => {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const [dialogText, setDialogText] = useState('')
   const [openLinkRecordDialog, setOpenLinkRecordDialog] = useState(false)
   const [isSearchModalVisible, setIsSearchModalVisible] = useState(false)
   const [isNewGoldenRecordDialogOpen, setIsNewGoldenRecordDialogOpen] =
@@ -58,7 +57,7 @@ const ReviewLink = () => {
     isError
   } = useLinkReview(payload, refineSearchQuery)
 
-  const updateNotification = useMutation({
+  const mutateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
     onError: (error: AxiosError) => {
       enqueueSnackbar(`Error updating notification: ${error.message}`, {
@@ -68,24 +67,44 @@ const ReviewLink = () => {
     }
   })
 
-  const acceptAndClose = () => {
-    updateNotification.mutate(
-      {
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Accepted
-      },
-      {
-        onSuccess: () => {
-          enqueueSnackbar('Golden record accepted and notification closed', {
-            variant: 'success'
-          })
-          navigate({ to: '/notifications' })
-        }
-      }
-    )
+  const updateNotification = (state: NotificationState) => {
+    mutateNotification.mutate({
+      notificationId: payload?.notificationId ? payload.notificationId : '',
+      state: state
+    })
   }
+
+  const newGoldenRecord = useMutation({
+    mutationFn: ApiClient.newGoldenRecord,
+    onSuccess: () => {
+      updateNotification(NotificationState.Actioned)
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setIsNewGoldenRecordDialogOpen(false)
+    }
+  })
+
+  const linkRecord = useMutation({
+    mutationFn: ApiClient.linkRecord,
+    onSuccess: () => {
+      enqueueSnackbar('Golden record accepted and notification closed', {
+        variant: 'success'
+      })
+      navigate({ to: '/notifications' })
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error linking to golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setOpenLinkRecordDialog(false)
+    }
+  })
+
   const leavePending = () => {
-    updateNotification.mutate(
+    mutateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Pending
@@ -104,42 +123,6 @@ const ReviewLink = () => {
     )
   }
 
-  const newGoldenRecord = useMutation({
-    mutationFn: ApiClient.newGoldenRecord,
-    onSuccess: () => {
-      updateNotification.mutate({
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
-      })
-    },
-    onError: (error: AxiosError) => {
-      enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
-        variant: 'error'
-      })
-      setIsNewGoldenRecordDialogOpen(false)
-    }
-  })
-
-  const linkRecord = useMutation({
-    mutationFn: ApiClient.linkRecord,
-    onSuccess: () => {
-      enqueueSnackbar('Golden record accepted and notification closed', {
-        variant: 'success'
-      })
-      navigate({ to: '/notifications' })
-      updateNotification.mutate({
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
-      })
-    },
-    onError: (error: AxiosError) => {
-      enqueueSnackbar(`Error linking to golden record: ${error.message}`, {
-        variant: 'error'
-      })
-      setOpenLinkRecordDialog(false)
-    }
-  })
-
   const createGoldenRecord = (id: string) => {
     newGoldenRecord.mutate(
       {
@@ -148,22 +131,30 @@ const ReviewLink = () => {
         newGoldenID: id
       },
       {
-        onSuccess: () => {
+        onSuccess: data => {
           enqueueSnackbar('New record linked', {
             variant: 'success'
           })
-          navigate({ to: `/golden-record/${id}` })
+          navigate({ to: `/golden-record/${data.goldenUID}` })
         }
       }
     )
   }
 
-  const linkRecords = (id: string) => {
-    linkRecord.mutate({
-      patientID: patientRecord ? patientRecord.uid : '',
-      goldenID: goldenRecord ? goldenRecord.uid : '',
-      newGoldenID: id
-    })
+  const linkRecords = (id: string, status?: NotificationState) => {
+    linkRecord.mutate(
+      {
+        patientID: patientRecord ? patientRecord.uid : '',
+        goldenID: goldenRecord ? goldenRecord.uid : '',
+        newGoldenID: id
+      },
+      {
+        onSuccess: () => {
+          updateNotification(status ?? NotificationState.Actioned)
+          navigate({ to: '/notifications' })
+        }
+      }
+    )
   }
 
   const handleCancel = () => {
@@ -191,14 +182,6 @@ const ReviewLink = () => {
     setOpenLinkRecordDialog(true)
     setCandidateUID(uid)
     close()
-  }
-
-  const openCreateGoldenRecordDialog = () => {
-    setDialogText(
-      `Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`
-    )
-    setIsNewGoldenRecordDialogOpen(true)
-    setCandidateUID(patientRecord?.uid || '')
   }
 
   return (
@@ -257,7 +240,6 @@ const ReviewLink = () => {
       <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
       <DataGrid
         data={candidateGoldenRecords || []}
-        onNewGoldenRecordDialogOpen={openCreateGoldenRecordDialog}
         onLinkedRecordDialogOpen={handleOpenLinkedRecordDialog}
         sx={{
           '& .MuiDataGrid-columnHeaders': { display: 'none' },
@@ -266,7 +248,12 @@ const ReviewLink = () => {
       />
       <Stack direction="row" sx={{ mt: 3 }} justifyContent={'space-between'}>
         <Stack direction="row" spacing={1}>
-          <Button variant="contained" onClick={() => acceptAndClose()}>
+          <Button
+            variant="contained"
+            onClick={() =>
+              linkRecords(goldenRecord?.uid || '', NotificationState.Accepted)
+            }
+          >
             Accept
           </Button>
           <Button variant="outlined" onClick={() => leavePending()}>
@@ -275,7 +262,7 @@ const ReviewLink = () => {
         </Stack>
         <Button
           variant="outlined"
-          onClick={() => openCreateGoldenRecordDialog()}
+          onClick={() => setIsNewGoldenRecordDialogOpen(true)}
         >
           Create new golden record
         </Button>
@@ -296,7 +283,7 @@ const ReviewLink = () => {
             Unlink and create new record
           </Button>
         ]}
-        content={dialogText}
+        content={`Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`}
         title="Confirm Records Unlinking"
         onClose={handleCancel}
         onOpen={isNewGoldenRecordDialogOpen}
