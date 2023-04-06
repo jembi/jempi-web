@@ -1,10 +1,12 @@
-import { Container, Divider, Stack, Typography } from '@mui/material'
+import { SearchOutlined } from '@mui/icons-material'
+import { Box, Container, Divider, Stack, Typography } from '@mui/material'
 import { MakeGenerics, useNavigate, useSearch } from '@tanstack/react-location'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useLinkReview } from 'hooks/useLinkReview'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import { useAppConfig } from '../../hooks/useAppConfig'
+import { CustomSearchQuery, SearchQuery } from 'types/SimpleSearch'
 import ApiClient from '../../services/ApiClient'
 import { NotificationState } from '../../types/Notification'
 import { AnyRecord } from '../../types/PatientRecord'
@@ -15,8 +17,10 @@ import Button from '../shared/Button'
 import PageHeader from '../shell/PageHeader'
 import DataGrid from './DataGrid'
 import Dialog from './Dialog'
+import SearchModal from './SearchModal'
+import Stepper from './Stepper'
 
-type ReviewLinkParams = MakeGenerics<{
+export type ReviewLinkParams = MakeGenerics<{
   Search: {
     payload: {
       notificationId: string
@@ -28,52 +32,32 @@ type ReviewLinkParams = MakeGenerics<{
   }
 }>
 
-//TODO Move horrible function to the backend
-const mapDataToScores = (
-  data?: AnyRecord[],
-  candidates?: { golden_id: string; score: number }[]
-): AnyRecord[] => {
-  if (!data?.length) {
-    return []
-  }
-  return data.map(d => ({
-    ...d,
-    score: candidates?.find(c => c.golden_id === d.uid)?.score || 0
-  }))
-}
-
 const ReviewLink = () => {
-  const { getPatientName } = useAppConfig()
-  const [dialogText, setDialogText] = useState<string>('')
-  const [openLinkRecordDialog, setOpenLinkRecordDialog] =
-    useState<boolean>(false)
-  const [opencreateNewGRecordDialog, setOpencreateNewGRecordDialog] =
-    useState<boolean>(false)
-  const [tableData, setTableData] = useState<AnyRecord[]>([])
   const { payload } = useSearch<ReviewLinkParams>()
-  const [canditateUID, setCandidateUID] = useState<string>('')
-
   const navigate = useNavigate()
-
   const { enqueueSnackbar } = useSnackbar()
 
-  const { data, error, isLoading, isError } = useQuery<AnyRecord[], AxiosError>(
-    {
-      queryKey: ['matchDetails', payload],
-      queryFn: () => {
-        return ApiClient.getMatchDetails(
-          payload?.patient_id || '',
-          payload?.golden_id || '',
-          payload?.candidates?.map(c => c.golden_id) || []
-        )
-      },
-      refetchOnWindowFocus: false
-    }
-  )
+  const [openLinkRecordDialog, setOpenLinkRecordDialog] = useState(false)
+  const [isSearchModalVisible, setIsSearchModalVisible] = useState(false)
+  const [isNewGoldenRecordDialogOpen, setIsNewGoldenRecordDialogOpen] =
+    useState(false)
+  const [tableData, setTableData] = useState<AnyRecord[]>([])
+  const [canditateUID, setCandidateUID] = useState('')
+  const [refineSearchQuery, setRefineSearchQuery] = useState<
+    SearchQuery | CustomSearchQuery | undefined
+  >(undefined)
 
-  //TODO: on success we can invalidate matchDetails query and receive the updated one. Or SetQueryData
+  const {
+    goldenRecord,
+    patientRecord,
+    candidateGoldenRecords,
+    matchDetails,
+    error,
+    isLoading,
+    isError
+  } = useLinkReview(payload, refineSearchQuery)
 
-  const updateNotification = useMutation({
+  const mutateNotification = useMutation({
     mutationFn: ApiClient.updateNotification,
     onError: (error: AxiosError) => {
       enqueueSnackbar(`Error updating notification: ${error.message}`, {
@@ -83,24 +67,44 @@ const ReviewLink = () => {
     }
   })
 
-  const acceptAndClose = () => {
-    updateNotification.mutate(
-      {
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Accepted
-      },
-      {
-        onSuccess: () => {
-          enqueueSnackbar('Golden record accepted and notification closed', {
-            variant: 'success'
-          })
-          navigate({ to: '/notifications' })
-        }
-      }
-    )
+  const updateNotification = (state: NotificationState) => {
+    mutateNotification.mutate({
+      notificationId: payload?.notificationId ? payload.notificationId : '',
+      state: state
+    })
   }
+
+  const newGoldenRecord = useMutation({
+    mutationFn: ApiClient.newGoldenRecord,
+    onSuccess: () => {
+      updateNotification(NotificationState.Actioned)
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setIsNewGoldenRecordDialogOpen(false)
+    }
+  })
+
+  const linkRecord = useMutation({
+    mutationFn: ApiClient.linkRecord,
+    onSuccess: () => {
+      enqueueSnackbar('Golden record accepted and notification closed', {
+        variant: 'success'
+      })
+      navigate({ to: '/notifications' })
+    },
+    onError: (error: AxiosError) => {
+      enqueueSnackbar(`Error linking to golden record: ${error.message}`, {
+        variant: 'error'
+      })
+      setOpenLinkRecordDialog(false)
+    }
+  })
+
   const leavePending = () => {
-    updateNotification.mutate(
+    mutateNotification.mutate(
       {
         notificationId: payload?.notificationId ? payload.notificationId : '',
         state: NotificationState.Pending
@@ -119,70 +123,42 @@ const ReviewLink = () => {
     )
   }
 
-  const newGoldenRecord = useMutation({
-    mutationFn: ApiClient.newGoldenRecord,
-    onSuccess: () => {
-      updateNotification.mutate({
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
-      })
-    },
-    onError: (error: AxiosError) => {
-      enqueueSnackbar(`Error creating new golden record: ${error.message}`, {
-        variant: 'error'
-      })
-      setOpencreateNewGRecordDialog(false)
-    }
-  })
-
-  const linkRecord = useMutation({
-    mutationFn: ApiClient.linkRecord,
-    onSuccess: () => {
-      enqueueSnackbar('Golden record accepted and notification closed', {
-        variant: 'success'
-      })
-      navigate({ to: '/notifications' })
-      updateNotification.mutate({
-        notificationId: payload?.notificationId ? payload.notificationId : '',
-        state: NotificationState.Actioned
-      })
-    },
-    onError: (error: AxiosError) => {
-      enqueueSnackbar(`Error linking to golden record: ${error.message}`, {
-        variant: 'error'
-      })
-      setOpenLinkRecordDialog(false)
-    }
-  })
-
-  const handleCreateNewGR = (id: string) => {
+  const createGoldenRecord = (id: string) => {
     newGoldenRecord.mutate(
       {
-        patientID: data ? data[0].uid : '',
-        goldenID: data ? data[1].uid : '',
+        patientID: patientRecord ? patientRecord.uid : '',
+        goldenID: goldenRecord ? goldenRecord.uid : '',
         newGoldenID: id
       },
       {
-        onSuccess: () => {
+        onSuccess: data => {
           enqueueSnackbar('New record linked', {
             variant: 'success'
           })
-          navigate({ to: `/golden-record/${id}` })
+          navigate({ to: `/golden-record/${data.goldenUID}` })
         }
       }
     )
   }
 
-  const handleLinkRecord = (id: string) => {
-    linkRecord.mutate({
-      patientID: data ? data[0].uid : '',
-      goldenID: data ? data[1].uid : '',
-      newGoldenID: id
-    })
+  const linkRecords = (id: string, status?: NotificationState) => {
+    linkRecord.mutate(
+      {
+        patientID: patientRecord ? patientRecord.uid : '',
+        goldenID: goldenRecord ? goldenRecord.uid : '',
+        newGoldenID: id
+      },
+      {
+        onSuccess: () => {
+          updateNotification(status ?? NotificationState.Actioned)
+          navigate({ to: '/notifications' })
+        }
+      }
+    )
   }
 
   const handleCancel = () => {
-    setOpencreateNewGRecordDialog(false)
+    setIsNewGoldenRecordDialogOpen(false)
     setOpenLinkRecordDialog(false)
   }
 
@@ -194,110 +170,128 @@ const ReviewLink = () => {
     return <ApiErrorMessage error={error} />
   }
 
-  if (!data) {
+  if (!matchDetails) {
     return <NotFound />
   }
 
   const handleOpenLinkedRecordDialog = (uid: string) => {
-    const tableDataTemp: AnyRecord[] = data.filter(d => {
-      if (d.uid === uid || d.type === 'Golden') {
-        return d
-      }
-    })
+    const tableDataTemp = candidateGoldenRecords.filter(d => d.uid === uid)
 
-    setTableData(tableDataTemp)
+    if (patientRecord) setTableData([patientRecord, ...tableDataTemp])
+
     setOpenLinkRecordDialog(true)
     setCandidateUID(uid)
     close()
   }
 
-  const handleOpenCreateNewGRDialog = (uid: string) => {
-    const goldenRecordUid = data[1].uid
-
-    setDialogText(
-      `Are you sure you want to unlink the patient record ${uid} and golden record ${goldenRecordUid} and create a new record?`
-    )
-    setOpencreateNewGRecordDialog(true)
-    setCandidateUID(uid)
-  }
-
   return (
     <Container maxWidth={false}>
+      <Stepper />
       <PageHeader
         title={'Review Linked Patient Record'}
         description="Review the patient record and possible matches in detail."
-        breadcrumbs={[
-          {
-            link: '/review-matches/',
-            title: 'Matches'
-          },
-          {
-            link: '/review-matches/',
-            title: getPatientName(data[0])
-          }
+        buttons={[
+          <Button
+            startIcon={<SearchOutlined />}
+            variant="outlined"
+            size="large"
+            onClick={() => setIsSearchModalVisible(true)}
+          >
+            Refine Search
+          </Button>
         ]}
       />
       <Divider
         sx={{
-          mb: 4
+          mb: 3
         }}
       />
-
-      <Typography variant="dgSubTitle">
-        PATIENT LINKED TO GOLDEN RECORD
-      </Typography>
-      <DataGrid
-        data={data.filter((r: AnyRecord) => {
-          if (r.type === 'Golden' || r.type === 'Current') {
-            return r
-          }
-        })}
+      <Box
         sx={{
-          mb: 4
+          mb: 3,
+          borderRadius: '4px',
+          boxShadow: '0px 0px 0px 1px #E0E0E0'
         }}
-      />
-      <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
-      <DataGrid
-        data={mapDataToScores(
-          data.filter((r: AnyRecord) => {
-            if (r.type === 'Candidate') {
+      >
+        <Typography pl={1.5} variant="dgSubTitle">
+          PATIENT LINKED TO GOLDEN RECORD
+        </Typography>
+
+        <DataGrid
+          data={matchDetails.filter((r: AnyRecord) => {
+            if (r.type === 'Golden' || r.type === 'Current') {
               return r
             }
-          }),
-          payload?.candidates
-        )}
-        handleOpenCreateNewGRDialog={handleOpenCreateNewGRDialog}
-        handleOpenLinkedRecordDialog={handleOpenLinkedRecordDialog}
+          })}
+          sx={{
+            '.MuiDataGrid-columnSeparator': {
+              display: 'none'
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#274263',
+              color: '#FFF',
+              borderRadius: '0px'
+            },
+            borderRadius: '0px',
+            p: 0
+          }}
+        />
+      </Box>
+      <Typography variant="dgSubTitle">OTHER GOLDEN RECORDS</Typography>
+      <DataGrid
+        data={candidateGoldenRecords || []}
+        onLinkedRecordDialogOpen={handleOpenLinkedRecordDialog}
+        sx={{
+          '& .MuiDataGrid-columnHeaders': { display: 'none' },
+          '& .MuiDataGrid-virtualScroller': { marginTop: '0!important' }
+        }}
       />
-
-      <Stack direction="row" sx={{ mt: 3 }} spacing={1}>
-        <Button variant="contained" onClick={() => acceptAndClose()}>
-          Accept & Close
-        </Button>
-        <Button variant="outlined" onClick={() => leavePending()}>
-          Leave as pending
+      <Stack direction="row" sx={{ mt: 3 }} justifyContent={'space-between'}>
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="contained"
+            onClick={() =>
+              linkRecords(goldenRecord?.uid || '', NotificationState.Accepted)
+            }
+          >
+            Accept
+          </Button>
+          <Button variant="outlined" onClick={() => leavePending()}>
+            Leave pending
+          </Button>
+        </Stack>
+        <Button
+          variant="outlined"
+          onClick={() => setIsNewGoldenRecordDialogOpen(true)}
+        >
+          Create new golden record
         </Button>
       </Stack>
+      <SearchModal
+        isOpen={isSearchModalVisible}
+        onClose={() => setIsSearchModalVisible(false)}
+        onChange={setRefineSearchQuery}
+      />
       <Dialog
         buttons={[
           <Button onClick={() => handleCancel()}>Cancel</Button>,
           <Button
-            onClick={() => handleCreateNewGR(canditateUID)}
+            onClick={() => createGoldenRecord(canditateUID)}
             isLoading={newGoldenRecord.isLoading}
             autoFocus
           >
             Unlink and create new record
           </Button>
         ]}
-        content={dialogText}
+        content={`Are you sure you want to unlink the patient record ${patientRecord?.uid} and golden record ${goldenRecord?.uid} and create a new record?`}
         title="Confirm Records Unlinking"
         onClose={handleCancel}
-        onOpen={opencreateNewGRecordDialog}
+        onOpen={isNewGoldenRecordDialogOpen}
       />
       <Dialog
         buttons={[
           <Button onClick={() => handleCancel()}>Don&apos;t link</Button>,
-          <Button onClick={() => handleLinkRecord(canditateUID)}>
+          <Button onClick={() => linkRecords(canditateUID)}>
             Link records
           </Button>
         ]}
