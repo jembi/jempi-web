@@ -90,7 +90,7 @@ const LinkedRecords = () => {
         buttons={[
           <Button
             variant="header"
-            href={`/patient/${uid}`}
+            href={`/golden-record/${uid}`}
             key="back-to-record"
           >
             BACK TO RECORD
