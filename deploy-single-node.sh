@@ -20,6 +20,6 @@ set +a
 
 envsubst < ./docker-compose.yml > 0-docker-compose.yml
 
-docker stack deploy -c 0-docker-compose.yml -c docker-compose.dev.yml jempi
+docker-compose -f 0-docker-compose.yml -f docker-compose.dev.yml up -d
 
 rm -f 0-docker-compose.yml
