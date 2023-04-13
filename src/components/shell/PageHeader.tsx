@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 
 interface PageHeaderProps {
-  breadcrumbs: Array<{ icon?: JSX.Element; title?: string; link?: string }>
+  breadcrumbs?: Array<{ icon?: JSX.Element; title?: string; link?: string }>
   buttons?: JSX.Element[]
   title: string
   description?: string | JSX.Element
@@ -26,28 +26,30 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <Grid container justifyContent="space-between">
       <Grid item container direction="column" xs="auto">
-        <Grid item>
-          <Breadcrumbs>
-            <IconButton href="/">
-              <HomeIcon />
-            </IconButton>
-            {breadcrumbs.map(({ icon, title, link }, idx) => {
-              return (
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  href={link || '#'}
-                  key={idx}
-                >
-                  <Stack direction={'row'} spacing={1}>
-                    {icon}
-                    <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
-                  </Stack>
-                </Link>
-              )
-            })}
-          </Breadcrumbs>
-        </Grid>
+        {breadcrumbs && breadcrumbs.length > 0 && (
+          <Grid item>
+            <Breadcrumbs>
+              <IconButton href="/">
+                <HomeIcon />
+              </IconButton>
+              {breadcrumbs?.map(({ icon, title, link }, idx) => {
+                return (
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    href={link || '#'}
+                    key={idx}
+                  >
+                    <Stack direction={'row'} spacing={1}>
+                      {icon}
+                      <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
+                    </Stack>
+                  </Link>
+                )
+              })}
+            </Breadcrumbs>
+          </Grid>
+        )}
         <Grid item>
           <Typography
             variant="h5"

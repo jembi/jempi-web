@@ -34,3 +34,10 @@ export const INITIAL_VALUES: CustomSearchQuery = {
   offset: 0,
   limit: PAGINATION_LIMIT
 }
+
+export const REVIEW_LINK_STEPS = [
+  'Read Instructions',
+  'Review Linked Records',
+  'Refine Search (Optional)',
+  'Accept'
+]
