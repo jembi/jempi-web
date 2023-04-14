@@ -16,3 +16,4 @@ Dockerfile
 README.md
 build
 .husky
+.vscode
