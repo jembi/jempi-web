@@ -10,6 +10,7 @@ import {
 import CustomSearchForm from 'components/customSearch/CustomSearchForm'
 import SimpleSearchForm from 'components/search/SimpleSearchForm'
 import { FC, useState } from 'react'
+import { SearchType } from 'types/ReviewLink'
 import {
   CustomSearchQuery,
   SearchQuery,
@@ -18,40 +19,50 @@ import {
 import SearchTypeToggle from './SearchTypeToggle'
 
 const options: ToggleButtonOptions[] = [
-  { value: 0, label: 'Custom search' },
-  { value: 1, label: 'Simple search' }
+  { value: 0, label: SearchType.CUSTOM_SEARCH },
+  { value: 1, label: SearchType.SIMPLE_SEARCH }
 ]
 
-const SearchModal: FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose
-}) => {
-  const [tabValue, setTabValue] = useState('Custom search')
+const SearchModal: FC<{
+  isOpen: boolean
+  onClose: () => void
+  onChange: (query: SearchQuery | CustomSearchQuery | undefined) => void
+}> = ({ isOpen, onClose, onChange }) => {
+  const [selectedTab, setSelectedTab] = useState(SearchType.CUSTOM_SEARCH)
   const [refineSearchQuery, setRefineSearchQuery] = useState<
     SearchQuery | CustomSearchQuery | undefined
   >(undefined)
 
+  const handleClose = () => {
+    onClose()
+  }
+
+  const onConfirmSearch = () => {
+    onChange(refineSearchQuery)
+    onClose()
+  }
+
   return (
-    <Dialog fullWidth maxWidth={'md'} open={isOpen} onClose={() => onClose()}>
+    <Dialog fullWidth maxWidth={'md'} open={isOpen}>
       <DialogContent sx={{ p: 0 }}>
         <DialogTitle>Refine the current search</DialogTitle>
         <Divider />
-        <SearchTypeToggle onChange={setTabValue} options={options} />
+        <SearchTypeToggle onChange={setSelectedTab} options={options} />
 
-        {tabValue === 'Simple search' && (
-          <SimpleSearchForm onChange={value => setRefineSearchQuery(value)} />
+        {selectedTab === SearchType.SIMPLE_SEARCH && (
+          <SimpleSearchForm onChange={setRefineSearchQuery} />
         )}
-        {tabValue === 'Custom search' && (
+        {selectedTab === SearchType.CUSTOM_SEARCH && (
           <Box mt={3}>
-            <CustomSearchForm onChange={value => setRefineSearchQuery(value)} />
+            <CustomSearchForm onChange={setRefineSearchQuery} />
           </Box>
         )}
 
         <DialogActions
           sx={{ display: 'flex', justifyContent: 'space-between', p: '20px' }}
         >
-          <Button>Cancel</Button>
-          <Button>Refine Search</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={onConfirmSearch}>Refine Search</Button>
         </DialogActions>
       </DialogContent>
     </Dialog>
