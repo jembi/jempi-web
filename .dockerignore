@@ -1,7 +1,19 @@
-.git/
-.github/
-.vscode/
+# Dependency directories
 node_modules/
-build/
-platform-*
-instant-*
+
+# Dockerfiles
+Dockerfile
+
+# Env
+.env.*
+
+# Git
+.github/
+.gitignore
+.git
+
+# Others
+README.md
+build
+.husky
+.vscode
