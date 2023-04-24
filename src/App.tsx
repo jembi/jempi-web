@@ -158,21 +158,13 @@ const App = () => {
           <SnackbarProvider
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           >
-            {config.useSso ? (
-              <AuthProvider>
-                <ErrorBoundary>
-                  <AppConfigProvider>
-                    <Shell />
-                  </AppConfigProvider>
-                </ErrorBoundary>
-              </AuthProvider>
-            ) : (
+            <AuthProvider>
               <ErrorBoundary>
                 <AppConfigProvider>
                   <Shell />
                 </AppConfigProvider>
               </ErrorBoundary>
-            )}
+            </AuthProvider>
           </SnackbarProvider>
           <ReactLocationDevtools position="bottom-right" />
           <ReactQueryDevtools />
