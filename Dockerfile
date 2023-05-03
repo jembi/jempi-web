@@ -1,4 +1,5 @@
-FROM node:16-alpine
+# Build Production version in Node
+FROM node:16-alpine as build
 
 WORKDIR /app
 
@@ -8,6 +9,9 @@ RUN yarn install
 
 RUN yarn build
 
-RUN yarn global add serve
+# Serve built project with nginx
+FROM nginx:mainline-alpine
 
-CMD serve -s build
+WORKDIR /usr/share/nginx/html
+
+COPY --from=build /app/build  ./
